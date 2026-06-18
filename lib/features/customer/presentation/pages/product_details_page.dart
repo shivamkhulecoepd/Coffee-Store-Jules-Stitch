@@ -24,10 +24,7 @@ class ProductDetailsPage extends StatelessWidget {
               ),
             ),
             child: Center(
-              child: Hero(
-                tag: 'Vanilla Latte',
-                child: Icon(Icons.coffee, size: 200.sp, color: AppColors.primary.withValues(alpha: 0.1)),
-              ),
+              child: Icon(Icons.coffee, size: 200.sp, color: AppColors.primary.withValues(alpha: 0.1)),
             ),
           ),
           SafeArea(
@@ -47,55 +44,44 @@ class ProductDetailsPage extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                TweenAnimationBuilder<double>(
-                  tween: Tween(begin: 1.0, end: 0.0),
-                  duration: const Duration(milliseconds: 600),
-                  curve: Curves.easeOutCubic,
-                  builder: (context, value, child) {
-                    return Transform.translate(
-                      offset: Offset(0, 100 * value),
-                      child: Opacity(opacity: 1.0 - value, child: child),
-                    );
-                  },
-                  child: AppGlassContainer(
-                    height: 480.h,
-                    borderRadius: 40,
-                    padding: EdgeInsets.all(32.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Signature', style: AppTypography.labelSmall.copyWith(color: AppColors.primary)),
-                                Text('Vanilla Latte', style: AppTypography.displayLargeMobile),
-                              ],
-                            ),
-                            Text(r'.50', style: AppTypography.headlineMedium.copyWith(color: AppColors.primary)),
-                          ],
-                        ),
-                        SizedBox(height: 24.h),
-                        Text('A velvety smooth espresso balanced with steamed milk and our house-made Madagascar vanilla syrup.', style: AppTypography.bodyMedium.copyWith(color: AppColors.outline)),
-                        SizedBox(height: 32.h),
-                        Text('Size', style: AppTypography.labelMedium),
-                        SizedBox(height: 16.h),
-                        Row(
-                          children: [
-                            _buildSizeOption('S', false),
-                            _buildSizeOption('M', true),
-                            _buildSizeOption('L', false),
-                          ],
-                        ),
-                        const Spacer(),
-                        AppButton(
-                          text: 'Add to Cart',
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
+                AppGlassContainer(
+                  height: 480.h,
+                  borderRadius: 40,
+                  padding: EdgeInsets.all(32.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Signature', style: AppTypography.labelSmall.copyWith(color: AppColors.primary)),
+                              Text('Vanilla Latte', style: AppTypography.displayLargeMobile),
+                            ],
+                          ),
+                          Text(r'.50', style: AppTypography.headlineMedium.copyWith(color: AppColors.primary)),
+                        ],
+                      ),
+                      SizedBox(height: 24.h),
+                      Text('A velvety smooth espresso balanced with steamed milk and our house-made Madagascar vanilla syrup.', style: AppTypography.bodyMedium.copyWith(color: AppColors.outline)),
+                      SizedBox(height: 32.h),
+                      Text('Size', style: AppTypography.labelMedium),
+                      SizedBox(height: 16.h),
+                      Row(
+                        children: [
+                          _buildSizeOption('S', false),
+                          _buildSizeOption('M', true),
+                          _buildSizeOption('L', false),
+                        ],
+                      ),
+                      const Spacer(),
+                      AppButton(
+                        text: 'Add to Cart',
+                        onPressed: () => Navigator.pushNamed(context, '/cart'),
+                      ),
+                    ],
                   ),
                 ),
               ],

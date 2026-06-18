@@ -75,7 +75,7 @@ class CheckoutPage extends StatelessWidget {
             SizedBox(height: 48.h),
             AppButton(
               text: 'Place Order',
-              onPressed: () {},
+              onPressed: () => Navigator.pushNamed(context, '/transmitted'),
             ),
           ],
         ),

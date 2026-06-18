@@ -29,7 +29,7 @@ class CartPage extends StatelessWidget {
               },
             ),
           ),
-          _buildSummarySection(),
+          _buildSummarySection(context),
         ],
       ),
     );
@@ -90,7 +90,7 @@ class CartPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSummarySection() {
+  Widget _buildSummarySection(BuildContext context) {
     return AppGlassContainer(
       borderRadius: 0,
       padding: EdgeInsets.all(32.w),
@@ -106,7 +106,7 @@ class CartPage extends StatelessWidget {
           SizedBox(height: 32.h),
           AppButton(
             text: 'Checkout',
-            onPressed: () {},
+            onPressed: () => Navigator.pushNamed(context, '/checkout'),
           ),
         ],
       ),

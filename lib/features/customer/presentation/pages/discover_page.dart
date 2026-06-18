@@ -110,7 +110,7 @@ class DiscoverPage extends StatelessWidget {
                   color: AppColors.surfaceSecondary,
                   borderRadius: BorderRadius.circular(16.r),
                 ),
-                child: Icon(Icons.coffee_bean_outlined, color: AppColors.primary),
+                child: Icon(Icons.coffee, color: AppColors.primary),
               ),
               SizedBox(width: 16.w),
               Expanded(
