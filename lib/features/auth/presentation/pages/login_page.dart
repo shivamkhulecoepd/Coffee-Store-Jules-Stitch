@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
-import '../../../../core/theme/app_animations.dart';
 import '../../../../shared/widgets/custom_button.dart';
 import '../../../../shared/widgets/custom_textfield.dart';
-import '../../../customer/presentation/pages/home_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -28,19 +26,25 @@ class LoginPage extends StatelessWidget {
             SizedBox(height: 12.h),
             Align(
               alignment: Alignment.centerRight,
-              child: Text('Forgot Password?', style: AppTypography.labelSmall.copyWith(color: AppColors.primary)),
+              child: GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/forgot-password'),
+                child: Text('Forgot Password?', style: AppTypography.labelSmall.copyWith(color: AppColors.primary)),
+              ),
             ),
             SizedBox(height: 48.h),
             AppButton(
               text: 'Sign In',
-              onPressed: () => Navigator.pushReplacement(context, AppAnimations.fadePageRoute(const HomePage())),
+              onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
             ),
             SizedBox(height: 32.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Don't have an account? ", style: AppTypography.bodyMedium.copyWith(color: AppColors.outline)),
-                Text("Register", style: AppTypography.labelMedium.copyWith(color: AppColors.primary)),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, '/register'),
+                  child: Text("Register", style: AppTypography.labelMedium.copyWith(color: AppColors.primary)),
+                ),
               ],
             ),
           ],

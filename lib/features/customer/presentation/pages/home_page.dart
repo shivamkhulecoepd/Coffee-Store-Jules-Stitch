@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
-import '../../../../core/theme/app_animations.dart';
 import '../../../../shared/widgets/glass_container.dart';
-import 'product_details_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -18,7 +16,7 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(),
+              _buildHeader(context),
               SizedBox(height: 32.h),
               _buildHeroSection(),
               SizedBox(height: 32.h),
@@ -33,11 +31,11 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: _buildBottomNav(context),
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -230,27 +228,30 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNav() {
+  Widget _buildBottomNav(BuildContext context) {
     return AppGlassContainer(
       height: 80.h,
       borderRadius: 0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(Icons.home_filled, true),
-          _buildNavItem(Icons.search, false),
-          _buildNavItem(Icons.shopping_bag_outlined, false),
-          _buildNavItem(Icons.favorite_border, false),
+          _buildNavItem(Icons.home_filled, true, () {}),
+          _buildNavItem(Icons.search, false, () => Navigator.pushNamed(context, '/discover')),
+          _buildNavItem(Icons.shopping_bag_outlined, false, () => Navigator.pushNamed(context, '/cart')),
+          _buildNavItem(Icons.favorite_border, false, () {}),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, bool isActive) {
-    return Icon(
-      icon,
-      color: isActive ? AppColors.primary : AppColors.outline,
-      size: 28.sp,
+  Widget _buildNavItem(IconData icon, bool isActive, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Icon(
+        icon,
+        color: isActive ? AppColors.primary : AppColors.outline,
+        size: 28.sp,
+      ),
     );
   }
 }

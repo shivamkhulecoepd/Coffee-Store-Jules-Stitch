@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
-import '../../../../core/theme/app_animations.dart';
 import '../../../../shared/widgets/custom_button.dart';
-import 'login_page.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -39,14 +37,7 @@ class WelcomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TweenAnimationBuilder<double>(
-                      tween: Tween(begin: 0.0, end: 1.0),
-                      duration: const Duration(seconds: 1),
-                      builder: (context, value, child) {
-                        return Opacity(opacity: value, child: child);
-                      },
-                      child: Text('Experience the Art of Coffee', style: AppTypography.displayLargeMobile),
-                    ),
+                    Text('Experience the Art of Coffee', style: AppTypography.displayLargeMobile),
                     SizedBox(height: 16.h),
                     Text(
                       'Join Bean & Brew and discover a world of artisanal flavors and premium brewing tools.',
@@ -55,13 +46,13 @@ class WelcomePage extends StatelessWidget {
                     SizedBox(height: 48.h),
                     AppButton(
                       text: 'Get Started',
-                      onPressed: () => Navigator.push(context, AppAnimations.fadePageRoute(const LoginPage())),
+                      onPressed: () => Navigator.pushNamed(context, '/login'),
                     ),
                     SizedBox(height: 16.h),
                     AppButton(
                       text: 'Login',
                       isPrimary: false,
-                      onPressed: () => Navigator.push(context, AppAnimations.fadePageRoute(const LoginPage())),
+                      onPressed: () => Navigator.pushNamed(context, '/login'),
                     ),
                     SizedBox(height: 32.h),
                   ],

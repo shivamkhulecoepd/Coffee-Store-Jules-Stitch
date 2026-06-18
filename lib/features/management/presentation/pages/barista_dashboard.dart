@@ -10,6 +10,14 @@ class BaristaDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.boneWhite),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(20.w),
@@ -32,9 +40,11 @@ class BaristaDashboard extends StatelessWidget {
               SizedBox(height: 32.h),
               _buildStatsRow(),
               SizedBox(height: 32.h),
+              _buildQuickActions(context),
+              SizedBox(height: 32.h),
               Text('Active Orders', style: AppTypography.headlineMedium),
               SizedBox(height: 16.h),
-              _buildActiveOrdersList(),
+              _buildActiveOrdersList(context),
             ],
           ),
         ),
@@ -85,28 +95,68 @@ class BaristaDashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildActiveOrdersList() {
+  Widget _buildQuickActions(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Quick Actions', style: AppTypography.labelMedium.copyWith(color: AppColors.primary)),
+        SizedBox(height: 16.h),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildActionItem(context, Icons.qr_code_scanner, 'Scan', '/scan'),
+            _buildActionItem(context, Icons.table_bar, 'Tables', '/tables'),
+            _buildActionItem(context, Icons.assignment, 'Tasks', '/tasks'),
+            _buildActionItem(context, Icons.bar_chart, 'Stats', '/performance'),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionItem(BuildContext context, IconData icon, String label, String route) {
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, route),
+      child: Column(
+        children: [
+          AppGlassContainer(
+            width: 64.w,
+            height: 64.w,
+            borderRadius: 16.r,
+            child: Icon(icon, color: AppColors.primary),
+          ),
+          SizedBox(height: 8.h),
+          Text(label, style: AppTypography.labelSmall),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActiveOrdersList(BuildContext context) {
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: 3,
       separatorBuilder: (context, index) => SizedBox(height: 16.h),
       itemBuilder: (context, index) {
-        return AppGlassContainer(
-          padding: EdgeInsets.all(20.w),
-          child: Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('ORDER #421', style: AppTypography.labelSmall.copyWith(color: AppColors.primary)),
-                  Text('2x Vanilla Latte', style: AppTypography.labelMedium),
-                  Text('Table 4', style: AppTypography.bodyMedium.copyWith(color: AppColors.outline, fontSize: 12.sp)),
-                ],
-              ),
-              const Spacer(),
-              _buildStatusBadge('IN PROGRESS', AppColors.primary),
-            ],
+        return GestureDetector(
+          onTap: () => Navigator.pushNamed(context, '/brewing'),
+          child: AppGlassContainer(
+            padding: EdgeInsets.all(20.w),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('ORDER #421', style: AppTypography.labelSmall.copyWith(color: AppColors.primary)),
+                    Text('2x Vanilla Latte', style: AppTypography.labelMedium),
+                    Text('Table 4', style: AppTypography.bodyMedium.copyWith(color: AppColors.outline, fontSize: 12.sp)),
+                  ],
+                ),
+                const Spacer(),
+                _buildStatusBadge('IN PROGRESS', AppColors.primary),
+              ],
+            ),
           ),
         );
       },
