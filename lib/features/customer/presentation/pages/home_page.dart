@@ -1,5 +1,3 @@
-import 'package:coffee_store_jules_stitch/core/theme/app_animations.dart';
-import 'package:coffee_store_jules_stitch/features/customer/presentation/pages/product_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -33,7 +31,6 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(context),
     );
   }
 
@@ -44,23 +41,14 @@ class HomePage extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Good Morning,',
-              style: AppTypography.labelMedium.copyWith(
-                color: AppColors.outline,
-              ),
-            ),
+            Text('Good Morning,', style: AppTypography.labelMedium.copyWith(color: AppColors.outline)),
             Text('Alex Johnson', style: AppTypography.headlineMedium),
           ],
         ),
         CircleAvatar(
           radius: 24.r,
           backgroundColor: AppColors.surfaceSecondary,
-          child: Icon(
-            Icons.person_outline,
-            color: AppColors.primary,
-            size: 24.sp,
-          ),
+          child: Icon(Icons.person_outline, color: AppColors.primary, size: 24.sp),
         ),
       ],
     );
@@ -70,37 +58,22 @@ class HomePage extends StatelessWidget {
     return AppGlassContainer(
       height: 180.h,
       padding: EdgeInsets.all(24.w),
-      child: Padding(
-        padding: EdgeInsets.all(16.w),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'MORNING BREW',
-                    style: AppTypography.labelSmall.copyWith(
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  Text('25% OFF', style: AppTypography.displayLargeMobile),
-                  Text(
-                    'On your first order today',
-                    style: AppTypography.bodyMedium,
-                  ),
-                ],
-              ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('MORNING BREW', style: AppTypography.labelSmall.copyWith(color: AppColors.primary)),
+                SizedBox(height: 8.h),
+                Text('25% OFF', style: AppTypography.displayLargeMobile),
+                Text('On your first order today', style: AppTypography.bodyMedium),
+              ],
             ),
-            Icon(
-              Icons.coffee,
-              size: 80.sp,
-              color: AppColors.primary.withValues(alpha: 0.3),
-            ),
-          ],
-        ),
+          ),
+          Icon(Icons.coffee, size: 80.sp, color: AppColors.primary.withValues(alpha: 0.3)),
+        ],
       ),
     );
   }
@@ -150,25 +123,13 @@ class HomePage extends StatelessWidget {
       children: [
         _buildProductCard(context, 'Vanilla Latte', '4.8', '5.50'),
         _buildProductCard(context, 'Caramel Macchiato', '4.9', '6.00'),
-        _buildProductCard(context, 'Vanilla Latte', '4.8', '5.50'),
-        _buildProductCard(context, 'Caramel Macchiato', '4.9', '6.00'),
-        _buildProductCard(context, 'Vanilla Latte', '4.8', '5.50'),
-        _buildProductCard(context, 'Caramel Macchiato', '4.9', '6.00'),
       ],
     );
   }
 
-  Widget _buildProductCard(
-    BuildContext context,
-    String name,
-    String rating,
-    String price,
-  ) {
+  Widget _buildProductCard(BuildContext context, String name, String rating, String price) {
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        AppAnimations.fadePageRoute(const ProductDetailsPage()),
-      ),
+      onTap: () => Navigator.pushNamed(context, '/details'),
       child: AppGlassContainer(
         padding: EdgeInsets.all(12.w),
         child: Column(
@@ -180,79 +141,25 @@ class HomePage extends StatelessWidget {
                   color: AppColors.background,
                   borderRadius: BorderRadius.circular(20.r),
                 ),
-                child: Center(
-                  child: Hero(
-                    tag: name,
-                    child: Icon(
-                      Icons.coffee,
-                      size: 40.sp,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ),
+                child: Center(child: Icon(Icons.coffee, size: 40.sp, color: AppColors.primary)),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                left: 8.w,
-                right: 8.w,
-                top: 12.h,
-                bottom: 16.h,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(name, style: AppTypography.labelMedium),
-                  SizedBox(height: 8.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        r'$' + price,
-                        style: AppTypography.labelMedium.copyWith(
-                          color: AppColors.primary,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Icon(Icons.star, size: 14.sp, color: Colors.amber),
-                          Text(rating, style: AppTypography.labelSmall),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            SizedBox(height: 12.h),
+            Text(name, style: AppTypography.labelMedium),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(r'$'+price, style: AppTypography.labelMedium.copyWith(color: AppColors.primary)),
+                Row(
+                  children: [
+                    Icon(Icons.star, size: 14.sp, color: Colors.amber),
+                    Text(rating, style: AppTypography.labelSmall),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildBottomNav(BuildContext context) {
-    return AppGlassContainer(
-      height: 80.h,
-      borderRadius: 0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(Icons.home_filled, true, () {}),
-          _buildNavItem(Icons.search, false, () => Navigator.pushNamed(context, '/discover')),
-          _buildNavItem(Icons.shopping_bag_outlined, false, () => Navigator.pushNamed(context, '/cart')),
-          _buildNavItem(Icons.favorite_border, false, () {}),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, bool isActive, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Icon(
-        icon,
-        color: isActive ? AppColors.primary : AppColors.outline,
-        size: 28.sp,
       ),
     );
   }

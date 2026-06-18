@@ -13,10 +13,13 @@ class BaristaDashboard extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.boneWhite),
-          onPressed: () => Navigator.pop(context),
-        ),
+        title: Text('Barista Hub', style: AppTypography.headlineMedium),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.red),
+            onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/welcome', (route) => false),
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -30,8 +33,8 @@ class BaristaDashboard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Barista Dashboard', style: AppTypography.labelMedium.copyWith(color: AppColors.primary)),
-                      Text('Morning Shift', style: AppTypography.headlineMedium),
+                      Text('Good Morning,', style: AppTypography.labelMedium.copyWith(color: AppColors.primary)),
+                      Text('Sarah Miller', style: AppTypography.headlineMedium),
                     ],
                   ),
                   _buildStatusBadge('ONLINE', Colors.green),
@@ -99,15 +102,15 @@ class BaristaDashboard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Quick Actions', style: AppTypography.labelMedium.copyWith(color: AppColors.primary)),
+        Text('Operations', style: AppTypography.labelMedium.copyWith(color: AppColors.primary)),
         SizedBox(height: 16.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _buildActionItem(context, Icons.qr_code_scanner, 'Scan', '/scan'),
-            _buildActionItem(context, Icons.table_bar, 'Tables', '/tables'),
-            _buildActionItem(context, Icons.assignment, 'Tasks', '/tasks'),
-            _buildActionItem(context, Icons.bar_chart, 'Stats', '/performance'),
+            _buildActionItem(context, Icons.history, 'Shift Info', '/overview'),
+            _buildActionItem(context, Icons.receipt_long, 'Billing', '/billing'),
+            _buildActionItem(context, Icons.assignment_turned_in, 'Handover', '/handover'),
           ],
         ),
       ],

@@ -16,6 +16,7 @@ class CartPage extends StatelessWidget {
         elevation: 0,
         title: Text('Your Cart', style: AppTypography.headlineMedium),
         centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         children: [

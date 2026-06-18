@@ -10,6 +10,17 @@ class ManagerDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text('Store Control', style: AppTypography.headlineMedium),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.red),
+            onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/welcome', (route) => false),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(20.w),
@@ -32,15 +43,13 @@ class ManagerDashboard extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 32.h),
-              Text('Inventory Alerts', style: AppTypography.headlineMedium),
+              _buildAdminOption(context, 'Manage Suppliers', '/suppliers'),
+              _buildAdminOption(context, 'System Requests', '/requests'),
+              SizedBox(height: 32.h),
+              Text('Inventory Critical', style: AppTypography.headlineMedium),
               SizedBox(height: 16.h),
               _buildInventoryAlert('Espresso Beans', 'Low Stock (12kg)', Colors.orange),
               _buildInventoryAlert('Whole Milk', 'Critically Low (5L)', Colors.red),
-              SizedBox(height: 32.h),
-              Text('Staff Performance', style: AppTypography.headlineMedium),
-              SizedBox(height: 16.h),
-              _buildStaffCard('Sarah Miller', '98% Efficiency'),
-              _buildStaffCard('Alex Johnson', '94% Efficiency'),
             ],
           ),
         ),
@@ -59,6 +68,25 @@ class ManagerDashboard extends StatelessWidget {
     );
   }
 
+  Widget _buildAdminOption(BuildContext context, String label, String route) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12.h),
+      child: AppGlassContainer(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+        child: GestureDetector(
+          onTap: () => Navigator.pushNamed(context, route),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(label, style: AppTypography.labelMedium),
+              Icon(Icons.arrow_forward_ios, color: AppColors.outline, size: 14.sp),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildInventoryAlert(String item, String status, Color color) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h),
@@ -71,30 +99,6 @@ class ManagerDashboard extends StatelessWidget {
             Text(item, style: AppTypography.labelMedium),
             const Spacer(),
             Text(status, style: AppTypography.labelSmall.copyWith(color: color)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStaffCard(String name, String metric) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 12.h),
-      child: AppGlassContainer(
-        padding: EdgeInsets.all(16.w),
-        child: Row(
-          children: [
-            CircleAvatar(radius: 20.r, backgroundColor: AppColors.surfaceSecondary, child: Text(name[0])),
-            SizedBox(width: 16.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(name, style: AppTypography.labelMedium),
-                Text(metric, style: AppTypography.bodyMedium.copyWith(color: AppColors.outline, fontSize: 12.sp)),
-              ],
-            ),
-            const Spacer(),
-            Icon(Icons.keyboard_arrow_right, color: AppColors.outline),
           ],
         ),
       ),
