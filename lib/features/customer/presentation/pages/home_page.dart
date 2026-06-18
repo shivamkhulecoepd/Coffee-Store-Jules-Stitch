@@ -1,3 +1,5 @@
+import 'package:coffee_store_jules_stitch/core/theme/app_animations.dart';
+import 'package:coffee_store_jules_stitch/features/customer/presentation/pages/product_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
