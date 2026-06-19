@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_typography.dart';
 import 'glass_container.dart';
 
 class AppBottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
+  final List<AppBottomNavItem> items;
 
   const AppBottomNavBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
+    required this.items,
   });
 
   @override
@@ -19,20 +22,16 @@ class AppBottomNavBar extends StatelessWidget {
       height: 80.h,
       width: double.infinity,
       borderRadius: 0,
-      padding: EdgeInsets.symmetric(horizontal: 10.w),
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(context, Icons.home_filled, 'Home', 0),
-          _buildNavItem(context, Icons.search, 'Discover', 1),
-          _buildNavItem(context, Icons.shopping_bag_outlined, 'Cart', 2),
-          _buildNavItem(context, Icons.person_outline, 'Profile', 3),
-        ],
+        children: List.generate(items.length, (index) => _buildNavItem(context, index)),
       ),
     );
   }
 
-  Widget _buildNavItem(BuildContext context, IconData icon, String label, int index) {
+  Widget _buildNavItem(BuildContext context, int index) {
+    final item = items[index];
     bool isActive = currentIndex == index;
     return GestureDetector(
       onTap: () => onTap(index),
@@ -43,7 +42,7 @@ class AppBottomNavBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              icon,
+              item.icon,
               color: isActive ? AppColors.primary : AppColors.outline,
               size: 28.sp,
             ),
@@ -62,4 +61,10 @@ class AppBottomNavBar extends StatelessWidget {
       ),
     );
   }
+}
+
+class AppBottomNavItem {
+  final IconData icon;
+  final String label;
+  const AppBottomNavItem({required this.icon, required this.label});
 }

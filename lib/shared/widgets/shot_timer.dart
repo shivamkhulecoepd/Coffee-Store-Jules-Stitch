@@ -27,8 +27,8 @@ class ShotTimer extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(time, style: AppTypography.displayLarge.copyWith(fontSize: 36.sp)),
-            Text('SECONDS', style: AppTypography.labelSmall.copyWith(color: AppColors.outline, fontSize: 10.sp)),
+            Text(time, style: AppTypography.displayLarge(context).copyWith(fontSize: 36.sp)),
+            Text('SECONDS', style: AppTypography.labelSmall(context).copyWith(color: AppColors.outline, fontSize: 10.sp)),
           ],
         ),
       ],

@@ -13,7 +13,6 @@ class AppGlassContainer extends StatelessWidget {
   final BoxShape shape;
   final List<BoxShadow>? boxShadow;
   final bool hasInnerBorder;
-  final Color? color;
 
   const AppGlassContainer({
     super.key,
@@ -27,7 +26,6 @@ class AppGlassContainer extends StatelessWidget {
     this.shape = BoxShape.rectangle,
     this.boxShadow,
     this.hasInnerBorder = true,
-    this.color,
   });
 
   @override
@@ -51,7 +49,9 @@ class AppGlassContainer extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: shape,
                     borderRadius: shape == BoxShape.circle ? null : BorderRadius.circular(borderRadius),
-                    color: (color ?? AppColors.surfaceSecondary).withOpacity(opacity),
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? AppColors.surfaceDark.withOpacity(opacity)
+                        : AppColors.surfaceLight.withOpacity(opacity),
                   ),
                 ),
               ),
@@ -89,7 +89,7 @@ class _GlassBorderPainter extends CustomPainter {
     final paint = Paint()
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke
-      ..shader = LinearGradient(
+      ..shader = const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: AppColors.innerBorderGradient,
