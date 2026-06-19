@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/glass_container.dart';
 
 class RewardsDashboard extends StatelessWidget {
@@ -10,35 +11,44 @@ class RewardsDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('My Rewards', style: AppTypography.headlineMedium),
+        title: Text('Reward Ledger', style: AppTypography.headlineMedium),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.w),
+        padding: EdgeInsets.all(24.w),
         child: Column(
           children: [
             AppGlassContainer(
-              height: 200.h,
-              padding: EdgeInsets.all(24.w),
+              height: 220.h,
+              padding: EdgeInsets.all(32.w),
+              boxShadow: AppTheme.premiumShadow,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('COFFEE POINTS', style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
-                  SizedBox(height: 8.h),
-                  Text('2,450', style: AppTypography.displayLarge),
+                  Text('ACCUMULATED CREDITS', style: AppTypography.labelSmall.copyWith(color: AppColors.primary, letterSpacing: 3)),
+                  SizedBox(height: 12.h),
+                  Text('2,450', style: AppTypography.displayLarge.copyWith(fontSize: 56.sp, color: AppColors.primary)),
                   SizedBox(height: 16.h),
-                  Text('550 points until your next free cup', style: AppTypography.labelSmall.copyWith(color: AppColors.primary)),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
+                    decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(20.r)),
+                    child: Text('Elite Tier Member', style: AppTypography.labelSmall.copyWith(color: AppColors.primary, fontWeight: FontWeight.w700)),
+                  ),
                 ],
               ),
             ),
-            SizedBox(height: 32.h),
-            _buildSectionHeader('Available Rewards'),
-            SizedBox(height: 16.h),
-            _buildRewardItem('Free Espresso', '500 pts'),
-            _buildRewardItem('Seasonal Muffin', '800 pts'),
-            _buildRewardItem('Custom Coffee Mug', '2500 pts'),
+            SizedBox(height: 40.h),
+            _buildSectionHeader('AVAILABLE REDEMPTIONS'),
+            SizedBox(height: 20.h),
+            _buildRewardItem('Artisan Espresso', '500 PTS'),
+            _buildRewardItem('Seasonal Pastry', '800 PTS'),
+            _buildRewardItem('Limited Edition Mug', '2,500 PTS'),
+            SizedBox(height: 120.h),
           ],
         ),
       ),
@@ -48,7 +58,7 @@ class RewardsDashboard extends StatelessWidget {
   Widget _buildSectionHeader(String title) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: Text(title, style: AppTypography.labelMedium.copyWith(color: AppColors.primary)),
+      child: Text(title, style: AppTypography.labelSmall.copyWith(color: AppColors.outline, letterSpacing: 1.5)),
     );
   }
 
@@ -56,20 +66,17 @@ class RewardsDashboard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: 16.h),
       child: AppGlassContainer(
-        padding: EdgeInsets.all(20.w),
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
         child: Row(
           children: [
-            Icon(Icons.card_giftcard, color: AppColors.primary),
-            SizedBox(width: 16.w),
-            Expanded(child: Text(title, style: AppTypography.labelMedium)),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceSecondary,
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-              child: Text(cost, style: AppTypography.labelSmall.copyWith(color: AppColors.primary)),
+              padding: EdgeInsets.all(12.w),
+              decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.1), shape: BoxShape.circle),
+              child: Icon(Icons.card_giftcard, color: AppColors.primary, size: 24.sp),
             ),
+            SizedBox(width: 20.w),
+            Expanded(child: Text(title, style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w600))),
+            Text(cost, style: AppTypography.dataMono.copyWith(color: AppColors.primary)),
           ],
         ),
       ),

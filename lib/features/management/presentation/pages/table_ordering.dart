@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/glass_container.dart';
 import '../../../../shared/widgets/custom_button.dart';
 
@@ -14,33 +15,42 @@ class TableOrderingPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('Table 4 Ordering', style: AppTypography.headlineMedium),
+        title: Text('Table 04 Session', style: AppTypography.headlineMedium),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView(
-              padding: EdgeInsets.all(20.w),
+              padding: EdgeInsets.all(24.w),
               children: [
-                _buildOrderItem('Espresso', '1'),
-                _buildOrderItem('Cappuccino', '2'),
+                Text('TRANSACTION ITEMS', style: AppTypography.labelSmall.copyWith(color: AppColors.primary, letterSpacing: 2)),
+                SizedBox(height: 20.h),
+                _buildOrderItem('Espresso Doppio', '1', r'.50'),
+                _buildOrderItem('Cappuccino Artisan', '2', r'.50'),
               ],
             ),
           ),
           AppGlassContainer(
-            borderRadius: 0,
-            padding: EdgeInsets.all(32.w),
+            borderRadius: 40.r,
+            padding: EdgeInsets.fromLTRB(32.w, 32.h, 32.w, 48.h),
+            boxShadow: AppTheme.premiumShadow,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Total', style: AppTypography.headlineMedium),
-                    Text(r'4.00', style: AppTypography.headlineMedium.copyWith(color: AppColors.primary)),
+                    Text('SESSION TOTAL', style: AppTypography.labelSmall.copyWith(color: AppColors.outline, letterSpacing: 1)),
+                    Text(r'4.00', style: AppTypography.headlineLarge.copyWith(color: AppColors.primary)),
                   ],
                 ),
-                SizedBox(height: 24.h),
-                AppButton(text: 'Send to Kitchen', onPressed: () {}),
+                SizedBox(height: 32.h),
+                AppButton(text: 'AUTHORIZE TRANSMISSION', onPressed: () => Navigator.pop(context)),
               ],
             ),
           ),
@@ -49,16 +59,22 @@ class TableOrderingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderItem(String name, String qty) {
+  Widget _buildOrderItem(String name, String qty, String price) {
     return Padding(
       padding: EdgeInsets.only(bottom: 16.h),
       child: AppGlassContainer(
-        padding: EdgeInsets.all(16.w),
+        padding: EdgeInsets.all(20.w),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(name, style: AppTypography.labelMedium),
-            Text('x'+qty, style: AppTypography.labelMedium.copyWith(color: AppColors.primary)),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(name, style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w700)),
+                Text('UNIT COUNT: $qty', style: AppTypography.labelSmall.copyWith(color: AppColors.primary, fontSize: 10.sp, letterSpacing: 1)),
+              ],
+            ),
+            Text(price, style: AppTypography.dataMono.copyWith(fontWeight: FontWeight.w600)),
           ],
         ),
       ),

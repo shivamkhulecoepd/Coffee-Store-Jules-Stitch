@@ -11,9 +11,8 @@ class AppTheme {
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
         onPrimary: AppColors.onPrimary,
-        secondary: AppColors.secondary,
-        onSecondary: AppColors.onSecondary,
-        surface: AppColors.surface,
+        secondary: AppColors.outline,
+        surface: AppColors.surfaceSecondary,
         onSurface: AppColors.boneWhite,
         error: AppColors.error,
       ),
@@ -27,7 +26,8 @@ class AppTheme {
         labelSmall: AppTypography.labelSmall,
       ),
       cardTheme: CardThemeData(
-        color: AppColors.surfaceSecondary,
+        color: AppColors.surfaceSecondaryGlass,
+        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(28),
         ),
@@ -45,4 +45,12 @@ class AppTheme {
       ),
     );
   }
+
+  static List<BoxShadow> get premiumShadow => [
+    BoxShadow(
+      color: Colors.black.withOpacity(0.3),
+      blurRadius: 40,
+      offset: const Offset(0, 20),
+    ),
+  ];
 }

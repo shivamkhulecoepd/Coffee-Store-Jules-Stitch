@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/glass_container.dart';
 import '../../../../shared/widgets/custom_button.dart';
 
@@ -14,30 +15,35 @@ class PaymentMethodsPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('Payment Methods', style: AppTypography.headlineMedium),
+        title: Text('Wallet', style: AppTypography.headlineMedium),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.w),
+        padding: EdgeInsets.all(24.w),
         child: Column(
           children: [
-            _buildCardItem('Visa', '•••• •••• •••• 4242', true),
-            SizedBox(height: 16.h),
+            _buildCardItem('Visa Credit', '•••• •••• •••• 4242', true),
+            SizedBox(height: 20.h),
             _buildCardItem('Mastercard', '•••• •••• •••• 5555', false),
-            SizedBox(height: 32.h),
+            SizedBox(height: 40.h),
             AppGlassContainer(
-              padding: EdgeInsets.all(20.w),
+              padding: EdgeInsets.all(24.w),
               height: 72.h,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.add, color: AppColors.primary),
-                  SizedBox(width: 12.w),
-                  Text('Add New Card', style: AppTypography.labelMedium),
+                  Icon(Icons.add_circle_outline, color: AppColors.primary, size: 24.sp),
+                  SizedBox(width: 16.w),
+                  Text('LINK NEW CARD', style: AppTypography.labelSmall.copyWith(color: AppColors.primary, letterSpacing: 2)),
                 ],
               ),
             ),
             const Spacer(),
-            AppButton(text: 'Save Selection', onPressed: () {}),
+            AppButton(text: 'SAVE PREFERENCES', onPressed: () => Navigator.pop(context)),
           ],
         ),
       ),
@@ -46,28 +52,26 @@ class PaymentMethodsPage extends StatelessWidget {
 
   Widget _buildCardItem(String type, String number, bool isSelected) {
     return AppGlassContainer(
-      padding: EdgeInsets.all(20.w),
+      padding: EdgeInsets.all(24.w),
+      boxShadow: isSelected ? AppTheme.premiumShadow : null,
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(12.w),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceSecondary,
-              shape: BoxShape.circle,
-            ),
+            padding: EdgeInsets.all(14.w),
+            decoration: BoxDecoration(color: isSelected ? AppColors.primary.withOpacity(0.1) : AppColors.surfaceSecondary, shape: BoxShape.circle),
             child: Icon(Icons.credit_card, color: isSelected ? AppColors.primary : AppColors.outline),
           ),
-          SizedBox(width: 16.w),
+          SizedBox(width: 20.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(type, style: AppTypography.labelMedium),
-                Text(number, style: AppTypography.bodyMedium.copyWith(color: AppColors.outline, fontSize: 12.sp)),
+                Text(type.toUpperCase(), style: AppTypography.labelSmall.copyWith(color: AppColors.outline, fontSize: 10.sp)),
+                Text(number, style: AppTypography.dataMono.copyWith(fontSize: 16.sp)),
               ],
             ),
           ),
-          if (isSelected) Icon(Icons.check_circle, color: AppColors.primary),
+          if (isSelected) Icon(Icons.check_circle, color: AppColors.primary, size: 24.sp),
         ],
       ),
     );

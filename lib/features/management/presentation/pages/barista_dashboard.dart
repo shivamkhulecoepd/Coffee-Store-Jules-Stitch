@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/glass_container.dart';
+import '../../../../shared/widgets/kpi_card.dart';
 
 class BaristaDashboard extends StatelessWidget {
   const BaristaDashboard({super.key});
@@ -14,18 +16,20 @@ class BaristaDashboard extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('Barista Hub', style: AppTypography.headlineMedium),
+        title: Text('Barista Control', style: AppTypography.headlineMedium),
+        centerTitle: true,
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout, color: Colors.red),
+            icon: const Icon(Icons.logout, color: AppColors.error),
             onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/welcome', (route) => false),
           ),
+          SizedBox(width: 8.w),
         ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(20.w),
+          padding: EdgeInsets.all(24.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -35,22 +39,24 @@ class BaristaDashboard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Good Morning,', style: AppTypography.labelMedium.copyWith(color: AppColors.primary)),
-                      Text('Sarah Miller', style: AppTypography.headlineMedium),
+                      Text('SYSTEM STATUS: ONLINE', style: AppTypography.labelSmall.copyWith(color: AppColors.success, letterSpacing: 2)),
+                      Text('Sarah Miller', style: AppTypography.displayLargeMobile.copyWith(fontWeight: FontWeight.w700)),
                     ],
                   ),
-                  _buildStatusBadge('ONLINE', Colors.green),
+                  _buildStatusIndicator(),
                 ],
               ),
               SizedBox(height: 32.h),
-              _buildStatsRow(),
-              SizedBox(height: 32.h),
+              _buildKPISection(),
+              SizedBox(height: 40.h),
+              Text('OPERATIONS', style: AppTypography.labelSmall.copyWith(color: AppColors.primary, letterSpacing: 2)),
+              SizedBox(height: 16.h),
               _buildQuickActions(context),
-              SizedBox(height: 32.h),
-              Text('Active Orders', style: AppTypography.headlineMedium),
+              SizedBox(height: 40.h),
+              Text('ACTIVE EXTRACTIONS', style: AppTypography.labelSmall.copyWith(color: AppColors.primary, letterSpacing: 2)),
               SizedBox(height: 16.h),
               _buildActiveOrdersList(context),
-              SizedBox(height: 100.h),
+              SizedBox(height: 120.h),
             ],
           ),
         ),
@@ -58,64 +64,56 @@ class BaristaDashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusBadge(String label, Color color) {
+  Widget _buildStatusIndicator() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+      width: 56.w,
+      height: 56.w,
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: color.withOpacity(0.5)),
+        color: AppColors.success.withOpacity(0.1),
+        shape: BoxShape.circle,
+        border: Border.all(color: AppColors.success.withOpacity(0.3)),
       ),
-      child: Text(label, style: AppTypography.labelSmall.copyWith(color: color)),
+      child: Center(
+        child: Container(
+          width: 12.w,
+          height: 12.w,
+          decoration: const BoxDecoration(color: AppColors.success, shape: BoxShape.circle),
+        ),
+      ),
     );
   }
 
-  Widget _buildStatsRow() {
+  Widget _buildKPISection() {
     return Row(
       children: [
-        Expanded(child: _buildStatCard('Orders', '24', Icons.receipt_long)),
+        const Expanded(
+          child: KPICard(
+            label: 'Total Orders',
+            value: '24',
+            chartData: [10, 15, 12, 18, 20, 24],
+          ),
+        ),
         SizedBox(width: 16.w),
-        Expanded(child: _buildStatCard('Wait Time', '4m', Icons.timer_outlined)),
+        const Expanded(
+          child: KPICard(
+            label: 'Avg. Latency',
+            value: '4m',
+            chartData: [5, 4.5, 4.2, 4.8, 4.1, 4.0],
+            chartColor: AppColors.success,
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildStatCard(String label, String value, IconData icon) {
-    return AppGlassContainer(
-      padding: EdgeInsets.all(16.w),
-      height: 100.h,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(label, style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
-              Icon(icon, size: 16.sp, color: AppColors.primary),
-            ],
-          ),
-          Text(value, style: AppTypography.headlineMedium),
-        ],
-      ),
-    );
-  }
-
   Widget _buildQuickActions(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('Operations', style: AppTypography.labelMedium.copyWith(color: AppColors.primary)),
-        SizedBox(height: 16.h),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildActionItem(context, Icons.qr_code_scanner, 'Scan', '/scan'),
-            _buildActionItem(context, Icons.history, 'Shift Info', '/overview'),
-            _buildActionItem(context, Icons.receipt_long, 'Billing', '/billing'),
-            _buildActionItem(context, Icons.assignment_turned_in, 'Handover', '/handover'),
-          ],
-        ),
+        _buildActionItem(context, Icons.qr_code_scanner, 'Scan QR', '/scan'),
+        _buildActionItem(context, Icons.history, 'Shift Info', '/overview'),
+        _buildActionItem(context, Icons.receipt_long, 'Billing', '/billing'),
+        _buildActionItem(context, Icons.assignment_turned_in, 'Handover', '/handover'),
       ],
     );
   }
@@ -123,16 +121,18 @@ class BaristaDashboard extends StatelessWidget {
   Widget _buildActionItem(BuildContext context, IconData icon, String label, String route) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, route),
+      behavior: HitTestBehavior.opaque,
       child: Column(
         children: [
           AppGlassContainer(
-            width: 64.w,
-            height: 64.w,
-            borderRadius: 16.r,
-            child: Icon(icon, color: AppColors.primary),
+            width: 68.w,
+            height: 68.w,
+            borderRadius: 20.r,
+            padding: EdgeInsets.zero,
+            child: Center(child: Icon(icon, color: AppColors.primary, size: 24.sp)),
           ),
-          SizedBox(height: 8.h),
-          Text(label, style: AppTypography.labelSmall),
+          SizedBox(height: 12.h),
+          Text(label, style: AppTypography.labelSmall.copyWith(fontSize: 10.sp, fontWeight: FontWeight.w600)),
         ],
       ),
     );
@@ -147,6 +147,7 @@ class BaristaDashboard extends StatelessWidget {
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () => Navigator.pushNamed(context, '/brewing'),
+          behavior: HitTestBehavior.opaque,
           child: AppGlassContainer(
             padding: EdgeInsets.all(20.w),
             child: Row(
@@ -154,13 +155,17 @@ class BaristaDashboard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('ORDER #421', style: AppTypography.labelSmall.copyWith(color: AppColors.primary)),
-                    Text('2x Vanilla Latte', style: AppTypography.labelMedium),
-                    Text('Table 4', style: AppTypography.bodyMedium.copyWith(color: AppColors.outline, fontSize: 12.sp)),
+                    Text('SESSION #421', style: AppTypography.dataMono.copyWith(color: AppColors.primary, fontSize: 10.sp)),
+                    Text('2x Vanilla Latte', style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w700)),
+                    Text('Table 4 • Synchronizing', style: AppTypography.bodyMedium.copyWith(color: AppColors.outline, fontSize: 11.sp)),
                   ],
                 ),
                 const Spacer(),
-                _buildStatusBadge('IN PROGRESS', AppColors.primary),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                  decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(6.r)),
+                  child: Text('BREWING', style: AppTypography.labelSmall.copyWith(color: AppColors.primary, fontSize: 9.sp, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                ),
               ],
             ),
           ),

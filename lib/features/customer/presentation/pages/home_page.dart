@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/glass_container.dart';
 
 class HomePage extends StatelessWidget {
@@ -10,25 +11,25 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent, // Important for glassmorphism stacking
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildHeader(context),
-              SizedBox(height: 32.h),
+              SizedBox(height: 40.h),
               _buildHeroSection(),
-              SizedBox(height: 32.h),
-              Text('Categories', style: AppTypography.headlineMedium),
+              SizedBox(height: 40.h),
+              Text('CATEGORIES', style: AppTypography.labelSmall.copyWith(color: AppColors.primary, letterSpacing: 2)),
               SizedBox(height: 16.h),
               _buildCategories(),
-              SizedBox(height: 32.h),
-              Text('Popular Now', style: AppTypography.headlineMedium),
+              SizedBox(height: 40.h),
+              Text('POPULAR SELECTIONS', style: AppTypography.labelSmall.copyWith(color: AppColors.primary, letterSpacing: 2)),
               SizedBox(height: 16.h),
               _buildProductGrid(context),
-              SizedBox(height: 100.h), // Spacing for bottom bar
+              SizedBox(height: 120.h),
             ],
           ),
         ),
@@ -43,14 +44,18 @@ class HomePage extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Good Morning,', style: AppTypography.labelMedium.copyWith(color: AppColors.outline)),
-            Text('Alex Johnson', style: AppTypography.headlineMedium),
+            Text('LUXURY COFFEE', style: AppTypography.labelSmall.copyWith(color: AppColors.primary, letterSpacing: 3)),
+            Text('Bean & Brew', style: AppTypography.displayLargeMobile.copyWith(fontSize: 32.sp, fontWeight: FontWeight.w700)),
           ],
         ),
-        CircleAvatar(
-          radius: 24.r,
-          backgroundColor: AppColors.surfaceSecondary,
-          child: Icon(Icons.person_outline, color: AppColors.primary, size: 24.sp),
+        AppGlassContainer(
+          width: 56.w,
+          height: 56.w,
+          borderRadius: 28.r,
+          padding: EdgeInsets.zero,
+          child: Center(
+            child: Icon(Icons.person_outline, color: AppColors.primary, size: 28.sp),
+          ),
         ),
       ],
     );
@@ -60,6 +65,7 @@ class HomePage extends StatelessWidget {
     return AppGlassContainer(
       height: 180.h,
       padding: EdgeInsets.all(24.w),
+      boxShadow: AppTheme.premiumShadow,
       child: Row(
         children: [
           Expanded(
@@ -67,14 +73,17 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('MORNING BREW', style: AppTypography.labelSmall.copyWith(color: AppColors.primary)),
+                Text('DAILY SPECIAL', style: AppTypography.labelSmall.copyWith(color: AppColors.primary, letterSpacing: 1.5)),
                 SizedBox(height: 8.h),
-                Text('25% OFF', style: AppTypography.displayLargeMobile),
-                Text('On your first order today', style: AppTypography.bodyMedium),
+                Text('25% OFF', style: AppTypography.displayLargeMobile.copyWith(fontSize: 38.sp)),
+                Text('Premium Roast Selections', style: AppTypography.bodyMedium.copyWith(color: AppColors.outline)),
               ],
             ),
           ),
-          Icon(Icons.coffee, size: 80.sp, color: AppColors.primary.withOpacity(0.3)),
+          Opacity(
+            opacity: 0.2,
+            child: Icon(Icons.coffee, size: 80.sp, color: AppColors.primary),
+          ),
         ],
       ),
     );
@@ -82,14 +91,14 @@ class HomePage extends StatelessWidget {
 
   Widget _buildCategories() {
     return SizedBox(
-      height: 40.h,
+      height: 48.h,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          _buildCategoryChip('All Coffee', true),
-          _buildCategoryChip('Espresso', false),
-          _buildCategoryChip('Cold Brew', false),
-          _buildCategoryChip('Pastries', false),
+          _buildCategoryChip('ESPRESSO', true),
+          _buildCategoryChip('COLD BREW', false),
+          _buildCategoryChip('PASTRIES', false),
+          _buildCategoryChip('BEANS', false),
         ],
       ),
     );
@@ -98,16 +107,19 @@ class HomePage extends StatelessWidget {
   Widget _buildCategoryChip(String label, bool isSelected) {
     return Container(
       margin: EdgeInsets.only(right: 12.w),
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
       decoration: BoxDecoration(
-        color: isSelected ? AppColors.primary : AppColors.surfaceSecondary,
-        borderRadius: BorderRadius.circular(20.r),
+        color: isSelected ? AppColors.primary : AppColors.surfaceSecondary.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(24.r),
+        border: Border.all(color: isSelected ? Colors.transparent : Colors.white.withOpacity(0.05)),
       ),
       child: Center(
         child: Text(
           label,
-          style: AppTypography.labelMedium.copyWith(
+          style: AppTypography.labelSmall.copyWith(
             color: isSelected ? AppColors.onPrimary : AppColors.boneWhite,
+            fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
+            letterSpacing: 1,
           ),
         ),
       ),
@@ -119,12 +131,12 @@ class HomePage extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 2,
-      mainAxisSpacing: 16.h,
-      crossAxisSpacing: 16.w,
-      childAspectRatio: 0.75,
+      mainAxisSpacing: 24.h,
+      crossAxisSpacing: 24.w,
+      childAspectRatio: 0.7,
       children: [
         _buildProductCard(context, 'Vanilla Latte', '4.8', '5.50'),
-        _buildProductCard(context, 'Caramel Macchiato', '4.9', '6.00'),
+        _buildProductCard(context, 'Macchiato', '4.9', '6.00'),
       ],
     );
   }
@@ -132,30 +144,35 @@ class HomePage extends StatelessWidget {
   Widget _buildProductCard(BuildContext context, String name, String rating, String price) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, '/details'),
+      behavior: HitTestBehavior.opaque,
       child: AppGlassContainer(
-        padding: EdgeInsets.all(12.w),
+        padding: EdgeInsets.all(16.w),
+        boxShadow: AppTheme.premiumShadow,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Container(
+                width: double.infinity,
                 decoration: BoxDecoration(
-                  color: AppColors.background,
+                  color: const Color(0xFF0A0A0A),
                   borderRadius: BorderRadius.circular(20.r),
                 ),
-                child: Center(child: Icon(Icons.coffee, size: 40.sp, color: AppColors.primary)),
+                child: Center(child: Icon(Icons.coffee, size: 48.sp, color: AppColors.primary)),
               ),
             ),
-            SizedBox(height: 12.h),
-            Text(name, style: AppTypography.labelMedium),
+            SizedBox(height: 16.h),
+            Text(name, style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w700)),
+            SizedBox(height: 4.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(r'$'+price, style: AppTypography.labelMedium.copyWith(color: AppColors.primary)),
+                Text(r'$'+price, style: AppTypography.dataMono.copyWith(color: AppColors.primary, fontWeight: FontWeight.w700)),
                 Row(
                   children: [
-                    Icon(Icons.star, size: 14.sp, color: Colors.amber),
-                    Text(rating, style: AppTypography.labelSmall),
+                    Icon(Icons.star, size: 14.sp, color: AppColors.primary),
+                    SizedBox(width: 4.w),
+                    Text(rating, style: AppTypography.dataMono.copyWith(fontSize: 12.sp, color: AppColors.outline)),
                   ],
                 ),
               ],

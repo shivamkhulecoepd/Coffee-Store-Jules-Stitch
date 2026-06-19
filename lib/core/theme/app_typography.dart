@@ -61,4 +61,12 @@ class AppTypography {
     height: 1.2,
     color: AppColors.boneWhite,
   );
+
+  static TextStyle dataMono = GoogleFonts.manrope(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    height: 1.2,
+    letterSpacing: 0.02.sp,
+    color: AppColors.boneWhite,
+  );
 }
