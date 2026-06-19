@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../shared/widgets/glass_container.dart';
 import '../../../../core/theme/app_colors.dart';
 import 'manager_dashboard.dart';
@@ -26,12 +27,14 @@ class _AdminNavigationPageState extends State<AdminNavigationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: IndexedStack(
         index: _currentIndex,
         children: _pages,
       ),
       bottomNavigationBar: AppGlassContainer(
-        height: 80,
+        height: 80.h,
+        width: double.infinity,
         borderRadius: 0,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -50,15 +53,16 @@ class _AdminNavigationPageState extends State<AdminNavigationPage> {
     bool isActive = _currentIndex == index;
     return GestureDetector(
       onTap: () => setState(() => _currentIndex = index),
+      behavior: HitTestBehavior.opaque,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: isActive ? AppColors.primary : AppColors.outline, size: 28),
+          Icon(icon, color: isActive ? AppColors.primary : AppColors.outline, size: 28.sp),
           if (isActive)
             Container(
-              margin: const EdgeInsets.only(top: 4),
-              width: 4,
-              height: 4,
+              margin: EdgeInsets.only(top: 4.h),
+              width: 4.w,
+              height: 4.w,
               decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
             ),
         ],

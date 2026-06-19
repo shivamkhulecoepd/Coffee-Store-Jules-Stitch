@@ -22,6 +22,7 @@ class MainNavigationPage extends StatelessWidget {
     return Consumer<NavigationProvider>(
       builder: (context, navProvider, child) {
         return Scaffold(
+          extendBody: true, // This is crucial for glassmorphism
           body: IndexedStack(
             index: navProvider.currentIndex,
             children: _pages,

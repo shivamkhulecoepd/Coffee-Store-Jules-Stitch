@@ -10,10 +10,12 @@ class BaristaDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text('Barista Hub', style: AppTypography.headlineMedium),
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.red),
@@ -48,6 +50,7 @@ class BaristaDashboard extends StatelessWidget {
               Text('Active Orders', style: AppTypography.headlineMedium),
               SizedBox(height: 16.h),
               _buildActiveOrdersList(context),
+              SizedBox(height: 100.h),
             ],
           ),
         ),
@@ -59,9 +62,9 @@ class BaristaDashboard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
+        color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: color.withValues(alpha: 0.5)),
+        border: Border.all(color: color.withOpacity(0.5)),
       ),
       child: Text(label, style: AppTypography.labelSmall.copyWith(color: color)),
     );

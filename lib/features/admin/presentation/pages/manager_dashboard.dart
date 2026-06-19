@@ -10,10 +10,12 @@ class ManagerDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text('Store Control', style: AppTypography.headlineMedium),
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.red),
@@ -50,6 +52,7 @@ class ManagerDashboard extends StatelessWidget {
               SizedBox(height: 16.h),
               _buildInventoryAlert('Espresso Beans', 'Low Stock (12kg)', Colors.orange),
               _buildInventoryAlert('Whole Milk', 'Critically Low (5L)', Colors.red),
+              SizedBox(height: 100.h),
             ],
           ),
         ),

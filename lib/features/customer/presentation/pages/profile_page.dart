@@ -10,6 +10,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -36,6 +37,7 @@ class ProfilePage extends StatelessWidget {
             _buildProfileOption(context, Icons.subscriptions_outlined, 'Subscription', '/subscription'),
             const Divider(color: AppColors.surfaceSecondary, height: 40),
             _buildProfileOption(context, Icons.logout, 'Logout', '/welcome', isDestructive: true),
+            SizedBox(height: 100.h),
           ],
         ),
       ),

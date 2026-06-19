@@ -10,6 +10,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent, // Important for glassmorphism stacking
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
@@ -27,6 +28,7 @@ class HomePage extends StatelessWidget {
               Text('Popular Now', style: AppTypography.headlineMedium),
               SizedBox(height: 16.h),
               _buildProductGrid(context),
+              SizedBox(height: 100.h), // Spacing for bottom bar
             ],
           ),
         ),
@@ -72,7 +74,7 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          Icon(Icons.coffee, size: 80.sp, color: AppColors.primary.withValues(alpha: 0.3)),
+          Icon(Icons.coffee, size: 80.sp, color: AppColors.primary.withOpacity(0.3)),
         ],
       ),
     );

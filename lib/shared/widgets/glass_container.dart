@@ -1,6 +1,5 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:glassmorphism/glassmorphism.dart';
-import '../../core/theme/app_colors.dart';
 
 class AppGlassContainer extends StatelessWidget {
   final Widget child;
@@ -10,6 +9,9 @@ class AppGlassContainer extends StatelessWidget {
   final double? width;
   final double? height;
   final EdgeInsetsGeometry? padding;
+  final BoxShape shape;
+  final Color? color;
+  final BoxBorder? border;
 
   const AppGlassContainer({
     super.key,
@@ -20,35 +22,49 @@ class AppGlassContainer extends StatelessWidget {
     this.width,
     this.height,
     this.padding,
+    this.shape = BoxShape.rectangle,
+    this.color,
+    this.border,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GlassmorphicContainer(
-      width: width ?? double.infinity,
-      height: height ?? double.infinity,
-      borderRadius: borderRadius,
-      blur: blur,
-      alignment: Alignment.center,
-      border: 1,
-      linearGradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Colors.white.withValues(alpha: opacity),
-          Colors.white.withValues(alpha: opacity * 0.5),
-        ],
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        shape: shape,
+        borderRadius: shape == BoxShape.circle ? null : BorderRadius.circular(borderRadius),
       ),
-      borderGradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Colors.white.withValues(alpha: 0.1),
-          Colors.white.withValues(alpha: 0.0),
-        ],
+      child: ClipRRect(
+        borderRadius: shape == BoxShape.circle ? BorderRadius.circular(1000) : BorderRadius.circular(borderRadius),
+        child: Stack(
+          children: [
+            // BackdropFilter applies blur to whatever is behind this widget
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: shape,
+                    borderRadius: shape == BoxShape.circle ? null : BorderRadius.circular(borderRadius),
+                    color: (color ?? Colors.white).withOpacity(opacity),
+                    border: border ?? Border.all(
+                      color: Colors.white.withOpacity(0.1),
+                      width: 1,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // Content layer
+            Padding(
+              padding: padding ?? EdgeInsets.zero,
+              child: child,
+            ),
+          ],
+        ),
       ),
-      padding: padding ?? EdgeInsets.zero,
-      child: child,
     );
   }
 }

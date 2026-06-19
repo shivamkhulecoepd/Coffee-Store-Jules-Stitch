@@ -24,7 +24,7 @@ class ProductDetailsPage extends StatelessWidget {
               ),
             ),
             child: Center(
-              child: Icon(Icons.coffee, size: 200.sp, color: AppColors.primary.withValues(alpha: 0.1)),
+              child: Icon(Icons.coffee, size: 200.sp, color: AppColors.primary.withOpacity(0.1)),
             ),
           ),
           SafeArea(
@@ -93,13 +93,12 @@ class ProductDetailsPage extends StatelessWidget {
   }
 
   Widget _buildCircleIcon(IconData icon) {
-    return Container(
-      padding: EdgeInsets.all(12.w),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceSecondary.withValues(alpha: 0.5),
-        shape: BoxShape.circle,
-      ),
-      child: Icon(icon, color: Colors.white, size: 24.sp),
+    return AppGlassContainer(
+      width: 48.w,
+      height: 48.w,
+      borderRadius: 24.r,
+      shape: BoxShape.circle,
+      child: Center(child: Icon(icon, color: Colors.white, size: 24.sp)),
     );
   }
 

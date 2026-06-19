@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_typography.dart';
 import 'glass_container.dart';
 
 class AppBottomNavBar extends StatelessWidget {
@@ -18,7 +17,9 @@ class AppBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppGlassContainer(
       height: 80.h,
+      width: double.infinity,
       borderRadius: 0,
+      padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -35,25 +36,29 @@ class AppBottomNavBar extends StatelessWidget {
     bool isActive = currentIndex == index;
     return GestureDetector(
       onTap: () => onTap(index),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color: isActive ? AppColors.primary : AppColors.outline,
-            size: 28.sp,
-          ),
-          if (isActive)
-            Container(
-              margin: EdgeInsets.only(top: 4.h),
-              width: 4.w,
-              height: 4.w,
-              decoration: const BoxDecoration(
-                color: AppColors.primary,
-                shape: BoxShape.circle,
-              ),
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        width: 70.w,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: isActive ? AppColors.primary : AppColors.outline,
+              size: 28.sp,
             ),
-        ],
+            if (isActive)
+              Container(
+                margin: EdgeInsets.only(top: 4.h),
+                width: 4.w,
+                height: 4.w,
+                decoration: const BoxDecoration(
+                  color: AppColors.primary,
+                  shape: BoxShape.circle,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

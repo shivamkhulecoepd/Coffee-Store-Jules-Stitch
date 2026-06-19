@@ -11,6 +11,7 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -31,6 +32,7 @@ class CartPage extends StatelessWidget {
             ),
           ),
           _buildSummarySection(context),
+          SizedBox(height: 100.h),
         ],
       ),
     );

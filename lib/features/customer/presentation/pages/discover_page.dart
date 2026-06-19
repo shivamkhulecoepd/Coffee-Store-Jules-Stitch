@@ -10,6 +10,7 @@ class DiscoverPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -42,6 +43,7 @@ class DiscoverPage extends StatelessWidget {
             _buildSectionHeader('New Arrivals'),
             SizedBox(height: 16.h),
             _buildArrivalsList(),
+            SizedBox(height: 100.h),
           ],
         ),
       ),
