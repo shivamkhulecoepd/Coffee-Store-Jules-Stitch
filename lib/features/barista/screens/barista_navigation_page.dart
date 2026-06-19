@@ -1,6 +1,72 @@
 import 'package:flutter/material.dart';
-class BaristaNavigationPage extends StatelessWidget {
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../shared/widgets/glass_container.dart';
+import '../../../core/theme/app_colors.dart';
+import 'barista_dashboard.dart';
+import 'table_layout.dart';
+import 'operational_tasks.dart';
+import 'barista_performance.dart';
+
+class BaristaNavigationPage extends StatefulWidget {
   const BaristaNavigationPage({super.key});
+
   @override
-  Widget build(BuildContext context) => const Scaffold(body: Center(child: Text('Barista Nav')));
+  State<BaristaNavigationPage> createState() => _BaristaNavigationPageState();
+}
+
+class _BaristaNavigationPageState extends State<BaristaNavigationPage> {
+  int _currentIndex = 0;
+
+  final List<Widget> _pages = const [
+    BaristaDashboard(),
+    TableLayoutPage(),
+    OperationalTasksPage(),
+    BaristaPerformancePage(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBody: true,
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _pages,
+      ),
+      bottomNavigationBar: AppGlassContainer(
+        height: 90.h,
+        width: double.infinity,
+        borderRadius: 0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(Icons.dashboard_outlined, 'Status', 0),
+            _buildNavItem(Icons.table_restaurant_outlined, 'Tables', 1),
+            _buildNavItem(Icons.checklist_rtl_outlined, 'Tasks', 2),
+            _buildNavItem(Icons.analytics_outlined, 'Stats', 3),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(IconData icon, String label, int index) {
+    bool isActive = _currentIndex == index;
+    return GestureDetector(
+      onTap: () => setState(() => _currentIndex = index),
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: isActive ? AppColors.primary : AppColors.outline, size: 28.sp),
+          if (isActive)
+            Container(
+              margin: EdgeInsets.only(top: 6.h),
+              width: 5.w,
+              height: 5.w,
+              decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
+            ),
+        ],
+      ),
+    );
+  }
 }
