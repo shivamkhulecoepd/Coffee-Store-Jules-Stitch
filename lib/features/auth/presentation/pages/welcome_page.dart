@@ -46,13 +46,13 @@ class WelcomePage extends StatelessWidget {
                     SizedBox(height: 48.h),
                     AppButton(
                       text: 'Get Started',
-                      onPressed: () => Navigator.pushNamed(context, '/login'),
+                      onPressed: () => Navigator.pushNamed(context, '/role'),
                     ),
                     SizedBox(height: 16.h),
                     AppButton(
                       text: 'Login',
                       isPrimary: false,
-                      onPressed: () => Navigator.pushNamed(context, '/login'),
+                      onPressed: () => Navigator.pushNamed(context, '/role'),
                     ),
                     SizedBox(height: 32.h),
                   ],

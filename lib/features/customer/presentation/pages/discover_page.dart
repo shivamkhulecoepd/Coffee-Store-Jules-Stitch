@@ -15,6 +15,7 @@ class DiscoverPage extends StatelessWidget {
         elevation: 0,
         title: Text('Discover', style: AppTypography.headlineMedium),
         centerTitle: false,
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.w),
@@ -110,7 +111,7 @@ class DiscoverPage extends StatelessWidget {
                   color: AppColors.surfaceSecondary,
                   borderRadius: BorderRadius.circular(16.r),
                 ),
-                child: Icon(Icons.coffee, color: AppColors.primary),
+                child: const Icon(Icons.coffee, color: AppColors.primary),
               ),
               SizedBox(width: 16.w),
               Expanded(

@@ -14,6 +14,7 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text('My Profile', style: AppTypography.headlineMedium),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.w),
@@ -34,9 +35,6 @@ class ProfilePage extends StatelessWidget {
             _buildProfileOption(context, Icons.card_giftcard, 'Rewards', '/rewards'),
             _buildProfileOption(context, Icons.subscriptions_outlined, 'Subscription', '/subscription'),
             const Divider(color: AppColors.surfaceSecondary, height: 40),
-            _buildProfileOption(context, Icons.admin_panel_settings_outlined, 'Barista View', '/barista'),
-            _buildProfileOption(context, Icons.manage_accounts_outlined, 'Store Management', '/admin'),
-            const Divider(color: AppColors.surfaceSecondary, height: 40),
             _buildProfileOption(context, Icons.logout, 'Logout', '/welcome', isDestructive: true),
           ],
         ),
@@ -50,7 +48,13 @@ class ProfilePage extends StatelessWidget {
       child: AppGlassContainer(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         child: ListTile(
-          onTap: () => Navigator.pushNamed(context, route),
+          onTap: () {
+            if (route == '/welcome') {
+               Navigator.pushNamedAndRemoveUntil(context, route, (route) => false);
+            } else {
+               Navigator.pushNamed(context, route);
+            }
+          },
           leading: Icon(icon, color: isDestructive ? Colors.red : AppColors.primary),
           title: Text(title, style: AppTypography.labelMedium.copyWith(color: isDestructive ? Colors.red : Colors.white)),
           trailing: Icon(Icons.keyboard_arrow_right, color: AppColors.outline),

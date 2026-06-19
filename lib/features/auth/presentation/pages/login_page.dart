@@ -10,15 +10,26 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String role = (ModalRoute.of(context)?.settings.arguments as String?) ?? 'Customer';
+
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          TextButton(
+            onPressed: () => _navigateToRoleHome(context, role),
+            child: Text('Skip', style: AppTypography.labelMedium.copyWith(color: AppColors.primary)),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(32.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Welcome Back', style: AppTypography.displayLargeMobile),
-            Text('Sign in to continue your coffee journey', style: AppTypography.bodyMedium.copyWith(color: AppColors.outline)),
+            Text('Sign in as $role to continue', style: AppTypography.bodyMedium.copyWith(color: AppColors.outline)),
             SizedBox(height: 48.h),
             const AppTextField(label: 'Email Address', hint: 'alex@example.com'),
             SizedBox(height: 24.h),
@@ -34,7 +45,7 @@ class LoginPage extends StatelessWidget {
             SizedBox(height: 48.h),
             AppButton(
               text: 'Sign In',
-              onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
+              onPressed: () => _navigateToRoleHome(context, role),
             ),
             SizedBox(height: 32.h),
             Row(
@@ -51,5 +62,15 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _navigateToRoleHome(BuildContext context, String role) {
+    if (role == 'Barista') {
+      Navigator.pushReplacementNamed(context, '/barista');
+    } else if (role == 'Admin') {
+      Navigator.pushReplacementNamed(context, '/admin');
+    } else {
+      Navigator.pushReplacementNamed(context, '/home');
+    }
   }
 }
