@@ -37,12 +37,14 @@ class BaristaDashboard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('SYSTEM STATUS: ONLINE', style: AppTypography.labelSmall(context).copyWith(color: AppColors.success, letterSpacing: 2)),
-                      Text('Sarah Miller', style: AppTypography.displayLargeMobile(context).copyWith(fontWeight: FontWeight.w700)),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('SYSTEM STATUS: ONLINE', style: AppTypography.labelSmall(context).copyWith(color: AppColors.success, letterSpacing: 2)),
+                        Text('Sarah Miller', style: AppTypography.displayLargeMobile(context).copyWith(fontWeight: FontWeight.w700)),
+                      ],
+                    ),
                   ),
                   _buildStatusIndicator(),
                 ],
@@ -95,11 +97,11 @@ class BaristaDashboard extends StatelessWidget {
           ),
         ),
         SizedBox(width: 16.w),
-        Expanded(
+        const Expanded(
           child: KPICard(
             label: 'Avg. Latency',
             value: '4m',
-            chartData: const [5, 4.5, 4.2, 4.8, 4.1, 4.0],
+            chartData: [5, 4.5, 4.2, 4.8, 4.1, 4.0],
             chartColor: AppColors.success,
           ),
         ),
@@ -153,15 +155,16 @@ class BaristaDashboard extends StatelessWidget {
             padding: EdgeInsets.all(20.w),
             child: Row(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('SESSION #421', style: AppTypography.dataMono(context).copyWith(color: AppColors.primary, fontSize: 10.sp)),
-                    Text('2x Vanilla Latte', style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700)),
-                    Text('Table 4 • Synchronizing', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline, fontSize: 11.sp)),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('SESSION #421', style: AppTypography.dataMono(context).copyWith(color: AppColors.primary, fontSize: 10.sp)),
+                      Text('2x Vanilla Latte', style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700)),
+                      Text('Table 4 • Synchronizing', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline, fontSize: 11.sp)),
+                    ],
+                  ),
                 ),
-                const Spacer(),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                   decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(6.r)),

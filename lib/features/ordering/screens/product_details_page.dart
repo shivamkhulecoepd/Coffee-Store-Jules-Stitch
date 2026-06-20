@@ -33,70 +33,72 @@ class ProductDetailsPage extends StatelessWidget {
             ),
           ),
           SafeArea(
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildCircleIcon(context, Icons.arrow_back_ios_new, onTap: () => context.pop()),
-                      _buildCircleIcon(context, Icons.favorite_border),
-                    ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildCircleIcon(context, Icons.arrow_back_ios_new, onTap: () => context.pop()),
+                        _buildCircleIcon(context, Icons.favorite_border),
+                      ],
+                    ),
                   ),
-                ),
-                const Spacer(),
-                AppGlassContainer(
-                  height: 540.h,
-                  borderRadius: 40.r,
-                  padding: EdgeInsets.all(32.w),
-                  boxShadow: AppTheme.premiumShadow,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('SIGNATURE SERIES', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2.5)),
-                                SizedBox(height: 4.h),
-                                Text('Vanilla Latte', style: AppTypography.displayLargeMobile(context).copyWith(fontSize: 36.sp, fontWeight: FontWeight.w700)),
-                              ],
+                  SizedBox(height: 120.h),
+                  AppGlassContainer(
+                    borderRadius: 40.r,
+                    padding: EdgeInsets.all(32.w),
+                    boxShadow: AppTheme.premiumShadow,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('SIGNATURE SERIES', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2.5)),
+                                  SizedBox(height: 4.h),
+                                  Text('Vanilla Latte', style: AppTypography.displayLargeMobile(context).copyWith(fontSize: 36.sp, fontWeight: FontWeight.w700)),
+                                ],
+                              ),
                             ),
-                          ),
-                          Text(r'.50', style: AppTypography.headlineLarge(context).copyWith(color: AppColors.primary, fontSize: 32.sp)),
-                        ],
-                      ),
-                      SizedBox(height: 32.h),
-                      Text('DESCRIPTION', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 1.5)),
-                      SizedBox(height: 12.h),
-                      Text(
-                        'A velvety smooth double espresso balanced with steamed whole milk and our signature house-made Madagascar vanilla bean syrup.',
-                        style: AppTypography.bodyMedium(context).copyWith(color: AppColors.boneWhite.withOpacity(0.65), height: 1.7),
-                      ),
-                      SizedBox(height: 40.h),
-                      Text('CALIBRATE SIZE', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 1.5)),
-                      SizedBox(height: 16.h),
-                      Row(
-                        children: [
-                          _buildSizeOption(context, 'S', false),
-                          _buildSizeOption(context, 'M', true),
-                          _buildSizeOption(context, 'L', false),
-                        ],
-                      ),
-                      const Spacer(),
-                      AppButton(
-                        text: 'ADD TO SELECTION',
-                        onPressed: () => context.pushNamed('cart'),
-                      ),
-                    ],
+                            Text(r'.50', style: AppTypography.headlineLarge(context).copyWith(color: AppColors.primary, fontSize: 32.sp)),
+                          ],
+                        ),
+                        SizedBox(height: 32.h),
+                        Text('DESCRIPTION', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 1.5)),
+                        SizedBox(height: 12.h),
+                        Text(
+                          'A velvety smooth double espresso balanced with steamed whole milk and our signature house-made Madagascar vanilla bean syrup.',
+                          style: AppTypography.bodyMedium(context).copyWith(color: AppColors.boneWhite.withOpacity(0.65), height: 1.7),
+                        ),
+                        SizedBox(height: 40.h),
+                        Text('CALIBRATE SIZE', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 1.5)),
+                        SizedBox(height: 16.h),
+                        Row(
+                          children: [
+                            _buildSizeOption(context, 'S', false),
+                            _buildSizeOption(context, 'M', true),
+                            _buildSizeOption(context, 'L', false),
+                          ],
+                        ),
+                        SizedBox(height: 40.h),
+                        AppButton(
+                          text: 'ADD TO SELECTION',
+                          onPressed: () => context.pushNamed('cart'),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

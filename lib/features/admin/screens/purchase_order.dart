@@ -23,7 +23,7 @@ class PurchaseOrderPage extends StatelessWidget {
           onPressed: () => context.pop(),
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(24.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +47,7 @@ class PurchaseOrderPage extends StatelessWidget {
             SizedBox(height: 16.h),
             _buildOrderItem(context, 'Arabica Light Roast', '10kg', r'50.00'),
             _buildOrderItem(context, 'Artisan Paper Cups (12oz)', '500 units', r'5.00'),
-            const Spacer(),
+            SizedBox(height: 40.h),
             AppGlassContainer(
               borderRadius: 40.r,
               padding: EdgeInsets.all(32.w),
@@ -66,6 +66,7 @@ class PurchaseOrderPage extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(height: 40.h),
           ],
         ),
       ),
@@ -84,7 +85,7 @@ class PurchaseOrderPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(name, style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700)),
-                  Text('QUANTITY: $qty', style: AppTypography.labelSmall(context).copyWith(color: AppColors.outline, fontSize: 10.sp)),
+                  Text('QUANTITY: ', style: AppTypography.labelSmall(context).copyWith(color: AppColors.outline, fontSize: 10.sp)),
                 ],
               ),
             ),

@@ -26,11 +26,12 @@ class KPICard extends StatelessWidget {
       boxShadow: AppTheme.premiumShadow,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(label.toUpperCase(), style: AppTypography.labelSmall(context).copyWith(color: AppColors.outline, letterSpacing: 1.5)),
           SizedBox(height: 8.h),
           Text(value, style: AppTypography.headlineLarge(context)),
-          const Spacer(),
+          SizedBox(height: 24.h),
           SizedBox(
             height: 30.h,
             width: double.infinity,

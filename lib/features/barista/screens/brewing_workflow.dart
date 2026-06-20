@@ -24,16 +24,16 @@ class BrewingWorkflow extends StatelessWidget {
           onPressed: () => context.pop(),
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(24.w),
         child: Column(
           children: [
             AppGlassContainer(
               padding: EdgeInsets.all(32.w),
-              height: 240.h,
               boxShadow: AppTheme.premiumShadow,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text('EXTRACTION PROGRESS', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
                   SizedBox(height: 24.h),
@@ -48,8 +48,9 @@ class BrewingWorkflow extends StatelessWidget {
             _buildStep(context, '2. Precision Tamping', true),
             _buildStep(context, '3. Extraction Phase', false),
             _buildStep(context, '4. Micro-foam Texturing', false),
-            const Spacer(),
+            SizedBox(height: 48.h),
             AppButton(text: 'Complete Sequence', onPressed: () => Navigator.pop(context)),
+            SizedBox(height: 48.h),
           ],
         ),
       ),
@@ -67,12 +68,14 @@ class BrewingWorkflow extends StatelessWidget {
             size: 24.sp,
           ),
           SizedBox(width: 20.w),
-          Text(
-            label,
-            style: AppTypography.labelMedium(context).copyWith(
-              color: isDone ? AppColors.boneWhite : AppColors.outline,
-              decoration: isDone ? TextDecoration.lineThrough : null,
-              fontWeight: isDone ? FontWeight.w600 : FontWeight.w400,
+          Expanded(
+            child: Text(
+              label,
+              style: AppTypography.labelMedium(context).copyWith(
+                color: isDone ? AppColors.boneWhite : AppColors.outline,
+                decoration: isDone ? TextDecoration.lineThrough : null,
+                fontWeight: isDone ? FontWeight.w600 : FontWeight.w400,
+              ),
             ),
           ),
         ],

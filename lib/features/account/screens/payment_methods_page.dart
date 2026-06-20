@@ -22,7 +22,7 @@ class PaymentMethodsPage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(24.w),
         child: Column(
           children: [
@@ -42,8 +42,9 @@ class PaymentMethodsPage extends StatelessWidget {
                 ],
               ),
             ),
-            const Spacer(),
+            SizedBox(height: 80.h),
             AppButton(text: 'SAVE PREFERENCES', onPressed: () => Navigator.pop(context)),
+            SizedBox(height: 40.h),
           ],
         ),
       ),

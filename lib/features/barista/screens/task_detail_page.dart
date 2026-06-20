@@ -23,7 +23,7 @@ class TaskDetailPage extends StatelessWidget {
           onPressed: () => context.pop(),
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(24.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,8 +52,9 @@ class TaskDetailPage extends StatelessWidget {
             _buildChecklist(context, 'Insert Blind Filter with Powder'),
             _buildChecklist(context, 'Run Automatic Backflush Cycle (5 Cycles)'),
             _buildChecklist(context, 'Scrub Group Gaskets'),
-            const Spacer(),
+            SizedBox(height: 40.h),
             AppButton(text: 'COMPLETE PROTOCOL', onPressed: () => context.pop()),
+            SizedBox(height: 40.h),
           ],
         ),
       ),
