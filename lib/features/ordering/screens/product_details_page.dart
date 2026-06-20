@@ -8,10 +8,15 @@ import '../../../shared/widgets/glass_container.dart';
 import '../../../shared/widgets/custom_button.dart';
 
 class ProductDetailsPage extends StatelessWidget {
-  const ProductDetailsPage({super.key});
+  final Map<String, dynamic>? data;
+
+  const ProductDetailsPage({super.key, this.data});
 
   @override
   Widget build(BuildContext context) {
+    final String heroTag = data?['tag'] ?? 'default';
+    final String name = data?['name'] ?? 'Vanilla Latte';
+
     return Scaffold(
       body: Stack(
         children: [
@@ -22,13 +27,16 @@ class ProductDetailsPage extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [AppColors.espressoBold, AppColors.backgroundDark],
+                colors: [AppColors.espressoBold, AppColors.background],
               ),
             ),
             child: Center(
               child: Opacity(
                 opacity: 0.1,
-                child: Icon(Icons.coffee, size: 280.sp, color: AppColors.primary),
+                child: Hero(
+                  tag: heroTag,
+                  child: Icon(Icons.coffee, size: 280.sp, color: AppColors.primary),
+                ),
               ),
             ),
           ),
@@ -50,7 +58,6 @@ class ProductDetailsPage extends StatelessWidget {
                   AppGlassContainer(
                     borderRadius: 40.r,
                     padding: EdgeInsets.all(32.w),
-                    boxShadow: AppTheme.premiumShadow,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
@@ -65,11 +72,11 @@ class ProductDetailsPage extends StatelessWidget {
                                 children: [
                                   Text('SIGNATURE SERIES', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2.5)),
                                   SizedBox(height: 4.h),
-                                  Text('Vanilla Latte', style: AppTypography.displayLargeMobile(context).copyWith(fontSize: 36.sp, fontWeight: FontWeight.w700)),
+                                  Text(name, style: AppTypography.displayLargeMobile(context).copyWith(fontSize: 36.sp, fontWeight: FontWeight.w700)),
                                 ],
                               ),
                             ),
-                            Text(r'.50', style: AppTypography.headlineLarge(context).copyWith(color: AppColors.primary, fontSize: 32.sp)),
+                            Text(r'$5.50', style: AppTypography.headlineLarge(context).copyWith(color: AppColors.primary, fontSize: 32.sp)),
                           ],
                         ),
                         SizedBox(height: 32.h),
@@ -77,7 +84,7 @@ class ProductDetailsPage extends StatelessWidget {
                         SizedBox(height: 12.h),
                         Text(
                           'A velvety smooth double espresso balanced with steamed whole milk and our signature house-made Madagascar vanilla bean syrup.',
-                          style: AppTypography.bodyMedium(context).copyWith(color: AppColors.boneWhite.withValues(alpha: 0.65), height: 1.7),
+                          style: AppTypography.bodyMedium(context).copyWith(color: AppColors.boneWhite.withOpacity(0.65), height: 1.7),
                         ),
                         SizedBox(height: 40.h),
                         Text('CALIBRATE SIZE', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 1.5)),
@@ -129,7 +136,7 @@ class ProductDetailsPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: isSelected ? AppColors.primary : Colors.transparent,
         borderRadius: BorderRadius.circular(18.r),
-        border: isSelected ? null : Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        border: isSelected ? null : Border.all(color: Colors.white.withOpacity(0.1)),
       ),
       child: Center(
         child: Text(

@@ -1,28 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'app_colors.dart';
 
 class AppTheme {
-  static ThemeData get lightTheme {
-    return ThemeData(
-      brightness: Brightness.light,
-      scaffoldBackgroundColor: AppColors.backgroundLight,
-      primaryColor: AppColors.primary,
-      colorScheme: const ColorScheme.light(
-        primary: AppColors.primary,
-        onPrimary: AppColors.onPrimary,
-        secondary: AppColors.primaryGold,
-        surface: AppColors.surfaceLight,
-        onSurface: AppColors.textDark,
-        error: AppColors.error,
-        outline: AppColors.outline,
-      ),
-      cardTheme: CardThemeData(
-        color: AppColors.surfaceLight,
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-      ),
-    );
-  }
+  static final List<BoxShadow> premiumShadow = [
+    BoxShadow(
+      color: Colors.black.withOpacity(0.3),
+      blurRadius: 40.r,
+      offset: Offset(0, 20.h),
+    ),
+    BoxShadow(
+      color: Colors.white.withOpacity(0.05),
+      blurRadius: 1,
+      offset: const Offset(0, -1),
+    ),
+  ];
 
   static ThemeData get darkTheme {
     return ThemeData(
@@ -31,26 +23,31 @@ class AppTheme {
       primaryColor: AppColors.primary,
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
-        onPrimary: AppColors.onPrimary,
         secondary: AppColors.primaryGold,
-        surface: AppColors.surfaceDark,
-        onSurface: AppColors.boneWhite,
+        surface: AppColors.surface,
         error: AppColors.error,
-        outline: AppColors.outline,
+        onSurface: AppColors.boneWhite,
       ),
-      cardTheme: CardThemeData(
-        color: AppColors.surfaceDark,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+        centerTitle: true,
       ),
     );
   }
 
-  static List<BoxShadow> get premiumShadow => [
-    BoxShadow(
-      color: Colors.black.withValues(alpha: 0.3),
-      blurRadius: 40,
-      offset: const Offset(0, 20),
-    ),
-  ];
+  static ThemeData get lightTheme {
+    return ThemeData(
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: AppColors.backgroundLight,
+      primaryColor: AppColors.onPrimary,
+      colorScheme: const ColorScheme.light(
+        primary: AppColors.onPrimary,
+        secondary: AppColors.primary,
+        surface: AppColors.crema,
+        error: AppColors.error,
+        onSurface: AppColors.textDark,
+      ),
+    );
+  }
 }

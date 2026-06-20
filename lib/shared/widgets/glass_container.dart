@@ -1,10 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/theme/app_colors.dart';
 
 class AppGlassContainer extends StatelessWidget {
   final Widget child;
-  final double borderRadius;
+  final double? borderRadius;
   final double blur;
   final double opacity;
   final double? width;
@@ -17,7 +18,7 @@ class AppGlassContainer extends StatelessWidget {
   const AppGlassContainer({
     super.key,
     required this.child,
-    this.borderRadius = 28,
+    this.borderRadius,
     this.blur = 32,
     this.opacity = 0.8,
     this.width,
@@ -30,21 +31,20 @@ class AppGlassContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double effectiveRadius = borderRadius ?? 28.r;
+
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
         shape: shape,
-        borderRadius: shape == BoxShape.circle
-            ? null
-            : BorderRadius.circular(borderRadius),
+        borderRadius: shape == BoxShape.circle ? null : BorderRadius.circular(effectiveRadius),
         boxShadow: boxShadow,
       ),
       child: ClipRRect(
-        borderRadius: shape == BoxShape.circle
-            ? BorderRadius.circular(1000)
-            : BorderRadius.circular(borderRadius),
+        borderRadius: shape == BoxShape.circle ? BorderRadius.circular(1000) : BorderRadius.circular(effectiveRadius),
         child: Stack(
+          fit: (width != null || height != null) ? StackFit.loose : StackFit.loose, // Default to loose to avoid forcing children to expand unless specified
           children: [
             Positioned.fill(
               child: BackdropFilter(
@@ -52,12 +52,8 @@ class AppGlassContainer extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     shape: shape,
-                    borderRadius: shape == BoxShape.circle
-                        ? null
-                        : BorderRadius.circular(borderRadius),
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? AppColors.surfaceDark.withValues(alpha: opacity)
-                        : AppColors.surfaceLight.withValues(alpha: opacity),
+                    borderRadius: shape == BoxShape.circle ? null : BorderRadius.circular(effectiveRadius),
+                    color: AppColors.surfaceLight.withOpacity(opacity),
                   ),
                 ),
               ),
@@ -66,13 +62,14 @@ class AppGlassContainer extends StatelessWidget {
               Positioned.fill(
                 child: CustomPaint(
                   painter: _GlassBorderPainter(
-                    borderRadius: borderRadius,
+                    borderRadius: effectiveRadius,
                     shape: shape,
                   ),
                 ),
               ),
-            Center(
-              child: Padding(padding: padding ?? EdgeInsets.zero, child: child),
+            Padding(
+              padding: padding ?? EdgeInsets.all(20.w),
+              child: child,
             ),
           ],
         ),
@@ -97,20 +94,13 @@ class _GlassBorderPainter extends CustomPainter {
       ..shader = const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: AppColors.innerBorderGradient,
+        colors: AppColors.glassGradient,
       ).createShader(rect);
 
     if (shape == BoxShape.circle) {
-      canvas.drawCircle(
-        Offset(size.width / 2, size.height / 2),
-        size.width / 2 - 0.5,
-        paint,
-      );
+      canvas.drawCircle(Offset(size.width / 2, size.height / 2), size.width / 2 - 0.5, paint);
     } else {
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(rect, Radius.circular(borderRadius)),
-        paint,
-      );
+      canvas.drawRRect(RRect.fromRectAndRadius(rect, Radius.circular(borderRadius)), paint);
     }
   }
 

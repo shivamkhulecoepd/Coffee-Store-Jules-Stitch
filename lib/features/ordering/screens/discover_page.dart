@@ -25,20 +25,21 @@ class DiscoverPage extends StatelessWidget {
           children: [
             AppGlassContainer(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
-              height: 60.h,
+              height: 64.h,
               borderRadius: 16.r,
               child: Row(
                 children: [
                   Icon(Icons.search, color: AppColors.primary, size: 24.sp),
-                  SizedBox(width: 10.w),
-                  Text('Search collections...', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline.withValues(alpha: 0.5))),
+                  SizedBox(width: 16.w),
+                  Text('Search collections...', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline.withOpacity(0.5))),
                 ],
               ),
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: 40.h),
             _buildSectionHeader(context, 'Brewing Methods'),
             SizedBox(height: 24.h),
             _buildBrewingMethodGrid(context),
+            SizedBox(height: 40.h),
             _buildSectionHeader(context, 'Monthly Roasts'),
             SizedBox(height: 24.h),
             _buildArrivalsList(context),

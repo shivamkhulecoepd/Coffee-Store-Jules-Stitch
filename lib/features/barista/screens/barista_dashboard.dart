@@ -72,9 +72,9 @@ class BaristaDashboard extends StatelessWidget {
       width: 56.w,
       height: 56.w,
       decoration: BoxDecoration(
-        color: AppColors.success.withValues(alpha: 0.1),
+        color: AppColors.success.withOpacity(0.1),
         shape: BoxShape.circle,
-        border: Border.all(color: AppColors.success.withValues(alpha: 0.3)),
+        border: Border.all(color: AppColors.success.withOpacity(0.3)),
       ),
       child: Center(
         child: Container(
@@ -167,7 +167,7 @@ class BaristaDashboard extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                  decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(6.r)),
+                  decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(6.r)),
                   child: Text('BREWING', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, fontSize: 9.sp, fontWeight: FontWeight.w900, letterSpacing: 1)),
                 ),
               ],

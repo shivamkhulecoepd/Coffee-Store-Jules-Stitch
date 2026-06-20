@@ -53,9 +53,9 @@ class CustomerRequestsPage extends StatelessWidget {
           ),
           SizedBox(height: 24.h),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildActionChip(context, 'ASSIGN AGENT'),
+              SizedBox(width: 16.w),
               _buildActionChip(context, 'RESOLVE CASE', isPrimary: true),
             ],
           ),
@@ -70,7 +70,7 @@ class CustomerRequestsPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: isPrimary ? AppColors.primary : AppColors.surfaceDark,
         borderRadius: BorderRadius.circular(8.r),
-        border: isPrimary ? null : Border.all(color: Colors.white.withValues(alpha: 0.05)),
+        border: isPrimary ? null : Border.all(color: Colors.white.withOpacity(0.05)),
       ),
       child: Text(
         label,

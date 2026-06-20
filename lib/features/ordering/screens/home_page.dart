@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
   Widget _buildHeroSection(BuildContext context) {
     return AppGlassContainer(
       height: 180.h,
-      padding: EdgeInsets.all(22.w),
+      padding: EdgeInsets.all(24.w),
       boxShadow: AppTheme.premiumShadow,
       child: Row(
         children: [
@@ -110,9 +110,9 @@ class HomePage extends StatelessWidget {
       margin: EdgeInsets.only(right: 12.w),
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       decoration: BoxDecoration(
-        color: isSelected ? AppColors.primary : AppColors.surfaceDark.withValues(alpha: 0.5),
+        color: isSelected ? AppColors.primary : AppColors.surfaceDark.withOpacity(0.5),
         borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(color: isSelected ? Colors.transparent : Colors.white.withValues(alpha: 0.05)),
+        border: Border.all(color: isSelected ? Colors.transparent : Colors.white.withOpacity(0.05)),
       ),
       child: Center(
         child: Text(
@@ -136,10 +136,6 @@ class HomePage extends StatelessWidget {
       crossAxisSpacing: 24.w,
       childAspectRatio: 0.7,
       children: [
-        _buildProductCard(context, 'Vanilla Latte', '4.8', '5.50'),
-        _buildProductCard(context, 'Macchiato', '4.9', '6.00'),
-        _buildProductCard(context, 'Vanilla Latte', '4.8', '5.50'),
-        _buildProductCard(context, 'Macchiato', '4.9', '6.00'),
         _buildProductCard(context, 'Vanilla Latte', '4.8', '5.50'),
         _buildProductCard(context, 'Macchiato', '4.9', '6.00'),
       ],

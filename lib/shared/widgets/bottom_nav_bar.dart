@@ -1,8 +1,7 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_typography.dart';
-import 'glass_container.dart';
 
 class AppBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -18,45 +17,49 @@ class AppBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppGlassContainer(
-      height: 80.h,
+    return Container(
+      height: 90.h,
       width: double.infinity,
-      borderRadius: 0,
-      padding: EdgeInsets.symmetric(horizontal: 12.w),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: List.generate(items.length, (index) => _buildNavItem(context, index)),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceLight.withOpacity(0.8),
+        border: const Border(top: BorderSide(color: Colors.white10, width: 0.5)),
       ),
-    );
-  }
+      child: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 32, sigmaY: 32),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: items.asMap().entries.map((entry) {
+              final int idx = entry.key;
+              final AppBottomNavItem item = entry.value;
+              final bool isSelected = currentIndex == idx;
 
-  Widget _buildNavItem(BuildContext context, int index) {
-    final item = items[index];
-    bool isActive = currentIndex == index;
-    return GestureDetector(
-      onTap: () => onTap(index),
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        width: 70.w,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              item.icon,
-              color: isActive ? AppColors.primary : AppColors.outline,
-              size: 28.sp,
-            ),
-            if (isActive)
-              Container(
-                margin: EdgeInsets.only(top: 4.h),
-                width: 4.w,
-                height: 4.w,
-                decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
+              return GestureDetector(
+                onTap: () => onTap(idx),
+                behavior: HitTestBehavior.opaque,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      item.icon,
+                      color: isSelected ? AppColors.primary : AppColors.outline,
+                      size: 28.sp,
+                    ),
+                    if (isSelected)
+                      Container(
+                        margin: EdgeInsets.only(top: 6.h),
+                        width: 4.w,
+                        height: 4.w,
+                        decoration: const BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                  ],
                 ),
-              ),
-          ],
+              );
+            }).toList(),
+          ),
         ),
       ),
     );
@@ -66,5 +69,6 @@ class AppBottomNavBar extends StatelessWidget {
 class AppBottomNavItem {
   final IconData icon;
   final String label;
+
   const AppBottomNavItem({required this.icon, required this.label});
 }

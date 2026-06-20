@@ -59,7 +59,7 @@ class PaymentMethodsPage extends StatelessWidget {
         children: [
           Container(
             padding: EdgeInsets.all(14.w),
-            decoration: BoxDecoration(color: isSelected ? AppColors.primary.withValues(alpha: 0.1) : AppColors.surfaceDark, shape: BoxShape.circle),
+            decoration: BoxDecoration(color: isSelected ? AppColors.primary.withOpacity(0.1) : AppColors.surfaceDark, shape: BoxShape.circle),
             child: Icon(Icons.credit_card, color: isSelected ? AppColors.primary : AppColors.outline),
           ),
           SizedBox(width: 20.w),
