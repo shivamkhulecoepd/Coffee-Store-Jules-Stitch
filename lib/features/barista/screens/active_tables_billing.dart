@@ -51,7 +51,7 @@ class ActiveTablesBillingPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Unpaid Amount', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.boneWhite.withOpacity(0.7))),
+              Text('Unpaid Amount', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.boneWhite.withValues(alpha: 0.7))),
               Text(r'8.50', style: AppTypography.headlineMedium(context).copyWith(color: AppColors.primary)),
             ],
           ),
@@ -78,7 +78,7 @@ class ActiveTablesBillingPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: isPrimary ? AppColors.primary : Colors.transparent,
         borderRadius: BorderRadius.circular(10.r),
-        border: isPrimary ? null : Border.all(color: AppColors.primary.withOpacity(0.3)),
+        border: isPrimary ? null : Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

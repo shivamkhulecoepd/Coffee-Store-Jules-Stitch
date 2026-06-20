@@ -77,7 +77,7 @@ class ProductDetailsPage extends StatelessWidget {
                         SizedBox(height: 12.h),
                         Text(
                           'A velvety smooth double espresso balanced with steamed whole milk and our signature house-made Madagascar vanilla bean syrup.',
-                          style: AppTypography.bodyMedium(context).copyWith(color: AppColors.boneWhite.withOpacity(0.65), height: 1.7),
+                          style: AppTypography.bodyMedium(context).copyWith(color: AppColors.boneWhite.withValues(alpha: 0.65), height: 1.7),
                         ),
                         SizedBox(height: 40.h),
                         Text('CALIBRATE SIZE', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 1.5)),
@@ -129,7 +129,7 @@ class ProductDetailsPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: isSelected ? AppColors.primary : Colors.transparent,
         borderRadius: BorderRadius.circular(18.r),
-        border: isSelected ? null : Border.all(color: Colors.white.withOpacity(0.1)),
+        border: isSelected ? null : Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Center(
         child: Text(

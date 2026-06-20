@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 width: 120.w,
                 height: 120.w,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(Icons.coffee, size: 60.sp, color: AppColors.primary),

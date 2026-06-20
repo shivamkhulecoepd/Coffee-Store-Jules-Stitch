@@ -20,7 +20,7 @@ class ShotTimer extends StatelessWidget {
           child: CircularProgressIndicator(
             value: progress,
             strokeWidth: 10.w,
-            backgroundColor: Colors.white.withOpacity(0.05),
+            backgroundColor: Colors.white.withValues(alpha: 0.05),
             valueColor: const AlwaysStoppedAnimation(AppColors.primary),
           ),
         ),

@@ -36,7 +36,7 @@ class KPICard extends StatelessWidget {
             height: 30.h,
             width: double.infinity,
             child: CustomPaint(
-              painter: _SparklinePainter(data: chartData, color: chartColor.withOpacity(0.5)),
+              painter: _SparklinePainter(data: chartData, color: chartColor.withValues(alpha: 0.5)),
             ),
           ),
         ],

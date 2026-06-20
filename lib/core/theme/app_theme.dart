@@ -48,7 +48,7 @@ class AppTheme {
 
   static List<BoxShadow> get premiumShadow => [
     BoxShadow(
-      color: Colors.black.withOpacity(0.3),
+      color: Colors.black.withValues(alpha: 0.3),
       blurRadius: 40,
       offset: const Offset(0, 20),
     ),

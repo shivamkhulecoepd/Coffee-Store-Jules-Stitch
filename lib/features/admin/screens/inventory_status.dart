@@ -68,7 +68,7 @@ class InventoryStatusPage extends StatelessWidget {
                 Container(
                   height: 6.h,
                   width: double.infinity,
-                  decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(3.r)),
+                  decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(3.r)),
                 ),
                 Container(
                   height: 6.h,
@@ -76,7 +76,7 @@ class InventoryStatusPage extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: color,
                     borderRadius: BorderRadius.circular(3.r),
-                    boxShadow: [BoxShadow(color: color.withOpacity(0.3), blurRadius: 10, spreadRadius: 1)],
+                    boxShadow: [BoxShadow(color: color.withValues(alpha: 0.3), blurRadius: 10, spreadRadius: 1)],
                   ),
                 ),
               ],

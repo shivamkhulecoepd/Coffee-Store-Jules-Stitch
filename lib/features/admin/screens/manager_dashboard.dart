@@ -92,7 +92,7 @@ class ManagerDashboard extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.all(8.w),
-                decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.1), shape: BoxShape.circle),
+                decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.1), shape: BoxShape.circle),
                 child: Icon(icon, color: AppColors.primary, size: 20.sp),
               ),
               SizedBox(width: 20.w),
@@ -114,7 +114,7 @@ class ManagerDashboard extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.all(8.w),
-              decoration: BoxDecoration(color: color.withOpacity(0.1), shape: BoxShape.circle),
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
               child: Icon(Icons.warning_amber_rounded, color: color, size: 20.sp),
             ),
             SizedBox(width: 20.w),

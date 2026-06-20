@@ -36,7 +36,7 @@ class RewardsPage extends StatelessWidget {
                   SizedBox(height: 16.h),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
-                    decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(20.r)),
+                    decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(20.r)),
                     child: Text('Elite Tier Member', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, fontWeight: FontWeight.w700)),
                   ),
                 ],
@@ -71,7 +71,7 @@ class RewardsPage extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.all(12.w),
-              decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.1), shape: BoxShape.circle),
+              decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.1), shape: BoxShape.circle),
               child: Icon(Icons.card_giftcard, color: AppColors.primary, size: 24.sp),
             ),
             SizedBox(width: 20.w),

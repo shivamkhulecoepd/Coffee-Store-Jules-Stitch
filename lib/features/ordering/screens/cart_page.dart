@@ -90,7 +90,7 @@ class CartPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surfaceDark,
         borderRadius: BorderRadius.circular(6.r),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Icon(icon, size: 14.sp, color: AppColors.primary),
     );

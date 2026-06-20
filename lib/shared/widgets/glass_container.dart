@@ -35,11 +35,15 @@ class AppGlassContainer extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         shape: shape,
-        borderRadius: shape == BoxShape.circle ? null : BorderRadius.circular(borderRadius),
+        borderRadius: shape == BoxShape.circle
+            ? null
+            : BorderRadius.circular(borderRadius),
         boxShadow: boxShadow,
       ),
       child: ClipRRect(
-        borderRadius: shape == BoxShape.circle ? BorderRadius.circular(1000) : BorderRadius.circular(borderRadius),
+        borderRadius: shape == BoxShape.circle
+            ? BorderRadius.circular(1000)
+            : BorderRadius.circular(borderRadius),
         child: Stack(
           children: [
             Positioned.fill(
@@ -48,10 +52,12 @@ class AppGlassContainer extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     shape: shape,
-                    borderRadius: shape == BoxShape.circle ? null : BorderRadius.circular(borderRadius),
+                    borderRadius: shape == BoxShape.circle
+                        ? null
+                        : BorderRadius.circular(borderRadius),
                     color: Theme.of(context).brightness == Brightness.dark
-                        ? AppColors.surfaceDark.withOpacity(opacity)
-                        : AppColors.surfaceLight.withOpacity(opacity),
+                        ? AppColors.surfaceDark.withValues(alpha: opacity)
+                        : AppColors.surfaceLight.withValues(alpha: opacity),
                   ),
                 ),
               ),
@@ -65,9 +71,8 @@ class AppGlassContainer extends StatelessWidget {
                   ),
                 ),
               ),
-            Padding(
-              padding: padding ?? EdgeInsets.zero,
-              child: child,
+            Center(
+              child: Padding(padding: padding ?? EdgeInsets.zero, child: child),
             ),
           ],
         ),
@@ -96,9 +101,16 @@ class _GlassBorderPainter extends CustomPainter {
       ).createShader(rect);
 
     if (shape == BoxShape.circle) {
-      canvas.drawCircle(Offset(size.width / 2, size.height / 2), size.width / 2 - 0.5, paint);
+      canvas.drawCircle(
+        Offset(size.width / 2, size.height / 2),
+        size.width / 2 - 0.5,
+        paint,
+      );
     } else {
-      canvas.drawRRect(RRect.fromRectAndRadius(rect, Radius.circular(borderRadius)), paint);
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(rect, Radius.circular(borderRadius)),
+        paint,
+      );
     }
   }
 

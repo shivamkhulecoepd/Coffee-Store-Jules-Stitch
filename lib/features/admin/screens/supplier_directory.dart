@@ -44,7 +44,7 @@ class SupplierDirectoryPage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.surfaceDark,
                 borderRadius: BorderRadius.circular(16.r),
-                border: Border.all(color: Colors.white.withOpacity(0.05)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
               ),
               child: Icon(Icons.business_outlined, color: AppColors.primary, size: 28.sp),
             ),
@@ -60,7 +60,7 @@ class SupplierDirectoryPage extends StatelessWidget {
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-              decoration: BoxDecoration(color: statusColor.withOpacity(0.1), borderRadius: BorderRadius.circular(4.r)),
+              decoration: BoxDecoration(color: statusColor.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(4.r)),
               child: Text(status, style: AppTypography.labelSmall(context).copyWith(color: statusColor, fontSize: 10.sp, fontWeight: FontWeight.w900)),
             ),
           ],

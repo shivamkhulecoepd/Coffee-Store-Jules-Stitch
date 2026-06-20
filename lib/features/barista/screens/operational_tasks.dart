@@ -43,7 +43,7 @@ class OperationalTasksPage extends StatelessWidget {
           leading: Container(
             padding: EdgeInsets.all(12.w),
             decoration: BoxDecoration(
-              color: statusColor.withOpacity(0.1),
+              color: statusColor.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(Icons.assignment_outlined, color: statusColor, size: 24.sp),
