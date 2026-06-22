@@ -5,52 +5,52 @@ import '../../core/theme/app_typography.dart';
 
 class AppTextField extends StatelessWidget {
   final String label;
-  final String? hint;
-  final TextEditingController? controller;
+  final String hint;
+  final IconData? prefixIcon;
   final bool isPassword;
 
   const AppTextField({
     super.key,
     required this.label,
-    this.hint,
-    this.controller,
+    required this.hint,
+    this.prefixIcon,
     this.isPassword = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label.toUpperCase(),
           style: AppTypography.labelSmall(context).copyWith(
-            color: AppColors.primary,
-            letterSpacing: 1.5.sp,
+            color: AppColors.outline,
+            fontSize: 10.sp,
+            letterSpacing: 2,
           ),
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 12.h),
         TextField(
-          controller: controller,
           obscureText: isPassword,
           style: AppTypography.bodyMedium(context),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline.withValues(alpha: 0.5)),
+            hintStyle: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline.withOpacity(0.5)),
+            prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: AppColors.primary, size: 20.sp) : null,
             filled: true,
-            fillColor: isDark ? const Color(0xFF0A0A0A) : AppColors.neutralLight,
-            contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+            fillColor: Colors.black.withOpacity(0.3),
+            contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: AppColors.outline.withValues(alpha: 0.2)),
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: AppColors.outline.withValues(alpha: 0.2)),
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.r),
+              borderRadius: BorderRadius.circular(16.r),
               borderSide: const BorderSide(color: AppColors.primary),
             ),
           ),

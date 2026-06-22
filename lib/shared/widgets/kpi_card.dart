@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
-import '../../core/theme/app_theme.dart';
 import 'glass_container.dart';
+import 'sparkline_painter.dart';
 
 class KPICard extends StatelessWidget {
   final String label;
@@ -22,56 +22,42 @@ class KPICard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppGlassContainer(
-      padding: EdgeInsets.all(24.w),
-      boxShadow: AppTheme.premiumShadow,
+      padding: EdgeInsets.all(16.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(label.toUpperCase(), style: AppTypography.labelSmall(context).copyWith(color: AppColors.outline, letterSpacing: 1.5)),
+          Text(
+            label.toUpperCase(),
+            style: AppTypography.labelSmall(context).copyWith(
+              color: AppColors.outline,
+              letterSpacing: 1.2,
+              fontSize: 9.sp,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           SizedBox(height: 8.h),
-          Text(value, style: AppTypography.headlineLarge(context)),
-          SizedBox(height: 24.h),
+          Text(
+            value,
+            style: AppTypography.headlineLarge(context).copyWith(
+              fontWeight: FontWeight.w700,
+              fontSize: 22.sp,
+            ),
+            maxLines: 1,
+          ),
+          SizedBox(height: 12.h),
           SizedBox(
-            height: 30.h,
+            height: 32.h,
             width: double.infinity,
             child: CustomPaint(
-              painter: _SparklinePainter(data: chartData, color: chartColor.withValues(alpha: 0.5)),
+              painter: SparklinePainter(
+                data: chartData,
+                color: chartColor,
+              ),
             ),
           ),
         ],
       ),
     );
   }
-}
-
-class _SparklinePainter extends CustomPainter {
-  final List<double> data;
-  final Color color;
-
-  _SparklinePainter({required this.data, required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (data.length < 2) return;
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 2.0
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round;
-    final path = Path();
-    final xStep = size.width / (data.length - 1);
-    final max = data.reduce((a, b) => a > b ? a : b);
-    final min = data.reduce((a, b) => a < b ? a : b);
-    final range = max - min == 0 ? 1.0 : max - min;
-    path.moveTo(0, size.height - ((data[0] - min) / range) * size.height);
-    for (int i = 1; i < data.length; i++) {
-      path.lineTo(i * xStep, size.height - ((data[i] - min) / range) * size.height);
-    }
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

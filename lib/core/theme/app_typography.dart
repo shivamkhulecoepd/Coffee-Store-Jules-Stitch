@@ -9,42 +9,56 @@ class AppTypography {
     fontWeight: FontWeight.w700,
     height: 1.1,
     letterSpacing: -0.02.sp,
-    color: Theme.of(context).brightness == Brightness.dark ? AppColors.boneWhite : AppColors.textDark,
+    color: AppColors.boneWhite,
   );
 
   static TextStyle displayLargeMobile(BuildContext context) => GoogleFonts.manrope(
     fontSize: 32.sp,
     fontWeight: FontWeight.w700,
     height: 1.2,
-    color: Theme.of(context).brightness == Brightness.dark ? AppColors.boneWhite : AppColors.textDark,
+    color: AppColors.boneWhite,
   );
 
   static TextStyle headlineLarge(BuildContext context) => GoogleFonts.manrope(
     fontSize: 32.sp,
     fontWeight: FontWeight.w600,
     height: 1.2,
-    color: Theme.of(context).brightness == Brightness.dark ? AppColors.boneWhite : AppColors.textDark,
+    color: AppColors.boneWhite,
   );
 
   static TextStyle headlineMedium(BuildContext context) => GoogleFonts.manrope(
     fontSize: 24.sp,
     fontWeight: FontWeight.w600,
     height: 1.3,
-    color: Theme.of(context).brightness == Brightness.dark ? AppColors.boneWhite : AppColors.textDark,
+    color: AppColors.boneWhite,
+  );
+
+  static TextStyle titleLarge(BuildContext context) => GoogleFonts.manrope(
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w600,
+    height: 1.4,
+    color: AppColors.boneWhite,
   );
 
   static TextStyle bodyLarge(BuildContext context) => GoogleFonts.inter(
     fontSize: 18.sp,
     fontWeight: FontWeight.w400,
     height: 1.6,
-    color: Theme.of(context).brightness == Brightness.dark ? AppColors.boneWhite : AppColors.textDark,
+    color: AppColors.boneWhite,
   );
 
   static TextStyle bodyMedium(BuildContext context) => GoogleFonts.inter(
     fontSize: 16.sp,
     fontWeight: FontWeight.w400,
     height: 1.5,
-    color: Theme.of(context).brightness == Brightness.dark ? AppColors.boneWhite : AppColors.textDark,
+    color: AppColors.boneWhite,
+  );
+
+  static TextStyle bodySmall(BuildContext context) => GoogleFonts.inter(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+    color: AppColors.textSecondary,
   );
 
   static TextStyle labelMedium(BuildContext context) => GoogleFonts.inter(
@@ -52,7 +66,7 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     height: 1.2,
     letterSpacing: 0.05.sp,
-    color: Theme.of(context).brightness == Brightness.dark ? AppColors.boneWhite : AppColors.textDark,
+    color: AppColors.boneWhite,
   );
 
   static TextStyle labelSmall(BuildContext context) => GoogleFonts.inter(
@@ -60,7 +74,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     height: 1.2,
     letterSpacing: 1.2.sp,
-    color: Theme.of(context).brightness == Brightness.dark ? AppColors.boneWhite : AppColors.textDark,
+    color: AppColors.primary,
   );
 
   static TextStyle dataMono(BuildContext context) => GoogleFonts.manrope(
@@ -68,6 +82,6 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     height: 1.2,
     letterSpacing: 0.02.sp,
-    color: Theme.of(context).brightness == Brightness.dark ? AppColors.boneWhite : AppColors.textDark,
+    color: AppColors.boneWhite,
   );
 }

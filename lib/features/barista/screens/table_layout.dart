@@ -26,7 +26,7 @@ class TableLayoutPage extends StatelessWidget {
           crossAxisCount: 3,
           mainAxisSpacing: 24.h,
           crossAxisSpacing: 24.w,
-          childAspectRatio: 0.9,
+          childAspectRatio: 0.86.w,
         ),
         itemCount: 12,
         itemBuilder: (context, index) {
@@ -47,14 +47,13 @@ class TableLayoutPage extends StatelessWidget {
         opacity: isOccupied ? 0.3 : 0.8,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text('T$number', style: AppTypography.headlineMedium(context).copyWith(color: isOccupied ? AppColors.outline : Colors.white)),
             SizedBox(height: 8.h),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
               decoration: BoxDecoration(
-                color: isOccupied ? AppColors.primary.withValues(alpha: 0.1) : AppColors.success.withValues(alpha: 0.1),
+                color: isOccupied ? AppColors.primary.withOpacity(0.1) : AppColors.success.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: Text(

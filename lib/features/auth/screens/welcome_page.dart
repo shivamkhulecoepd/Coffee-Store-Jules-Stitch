@@ -21,7 +21,7 @@ class WelcomePage extends StatelessWidget {
                 end: Alignment.bottomCenter,
                 colors: [
                   Colors.transparent,
-                  AppColors.backgroundDark.withValues(alpha: 0.8),
+                  AppColors.backgroundDark.withOpacity(0.8),
                   AppColors.backgroundDark,
                 ],
               ),

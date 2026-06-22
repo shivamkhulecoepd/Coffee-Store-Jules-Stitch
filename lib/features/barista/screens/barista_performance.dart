@@ -15,10 +15,7 @@ class BaristaPerformancePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text(
-          'Performance',
-          style: AppTypography.headlineMedium(context),
-        ),
+        title: Text('Performance', style: AppTypography.headlineMedium(context)),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -28,24 +25,14 @@ class BaristaPerformancePage extends StatelessWidget {
           children: [
             _buildScoreOverview(context),
             SizedBox(height: 32.h),
-            Text(
-              'METRICS',
-              style: AppTypography.labelSmall(
-                context,
-              ).copyWith(color: AppColors.primary, letterSpacing: 2),
-            ),
+            Text('METRICS', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
             SizedBox(height: 16.h),
             _buildMetricsGrid(context),
-            // SizedBox(height: 32.h),
-            Text(
-              'SESSION HISTORY',
-              style: AppTypography.labelSmall(
-                context,
-              ).copyWith(color: AppColors.primary, letterSpacing: 2),
-            ),
+            SizedBox(height: 32.h),
+            Text('SESSION HISTORY', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
             SizedBox(height: 16.h),
             _buildHistoryList(context),
-            SizedBox(height: 40.h),
+            SizedBox(height: 120.h),
           ],
         ),
       ),
@@ -61,27 +48,11 @@ class BaristaPerformancePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'DAILY SCORE',
-                  style: AppTypography.labelSmall(
-                    context,
-                  ).copyWith(color: AppColors.outline),
-                ),
+                Text('DAILY SCORE', style: AppTypography.labelSmall(context).copyWith(color: AppColors.outline)),
                 SizedBox(height: 4.h),
-                Text(
-                  '98.4',
-                  style: AppTypography.displayLargeMobile(context).copyWith(
-                    color: AppColors.success,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                Text('98.4', style: AppTypography.displayLargeMobile(context).copyWith(color: AppColors.success, fontWeight: FontWeight.w700)),
                 SizedBox(height: 4.h),
-                Text(
-                  '+2.1% from yesterday',
-                  style: AppTypography.labelMedium(
-                    context,
-                  ).copyWith(color: AppColors.success, fontSize: 11.sp),
-                ),
+                Text('+2.1% from yesterday', style: AppTypography.labelMedium(context).copyWith(color: AppColors.success, fontSize: 11.sp)),
               ],
             ),
           ),
@@ -90,18 +61,10 @@ class BaristaPerformancePage extends StatelessWidget {
             height: 80.w,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.success.withValues(alpha: 0.3),
-                width: 8.w,
-              ),
+              border: Border.all(color: AppColors.success.withOpacity(0.3), width: 8.w),
             ),
             child: Center(
-              child: Text(
-                'A+',
-                style: AppTypography.headlineLarge(
-                  context,
-                ).copyWith(color: AppColors.success),
-              ),
+              child: Text('A+', style: AppTypography.headlineLarge(context).copyWith(color: AppColors.success)),
             ),
           ),
         ],
@@ -116,32 +79,12 @@ class BaristaPerformancePage extends StatelessWidget {
       crossAxisCount: 2,
       mainAxisSpacing: 16.w,
       crossAxisSpacing: 16.w,
-      childAspectRatio: 0.87,
+      childAspectRatio: 1.2.w,
       children: const [
-        KPICard(
-          label: 'Avg Brew Time',
-          value: '2:14m',
-          chartData: [5, 4, 3, 4, 3],
-          chartColor: AppColors.primary,
-        ),
-        KPICard(
-          label: 'Order Accuracy',
-          value: '100%',
-          chartData: [10, 10, 10, 10, 10],
-          chartColor: AppColors.success,
-        ),
-        KPICard(
-          label: 'Customer Rating',
-          value: '4.9',
-          chartData: [4, 5, 4.5, 5, 4.9],
-          chartColor: AppColors.primary,
-        ),
-        KPICard(
-          label: 'Upsell Rate',
-          value: '12%',
-          chartData: [2, 5, 8, 4, 12],
-          chartColor: AppColors.primaryGold,
-        ),
+        KPICard(label: 'Avg Brew Time', value: '2:14m', chartData: [5, 4, 3, 4, 3], chartColor: AppColors.primary),
+        KPICard(label: 'Order Accuracy', value: '100%', chartData: [10, 10, 10, 10, 10], chartColor: AppColors.success),
+        KPICard(label: 'Customer Rating', value: '4.9', chartData: [4, 5, 4.5, 5, 4.9], chartColor: AppColors.primary),
+        KPICard(label: 'Upsell Rate', value: '12%', chartData: [2, 5, 8, 4, 12], chartColor: AppColors.primaryGold),
       ],
     );
   }
@@ -158,37 +101,20 @@ class BaristaPerformancePage extends StatelessWidget {
           child: Row(
             children: [
               CircleAvatar(
-                backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-                child: Icon(
-                  Icons.timer_outlined,
-                  color: AppColors.primary,
-                  size: 18.sp,
-                ),
+                backgroundColor: AppColors.primary.withOpacity(0.1),
+                child: Icon(Icons.timer_outlined, color: AppColors.primary, size: 18.sp),
               ),
               SizedBox(width: 16.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'V60 Pour Over - Single Origin',
-                      style: AppTypography.labelMedium(context),
-                    ),
-                    Text(
-                      'Completed in 3:45m',
-                      style: AppTypography.bodyMedium(
-                        context,
-                      ).copyWith(color: AppColors.outline, fontSize: 12.sp),
-                    ),
+                    Text('V60 Pour Over - Single Origin', style: AppTypography.labelMedium(context)),
+                    Text('Completed in 3:45m', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline, fontSize: 12.sp)),
                   ],
                 ),
               ),
-              Text(
-                '98 pts',
-                style: AppTypography.dataMono(
-                  context,
-                ).copyWith(color: AppColors.success),
-              ),
+              Text('98 pts', style: AppTypography.dataMono(context).copyWith(color: AppColors.success)),
             ],
           ),
         );

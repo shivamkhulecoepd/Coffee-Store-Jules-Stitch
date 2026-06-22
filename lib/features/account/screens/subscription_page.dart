@@ -65,7 +65,7 @@ class SubscriptionPage extends StatelessWidget {
               children: [
                 Icon(Icons.check_circle_outline, size: 18.sp, color: AppColors.primary),
                 SizedBox(width: 16.w),
-                Expanded(child: Text(f, style: AppTypography.bodyMedium(context).copyWith(color: AppColors.boneWhite.withValues(alpha: 0.8)))),
+                Expanded(child: Text(f, style: AppTypography.bodyMedium(context).copyWith(color: AppColors.boneWhite.withOpacity(0.8)))),
               ],
             ),
           )),

@@ -15,10 +15,7 @@ class ShiftOverviewPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text(
-          'Shift Analytics',
-          style: AppTypography.headlineMedium(context),
-        ),
+        title: Text('Shift Analytics', style: AppTypography.headlineMedium(context)),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
@@ -34,17 +31,9 @@ class ShiftOverviewPage extends StatelessWidget {
               boxShadow: AppTheme.premiumShadow,
               child: Column(
                 children: [
-                  _buildShiftDetail(
-                    context,
-                    'CURRENT WINDOW',
-                    'Morning (06:00 - 14:00)',
-                  ),
+                  _buildShiftDetail(context, 'CURRENT WINDOW', 'Morning (06:00 - 14:00)'),
                   const Divider(color: Colors.white10, height: 32),
-                  _buildShiftDetail(
-                    context,
-                    'ACTIVE PERSONNEL',
-                    'Sarah, Alex, Michael',
-                  ),
+                  _buildShiftDetail(context, 'ACTIVE PERSONNEL', 'Sarah, Alex, Michael'),
                   const Divider(color: Colors.white10, height: 32),
                   _buildShiftDetail(context, 'STATION REVENUE', r',240.50'),
                 ],
@@ -57,9 +46,7 @@ class ShiftOverviewPage extends StatelessWidget {
               padding: EdgeInsets.all(24.w),
               child: Text(
                 'SYSTEM ALERT: New seasonal blend "Autumn Harvest" deployment begins at 04:00 tomorrow. Verify all grinder settings.',
-                style: AppTypography.bodyMedium(
-                  context,
-                ).copyWith(color: AppColors.outline, height: 1.6),
+                style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline, height: 1.6),
               ),
             ),
           ],
@@ -71,38 +58,16 @@ class ShiftOverviewPage extends StatelessWidget {
   Widget _buildSectionHeader(BuildContext context, String title) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: Text(
-        title,
-        style: AppTypography.labelSmall(
-          context,
-        ).copyWith(color: AppColors.primary, letterSpacing: 1.5),
-      ),
+      child: Text(title, style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 1.5)),
     );
   }
 
   Widget _buildShiftDetail(BuildContext context, String label, String value) {
     return Row(
-      spacing: 6.w,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(
-          child: Text(
-            label,
-            style: AppTypography.labelSmall(
-              context,
-            ).copyWith(color: AppColors.outline, fontSize: 10.sp),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        Expanded(
-          child: Text(
-            value,
-            style: AppTypography.labelMedium(
-              context,
-            ).copyWith(fontWeight: FontWeight.w600),
-          ),
-        ),
+        Text(label, style: AppTypography.labelSmall(context).copyWith(color: AppColors.outline, fontSize: 10.sp)),
+        Text(value, style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w600)),
       ],
     );
   }
