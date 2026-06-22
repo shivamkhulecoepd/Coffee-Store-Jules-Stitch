@@ -4,12 +4,16 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/glass_container.dart';
 import '../../../shared/widgets/kpi_card.dart';
+import '../../../data/repositories/store_repository.dart';
+import '../../../core/utils/service_locator.dart';
 
 class BaristaPerformancePage extends StatelessWidget {
   const BaristaPerformancePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final performance = sl<StoreRepository>().performance;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -23,11 +27,11 @@ class BaristaPerformancePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildScoreOverview(context),
+            _buildScoreOverview(context, performance),
             SizedBox(height: 32.h),
             Text('METRICS', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
             SizedBox(height: 16.h),
-            _buildMetricsGrid(context),
+            _buildMetricsGrid(context, performance),
             SizedBox(height: 32.h),
             Text('SESSION HISTORY', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
             SizedBox(height: 16.h),
@@ -39,7 +43,7 @@ class BaristaPerformancePage extends StatelessWidget {
     );
   }
 
-  Widget _buildScoreOverview(BuildContext context) {
+  Widget _buildScoreOverview(BuildContext context, Map<String, dynamic> data) {
     return AppGlassContainer(
       padding: EdgeInsets.all(24.w),
       child: Row(
@@ -50,9 +54,9 @@ class BaristaPerformancePage extends StatelessWidget {
               children: [
                 Text('DAILY SCORE', style: AppTypography.labelSmall(context).copyWith(color: AppColors.outline)),
                 SizedBox(height: 4.h),
-                Text('98.4', style: AppTypography.displayLargeMobile(context).copyWith(color: AppColors.success, fontWeight: FontWeight.w700)),
+                Text('${data['score']}', style: AppTypography.displayLargeMobile(context).copyWith(color: AppColors.success, fontWeight: FontWeight.w700)),
                 SizedBox(height: 4.h),
-                Text('+2.1% from yesterday', style: AppTypography.labelMedium(context).copyWith(color: AppColors.success, fontSize: 11.sp)),
+                Text('${data['trend']} from yesterday', style: AppTypography.labelMedium(context).copyWith(color: AppColors.success, fontSize: 11.sp)),
               ],
             ),
           ),
@@ -72,19 +76,19 @@ class BaristaPerformancePage extends StatelessWidget {
     );
   }
 
-  Widget _buildMetricsGrid(BuildContext context) {
+  Widget _buildMetricsGrid(BuildContext context, Map<String, dynamic> data) {
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 2,
       mainAxisSpacing: 16.w,
       crossAxisSpacing: 16.w,
-      childAspectRatio: 1.2.w,
-      children: const [
-        KPICard(label: 'Avg Brew Time', value: '2:14m', chartData: [5, 4, 3, 4, 3], chartColor: AppColors.primary),
-        KPICard(label: 'Order Accuracy', value: '100%', chartData: [10, 10, 10, 10, 10], chartColor: AppColors.success),
-        KPICard(label: 'Customer Rating', value: '4.9', chartData: [4, 5, 4.5, 5, 4.9], chartColor: AppColors.primary),
-        KPICard(label: 'Upsell Rate', value: '12%', chartData: [2, 5, 8, 4, 12], chartColor: AppColors.primaryGold),
+      childAspectRatio: 1.0,
+      children: [
+        KPICard(label: 'Avg Brew Time', value: data['avgBrewTime'], chartData: const [5, 4, 3, 4, 3], chartColor: AppColors.primary),
+        KPICard(label: 'Order Accuracy', value: data['accuracy'], chartData: const [10, 10, 10, 10, 10], chartColor: AppColors.success),
+        KPICard(label: 'Customer Rating', value: data['rating'].toString(), chartData: const [4, 5, 4.5, 5, 4.9], chartColor: AppColors.primary),
+        KPICard(label: 'Upsell Rate', value: data['upsell'], chartData: const [2, 5, 8, 4, 12], chartColor: AppColors.primaryGold),
       ],
     );
   }

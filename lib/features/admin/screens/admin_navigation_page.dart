@@ -5,7 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import 'manager_dashboard.dart';
 import 'inventory_status.dart';
 import 'customer_requests.dart';
-import 'supplier_directory.dart';
+import 'product_management.dart';
 
 class AdminNavigationPage extends StatefulWidget {
   const AdminNavigationPage({super.key});
@@ -20,8 +20,8 @@ class _AdminNavigationPageState extends State<AdminNavigationPage> {
   final List<Widget> _pages = const [
     ManagerDashboard(),
     InventoryStatusPage(),
+    ProductManagementPage(),
     CustomerRequestsPage(),
-    SupplierDirectoryPage(),
   ];
 
   @override
@@ -41,8 +41,8 @@ class _AdminNavigationPageState extends State<AdminNavigationPage> {
           children: [
             _buildNavItem(Icons.analytics_outlined, 'Metrics', 0),
             _buildNavItem(Icons.inventory_2_outlined, 'Stock', 1),
-            _buildNavItem(Icons.support_agent_outlined, 'Service', 2),
-            _buildNavItem(Icons.business_outlined, 'Suppliers', 3),
+            _buildNavItem(Icons.coffee_outlined, 'Catalog', 2),
+            _buildNavItem(Icons.support_agent_outlined, 'Queue', 3),
           ],
         ),
       ),

@@ -22,7 +22,7 @@ class KPICard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppGlassContainer(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(12.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

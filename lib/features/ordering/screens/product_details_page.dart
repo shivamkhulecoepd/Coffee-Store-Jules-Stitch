@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
@@ -6,16 +7,30 @@ import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/glass_container.dart';
 import '../../../shared/widgets/custom_button.dart';
+import '../bloc/ordering_bloc.dart';
+import '../bloc/ordering_event.dart';
+import '../models/product_model.dart';
 
-class ProductDetailsPage extends StatelessWidget {
+class ProductDetailsPage extends StatefulWidget {
   final Map<String, dynamic>? data;
 
   const ProductDetailsPage({super.key, this.data});
 
   @override
+  State<ProductDetailsPage> createState() => _ProductDetailsPageState();
+}
+
+class _ProductDetailsPageState extends State<ProductDetailsPage> {
+  String selectedSize = 'M';
+
+  @override
   Widget build(BuildContext context) {
-    final String heroTag = data?['tag'] ?? 'default';
-    final String name = data?['name'] ?? 'Vanilla Latte';
+    final Product? product = widget.data?['product'];
+    final String heroTag = widget.data?['tag'] ?? 'default';
+
+    if (product == null) {
+      return const Scaffold(body: Center(child: Text('Product not found')));
+    }
 
     return Scaffold(
       body: Stack(
@@ -72,18 +87,18 @@ class ProductDetailsPage extends StatelessWidget {
                                 children: [
                                   Text('SIGNATURE SERIES', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2.5)),
                                   SizedBox(height: 4.h),
-                                  Text(name, style: AppTypography.displayLargeMobile(context).copyWith(fontSize: 36.sp, fontWeight: FontWeight.w700)),
+                                  Text(product.name, style: AppTypography.displayLargeMobile(context).copyWith(fontSize: 36.sp, fontWeight: FontWeight.w700)),
                                 ],
                               ),
                             ),
-                            Text(r'$5.50', style: AppTypography.headlineLarge(context).copyWith(color: AppColors.primary, fontSize: 32.sp)),
+                            Text(r'$' + product.price.toStringAsFixed(2), style: AppTypography.headlineLarge(context).copyWith(color: AppColors.primary, fontSize: 32.sp)),
                           ],
                         ),
                         SizedBox(height: 32.h),
                         Text('DESCRIPTION', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 1.5)),
                         SizedBox(height: 12.h),
                         Text(
-                          'A velvety smooth double espresso balanced with steamed whole milk and our signature house-made Madagascar vanilla bean syrup.',
+                          product.description,
                           style: AppTypography.bodyMedium(context).copyWith(color: AppColors.boneWhite.withOpacity(0.65), height: 1.7),
                         ),
                         SizedBox(height: 40.h),
@@ -91,15 +106,18 @@ class ProductDetailsPage extends StatelessWidget {
                         SizedBox(height: 16.h),
                         Row(
                           children: [
-                            _buildSizeOption(context, 'S', false),
-                            _buildSizeOption(context, 'M', true),
-                            _buildSizeOption(context, 'L', false),
+                            _buildSizeOption(context, 'S'),
+                            _buildSizeOption(context, 'M'),
+                            _buildSizeOption(context, 'L'),
                           ],
                         ),
                         SizedBox(height: 40.h),
                         AppButton(
                           text: 'ADD TO SELECTION',
-                          onPressed: () => context.pushNamed('cart'),
+                          onPressed: () {
+                            context.read<OrderingBloc>().add(AddToCartEvent(product, customization: 'Size: $selectedSize'));
+                            context.pushNamed('cart');
+                          },
                         ),
                       ],
                     ),
@@ -128,22 +146,26 @@ class ProductDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSizeOption(BuildContext context, String size, bool isSelected) {
-    return Container(
-      margin: EdgeInsets.only(right: 16.w),
-      width: 68.w,
-      height: 68.w,
-      decoration: BoxDecoration(
-        color: isSelected ? AppColors.primary : Colors.transparent,
-        borderRadius: BorderRadius.circular(18.r),
-        border: isSelected ? null : Border.all(color: Colors.white.withOpacity(0.1)),
-      ),
-      child: Center(
-        child: Text(
-          size,
-          style: AppTypography.headlineMedium(context).copyWith(
-            color: isSelected ? AppColors.onPrimary : AppColors.boneWhite,
-            fontWeight: FontWeight.w700,
+  Widget _buildSizeOption(BuildContext context, String size) {
+    final bool isSelected = selectedSize == size;
+    return GestureDetector(
+      onTap: () => setState(() => selectedSize = size),
+      child: Container(
+        margin: EdgeInsets.only(right: 16.w),
+        width: 68.w,
+        height: 68.w,
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(18.r),
+          border: isSelected ? null : Border.all(color: Colors.white.withOpacity(0.1)),
+        ),
+        child: Center(
+          child: Text(
+            size,
+            style: AppTypography.headlineMedium(context).copyWith(
+              color: isSelected ? AppColors.onPrimary : AppColors.boneWhite,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
       ),

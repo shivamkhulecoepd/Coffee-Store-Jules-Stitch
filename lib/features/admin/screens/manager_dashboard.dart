@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
@@ -6,9 +7,23 @@ import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/glass_container.dart';
 import '../../../shared/widgets/kpi_card.dart';
+import '../bloc/admin_bloc.dart';
+import '../bloc/admin_event.dart';
+import '../bloc/admin_state.dart';
 
-class ManagerDashboard extends StatelessWidget {
+class ManagerDashboard extends StatefulWidget {
   const ManagerDashboard({super.key});
+
+  @override
+  State<ManagerDashboard> createState() => _ManagerDashboardState();
+}
+
+class _ManagerDashboardState extends State<ManagerDashboard> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<AdminBloc>().add(LoadAdminDataEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,51 +43,58 @@ class ManagerDashboard extends StatelessWidget {
           SizedBox(width: 8.w),
         ],
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(24.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('EXECUTIVE SUMMARY', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2.5)),
-              Text('System Metrics', style: AppTypography.displayLargeMobile(context).copyWith(fontWeight: FontWeight.w700)),
-              SizedBox(height: 32.h),
-              _buildKPISection(context),
-              SizedBox(height: 40.h),
-              Text('OPERATIONAL ACCESS', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
-              SizedBox(height: 16.h),
-              _buildAdminOption(context, 'Supply Chain & Inventory', 'inventory', Icons.inventory_2_outlined),
-              _buildAdminOption(context, 'Supplier Infrastructure', 'suppliers', Icons.business_outlined),
-              _buildAdminOption(context, 'System Support Queue', 'requests', Icons.support_agent_outlined),
-              SizedBox(height: 40.h),
-              Text('CRITICAL ALERTS', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
-              SizedBox(height: 16.h),
-              _buildInventoryAlert(context, 'Arabica Espresso Reserves', 'LOW: 12kg', Colors.orange),
-              _buildInventoryAlert(context, 'Whole Organic Dairy', 'CRITICAL: 5L', AppColors.error),
-              SizedBox(height: 120.h),
-            ],
-          ),
-        ),
+      body: BlocBuilder<AdminBloc, AdminState>(
+        builder: (context, state) {
+          if (state.status == AdminStatus.loading) {
+            return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+          }
+
+          return SafeArea(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(24.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('EXECUTIVE SUMMARY', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2.5)),
+                  Text('System Metrics', style: AppTypography.displayLargeMobile(context).copyWith(fontWeight: FontWeight.w700)),
+                  SizedBox(height: 32.h),
+                  _buildKPISection(context, state),
+                  SizedBox(height: 40.h),
+                  Text('OPERATIONAL ACCESS', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
+                  SizedBox(height: 16.h),
+                  _buildAdminOption(context, 'Supply Chain & Inventory', 'inventory', Icons.inventory_2_outlined),
+                  _buildAdminOption(context, 'Supplier Infrastructure', 'suppliers', Icons.business_outlined),
+                  _buildAdminOption(context, 'System Support Queue', 'requests', Icons.support_agent_outlined),
+                  SizedBox(height: 40.h),
+                  Text('CRITICAL ALERTS', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
+                  SizedBox(height: 16.h),
+                  ...state.alerts.map((a) => _buildInventoryAlert(context, a['item'], a['status'], a['color'] == 'error' ? AppColors.error : Colors.orange)),
+                  SizedBox(height: 120.h),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildKPISection(BuildContext context) {
+  Widget _buildKPISection(BuildContext context, AdminState state) {
     return Row(
       children: [
-        const Expanded(
+        Expanded(
           child: KPICard(
             label: 'Daily Revenue',
-            value: r'.2k',
-            chartData: [2.1, 3.5, 2.8, 4.0, 3.2, 4.2],
+            value: r'$' + state.dailyRevenue.toStringAsFixed(1),
+            chartData: const [2.1, 3.5, 2.8, 4.0, 3.2, 4.2],
           ),
         ),
         SizedBox(width: 16.w),
-        const Expanded(
+        Expanded(
           child: KPICard(
             label: 'Avg Basket',
-            value: r'8.5',
-            chartData: [15, 17, 16.5, 18, 19, 18.5],
+            value: r'$' + state.avgBasket.toStringAsFixed(1),
+            chartData: const [15, 17, 16.5, 18, 19, 18.5],
             chartColor: AppColors.success,
           ),
         ),

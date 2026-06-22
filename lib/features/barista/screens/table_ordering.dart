@@ -8,15 +8,19 @@ import '../../../shared/widgets/glass_container.dart';
 import '../../../shared/widgets/custom_button.dart';
 
 class TableOrderingPage extends StatelessWidget {
-  const TableOrderingPage({super.key});
+  final Map<String, dynamic>? data;
+
+  const TableOrderingPage({super.key, this.data});
 
   @override
   Widget build(BuildContext context) {
+    final int tableNum = data?['table'] ?? 1;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('Table 04 Session', style: AppTypography.headlineMedium(context)),
+        title: Text('Table $tableNum Session', style: AppTypography.headlineMedium(context)),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
@@ -32,7 +36,7 @@ class TableOrderingPage extends StatelessWidget {
                 Text('TRANSACTION ITEMS', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
                 SizedBox(height: 20.h),
                 _buildOrderItem(context, 'Espresso Doppio', '1', r'.50'),
-                _buildOrderItem(context, 'Cappuccino Artisan', '2', r'.50'),
+                _buildOrderItem(context, 'Cappuccino Artisan', '2', r'1.00'),
               ],
             ),
           ),
@@ -47,11 +51,19 @@ class TableOrderingPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('SESSION TOTAL', style: AppTypography.labelSmall(context).copyWith(color: AppColors.outline, letterSpacing: 1)),
-                    Text(r'4.00', style: AppTypography.headlineLarge(context).copyWith(color: AppColors.primary)),
+                    Text(r'6.50', style: AppTypography.headlineLarge(context).copyWith(color: AppColors.primary)),
                   ],
                 ),
                 SizedBox(height: 32.h),
-                AppButton(text: 'AUTHORIZE TRANSMISSION', onPressed: () => context.pop()),
+                AppButton(
+                  text: 'AUTHORIZE TRANSMISSION',
+                  onPressed: () {
+                     ScaffoldMessenger.of(context).showSnackBar(
+                       const SnackBar(content: Text('Order Sent to Brewing Station')),
+                     );
+                     context.pop();
+                  }
+                ),
               ],
             ),
           ),

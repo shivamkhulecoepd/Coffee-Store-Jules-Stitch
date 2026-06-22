@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/glass_container.dart';
+import '../bloc/ordering_bloc.dart';
+import '../bloc/ordering_state.dart';
+import '../models/product_model.dart';
 
 class DiscoverPage extends StatelessWidget {
   const DiscoverPage({super.key});
@@ -42,7 +47,20 @@ class DiscoverPage extends StatelessWidget {
             SizedBox(height: 40.h),
             _buildSectionHeader(context, 'Monthly Roasts'),
             SizedBox(height: 24.h),
-            _buildArrivalsList(context),
+            BlocBuilder<OrderingBloc, OrderingState>(
+              builder: (context, state) {
+                final roasts = state.products.where((p) => p.category == 'BEANS').toList();
+                return ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: roasts.length,
+                  separatorBuilder: (context, index) => SizedBox(height: 16.h),
+                  itemBuilder: (context, index) {
+                    return _buildArrivalItem(context, roasts[index]);
+                  },
+                );
+              },
+            ),
             SizedBox(height: 120.h),
           ],
         ),
@@ -75,12 +93,12 @@ class DiscoverPage extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 16.h,
         crossAxisSpacing: 16.w,
-        childAspectRatio: 1.4.w,
+        childAspectRatio: 1.4,
       ),
       itemCount: methods.length,
       itemBuilder: (context, index) {
         return AppGlassContainer(
-          padding: EdgeInsets.all(16.w),
+          padding: EdgeInsets.all(20.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -94,43 +112,38 @@ class DiscoverPage extends StatelessWidget {
     );
   }
 
-  Widget _buildArrivalsList(BuildContext context) {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 3,
-      separatorBuilder: (context, index) => SizedBox(height: 16.h),
-      itemBuilder: (context, index) {
-        return AppGlassContainer(
-          padding: EdgeInsets.all(20.w),
-          height: 110.h,
-          child: Row(
-            children: [
-              Container(
-                width: 70.w,
-                height: 70.w,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0A0A0A),
-                  borderRadius: BorderRadius.circular(16.r),
-                ),
-                child: const Icon(Icons.coffee, color: AppColors.primary),
+  Widget _buildArrivalItem(BuildContext context, Product product) {
+    return GestureDetector(
+      onTap: () => context.pushNamed('details', extra: {'tag': product.heroTag, 'product': product}),
+      child: AppGlassContainer(
+        padding: EdgeInsets.all(20.w),
+        height: 110.h,
+        child: Row(
+          children: [
+            Container(
+              width: 70.w,
+              height: 70.w,
+              decoration: BoxDecoration(
+                color: const Color(0xFF0A0A0A),
+                borderRadius: BorderRadius.circular(16.r),
               ),
-              SizedBox(width: 20.w),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Ethiopian Blend', style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700)),
-                    Text('Floral & Citrus Notes', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline, fontSize: 12.sp)),
-                  ],
-                ),
+              child: const Icon(Icons.coffee, color: AppColors.primary),
+            ),
+            SizedBox(width: 20.w),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(product.name, style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700)),
+                  Text(product.description, style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline, fontSize: 12.sp), maxLines: 1, overflow: TextOverflow.ellipsis),
+                ],
               ),
-              Text(r'8.00', style: AppTypography.dataMono(context).copyWith(color: AppColors.primary, fontWeight: FontWeight.w700)),
-            ],
-          ),
-        );
-      },
+            ),
+            Text(r'$' + product.price.toStringAsFixed(2), style: AppTypography.dataMono(context).copyWith(color: AppColors.primary, fontWeight: FontWeight.w700)),
+          ],
+        ),
+      ),
     );
   }
 }

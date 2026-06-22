@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/glass_container.dart';
+import '../bloc/user_bloc.dart';
+import '../bloc/user_state.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -19,37 +22,45 @@ class ProfilePage extends StatelessWidget {
         title: Text('Membership', style: AppTypography.headlineMedium(context)),
         automaticallyImplyLeading: false,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(24.w),
-        child: Column(
-          children: [
-            AppGlassContainer(
-              padding: EdgeInsets.all(24.w),
-              boxShadow: AppTheme.premiumShadow,
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 54.r,
-                    backgroundColor: AppColors.primary.withOpacity(0.1),
-                    child: Icon(Icons.person, size: 54.sp, color: AppColors.primary),
+      body: BlocBuilder<UserBloc, UserState>(
+        builder: (context, state) {
+          return SingleChildScrollView(
+            padding: EdgeInsets.all(24.w),
+            child: Column(
+              children: [
+                AppGlassContainer(
+                  padding: EdgeInsets.all(24.w),
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 54.r,
+                        backgroundColor: AppColors.primary.withOpacity(0.1),
+                        child: Icon(Icons.person, size: 54.sp, color: AppColors.primary),
+                      ),
+                      SizedBox(height: 20.h),
+                      Text(state.name, style: AppTypography.headlineLarge(context).copyWith(fontWeight: FontWeight.w700)),
+                      Text(state.email, style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline)),
+                      SizedBox(height: 12.h),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
+                        decoration: BoxDecoration(color: AppColors.primaryGold.withOpacity(0.1), borderRadius: BorderRadius.circular(20.r)),
+                        child: Text('${state.points} PTS • ${state.tier} Tier', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primaryGold, fontWeight: FontWeight.w700)),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 20.h),
-                  Text('Alex Johnson', style: AppTypography.headlineLarge(context).copyWith(fontWeight: FontWeight.w700)),
-                  Text('alex.j@example.com', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline)),
-                ],
-              ),
+                ),
+                SizedBox(height: 32.h),
+                _buildProfileOption(context, Icons.history, 'Order History', 'history'),
+                _buildProfileOption(context, Icons.favorite_border, 'Wishlist', 'wishlist'),
+                _buildProfileOption(context, Icons.credit_card, 'Payment Methods', 'payment'),
+                _buildProfileOption(context, Icons.card_membership, 'Subscription', 'subscription'),
+                const Divider(color: Colors.white10, height: 48),
+                _buildProfileOption(context, Icons.logout, 'Logout Session', 'welcome', isDestructive: true),
+                SizedBox(height: 120.h),
+              ],
             ),
-            SizedBox(height: 32.h),
-            _buildProfileOption(context, Icons.history, 'Order History', 'history'),
-            _buildProfileOption(context, Icons.favorite_border, 'Wishlist', 'wishlist'),
-            _buildProfileOption(context, Icons.credit_card, 'Payment Methods', 'payment'),
-            const Divider(color: Colors.white10, height: 48),
-            _buildProfileOption(context, Icons.logout, 'Logout Session', 'welcome', isDestructive: true),
-            SizedBox(height: 120.h),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

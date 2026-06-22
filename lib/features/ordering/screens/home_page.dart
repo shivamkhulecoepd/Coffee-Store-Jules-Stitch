@@ -1,38 +1,95 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/glass_container.dart';
+import '../bloc/ordering_bloc.dart';
+import '../bloc/ordering_event.dart';
+import '../bloc/ordering_state.dart';
+import '../models/product_model.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String selectedCategory = 'ESPRESSO';
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<OrderingBloc>().add(LoadProductsEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(context),
-              SizedBox(height: 40.h),
-              _buildHeroSection(context),
-              SizedBox(height: 40.h),
-              Text('CATEGORIES', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
-              SizedBox(height: 16.h),
-              _buildCategories(context),
-              SizedBox(height: 40.h),
-              Text('POPULAR SELECTIONS', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
-              SizedBox(height: 16.h),
-              _buildProductGrid(context),
-              SizedBox(height: 120.h),
-            ],
-          ),
+        child: BlocBuilder<OrderingBloc, OrderingState>(
+          builder: (context, state) {
+            if (state.status == OrderingStatus.loading) {
+              return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+            }
+
+            final filteredProducts = state.products.where((p) => p.category == selectedCategory).toList();
+
+            return RefreshIndicator(
+              onRefresh: () async => context.read<OrderingBloc>().add(LoadProductsEvent()),
+              color: AppColors.primary,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(24.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeader(context),
+                    SizedBox(height: 32.h),
+                    _buildHeroSection(context),
+                    SizedBox(height: 40.h),
+                    Text('CATEGORIES', style: AppTypography.labelSmall(context).copyWith(letterSpacing: 2)),
+                    SizedBox(height: 16.h),
+                    _buildCategories(context),
+                    SizedBox(height: 40.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('POPULAR BREWS', style: AppTypography.labelSmall(context).copyWith(letterSpacing: 2)),
+                        Text('VIEW ALL', style: AppTypography.labelSmall(context).copyWith(color: AppColors.outline, fontSize: 10.sp)),
+                      ],
+                    ),
+                    SizedBox(height: 16.h),
+                    if (filteredProducts.isEmpty)
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 40.h),
+                        child: Center(child: Text('No products found in this category.', style: AppTypography.bodySmall(context))),
+                      )
+                    else
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 24.h,
+                          crossAxisSpacing: 24.w,
+                          childAspectRatio: 0.7,
+                        ),
+                        itemCount: filteredProducts.length,
+                        itemBuilder: (context, index) {
+                          return _buildProductCard(context, filteredProducts[index]);
+                        },
+                      ),
+                    SizedBox(height: 120.h),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -91,62 +148,48 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildCategories(BuildContext context) {
+    final categories = ['ESPRESSO', 'COLD BREW', 'PASTRIES', 'BEANS'];
     return SizedBox(
       height: 48.h,
-      child: ListView(
+      child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        children: [
-          _buildCategoryChip(context, 'ESPRESSO', true),
-          _buildCategoryChip(context, 'COLD BREW', false),
-          _buildCategoryChip(context, 'PASTRIES', false),
-          _buildCategoryChip(context, 'BEANS', false),
-        ],
+        itemCount: categories.length,
+        itemBuilder: (context, index) {
+          final cat = categories[index];
+          return _buildCategoryChip(context, cat, selectedCategory == cat);
+        },
       ),
     );
   }
 
   Widget _buildCategoryChip(BuildContext context, String label, bool isSelected) {
-    return Container(
-      margin: EdgeInsets.only(right: 12.w),
-      padding: EdgeInsets.symmetric(horizontal: 24.w),
-      decoration: BoxDecoration(
-        color: isSelected ? AppColors.primary : AppColors.surfaceDark.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(color: isSelected ? Colors.transparent : Colors.white.withOpacity(0.05)),
-      ),
-      child: Center(
-        child: Text(
-          label,
-          style: AppTypography.labelSmall(context).copyWith(
-            color: isSelected ? AppColors.onPrimary : AppColors.boneWhite,
-            fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
-            letterSpacing: 1,
+    return GestureDetector(
+      onTap: () => setState(() => selectedCategory = label),
+      child: Container(
+        margin: EdgeInsets.only(right: 12.w),
+        padding: EdgeInsets.symmetric(horizontal: 24.w),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary : AppColors.surfaceDark.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(24.r),
+          border: Border.all(color: isSelected ? Colors.transparent : Colors.white.withOpacity(0.05)),
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: AppTypography.labelSmall(context).copyWith(
+              color: isSelected ? AppColors.onPrimary : AppColors.boneWhite,
+              fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
+              letterSpacing: 1,
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildProductGrid(BuildContext context) {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      mainAxisSpacing: 24.h,
-      crossAxisSpacing: 24.w,
-      childAspectRatio: 0.7.w,
-      children: [
-        _buildProductCard(context, 'Vanilla Latte', '4.8', '5.50'),
-        _buildProductCard(context, 'Macchiato', '4.9', '6.00'),
-        _buildProductCard(context, 'Vanilla Latte', '4.8', '5.50'),
-        _buildProductCard(context, 'Macchiato', '4.9', '6.00'),
-      ],
-    );
-  }
-
-  Widget _buildProductCard(BuildContext context, String name, String rating, String price) {
+  Widget _buildProductCard(BuildContext context, Product product) {
     return GestureDetector(
-      onTap: () => context.pushNamed('details'),
+      onTap: () => context.pushNamed('details', extra: {'tag': product.heroTag, 'product': product}),
       behavior: HitTestBehavior.opaque,
       child: AppGlassContainer(
         padding: EdgeInsets.all(16.w),
@@ -161,21 +204,26 @@ class HomePage extends StatelessWidget {
                   color: const Color(0xFF0A0A0A),
                   borderRadius: BorderRadius.circular(20.r),
                 ),
-                child: Center(child: Icon(Icons.coffee, size: 48.sp, color: AppColors.primary)),
+                child: Center(
+                  child: Hero(
+                    tag: product.heroTag,
+                    child: Icon(Icons.coffee, size: 48.sp, color: AppColors.primary),
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 16.h),
-            Text(name, style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700)),
+            Text(product.name, style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700), maxLines: 1, overflow: TextOverflow.ellipsis),
             SizedBox(height: 4.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(r'$'+price, style: AppTypography.dataMono(context).copyWith(color: AppColors.primary, fontWeight: FontWeight.w700)),
+                Text(r'$' + product.price.toStringAsFixed(2), style: AppTypography.dataMono(context).copyWith(color: AppColors.primary, fontWeight: FontWeight.w700)),
                 Row(
                   children: [
                     Icon(Icons.star, size: 14.sp, color: AppColors.primary),
                     SizedBox(width: 4.w),
-                    Text(rating, style: AppTypography.dataMono(context).copyWith(fontSize: 12.sp, color: AppColors.outline)),
+                    Text(product.rating.toString(), style: AppTypography.dataMono(context).copyWith(fontSize: 12.sp, color: AppColors.outline)),
                   ],
                 ),
               ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
@@ -6,6 +7,10 @@ import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/glass_container.dart';
 import '../../../shared/widgets/custom_button.dart';
+import '../bloc/ordering_bloc.dart';
+import '../bloc/ordering_event.dart';
+import '../bloc/ordering_state.dart';
+import '../models/product_model.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -21,26 +26,49 @@ class CartPage extends StatelessWidget {
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.separated(
-              padding: EdgeInsets.all(24.w),
-              itemCount: 2,
-              separatorBuilder: (context, index) => SizedBox(height: 20.h),
-              itemBuilder: (context, index) {
-                return _buildCartItem(context);
-              },
-            ),
-          ),
-          _buildSummarySection(context),
-          SizedBox(height: 100.h),
-        ],
+      body: BlocBuilder<OrderingBloc, OrderingState>(
+        builder: (context, state) {
+          if (state.cart.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.shopping_bag_outlined, size: 80.sp, color: AppColors.outline.withOpacity(0.3)),
+                  SizedBox(height: 24.h),
+                  Text('Your selection is empty.', style: AppTypography.bodyLarge(context).copyWith(color: AppColors.outline)),
+                  SizedBox(height: 24.h),
+                  AppButton(
+                    text: 'BROWSE MENU',
+                    width: 200.w,
+                    onPressed: () => context.goNamed('home'),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.separated(
+                  padding: EdgeInsets.all(24.w),
+                  itemCount: state.cart.length,
+                  separatorBuilder: (context, index) => SizedBox(height: 20.h),
+                  itemBuilder: (context, index) {
+                    return _buildCartItem(context, state.cart[index]);
+                  },
+                ),
+              ),
+              _buildSummarySection(context, state),
+              SizedBox(height: 100.h),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildCartItem(BuildContext context) {
+  Widget _buildCartItem(BuildContext context, CartItem item) {
     return AppGlassContainer(
       padding: EdgeInsets.all(16.w),
       height: 120.h,
@@ -61,22 +89,22 @@ class CartPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Vanilla Latte', style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700)),
-                Text('Medium, Oat Milk', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline, fontSize: 12.sp)),
+                Text(item.product.name, style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700), maxLines: 1, overflow: TextOverflow.ellipsis),
+                Text(item.customization ?? 'Standard', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline, fontSize: 12.sp)),
                 SizedBox(height: 8.h),
-                Text(r'.50', style: AppTypography.dataMono(context).copyWith(color: AppColors.primary)),
+                Text(r'$' + (item.product.price * item.quantity).toStringAsFixed(2), style: AppTypography.dataMono(context).copyWith(color: AppColors.primary)),
               ],
             ),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildQtyBtn(context, Icons.add),
+              _buildQtyBtn(context, Icons.add, () => context.read<OrderingBloc>().add(UpdateQuantityEvent(item.product.id, 1))),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 4.h),
-                child: Text('1', style: AppTypography.dataMono(context)),
+                child: Text(item.quantity.toString(), style: AppTypography.dataMono(context)),
               ),
-              _buildQtyBtn(context, Icons.remove),
+              _buildQtyBtn(context, Icons.remove, () => context.read<OrderingBloc>().add(UpdateQuantityEvent(item.product.id, -1))),
             ],
           ),
         ],
@@ -84,32 +112,35 @@ class CartPage extends StatelessWidget {
     );
   }
 
-  Widget _buildQtyBtn(BuildContext context, IconData icon) {
-    return Container(
-      padding: EdgeInsets.all(4.w),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceDark,
-        borderRadius: BorderRadius.circular(6.r),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+  Widget _buildQtyBtn(BuildContext context, IconData icon, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(4.w),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceDark,
+          borderRadius: BorderRadius.circular(6.r),
+          border: Border.all(color: Colors.white.withOpacity(0.05)),
+        ),
+        child: Icon(icon, size: 14.sp, color: AppColors.primary),
       ),
-      child: Icon(icon, size: 14.sp, color: AppColors.primary),
     );
   }
 
-  Widget _buildSummarySection(BuildContext context) {
+  Widget _buildSummarySection(BuildContext context, OrderingState state) {
     return AppGlassContainer(
       borderRadius: 40.r,
       padding: EdgeInsets.all(32.w),
       boxShadow: AppTheme.premiumShadow,
       child: Column(
         children: [
-          _buildSummaryRow(context, 'Subtotal', r'1.00'),
+          _buildSummaryRow(context, 'Subtotal', r'$' + state.subtotal.toStringAsFixed(2)),
           SizedBox(height: 12.h),
-          _buildSummaryRow(context, 'Service Fee', r'.50'),
+          _buildSummaryRow(context, 'Service Fee', r'$' + state.serviceFee.toStringAsFixed(2)),
           SizedBox(height: 16.h),
           const Divider(color: Colors.white10),
           SizedBox(height: 16.h),
-          _buildSummaryRow(context, 'Total Amount', r'2.50', isTotal: true),
+          _buildSummaryRow(context, 'Total Amount', r'$' + state.total.toStringAsFixed(2), isTotal: true),
           SizedBox(height: 32.h),
           AppButton(
             text: 'Proceed to Checkout',

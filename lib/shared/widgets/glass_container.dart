@@ -67,11 +67,9 @@ class AppGlassContainer extends StatelessWidget {
                   ),
                 ),
               ),
-            Center(
-              child: Padding(
-                padding: padding ?? EdgeInsets.all(20.w),
-                child: child,
-              ),
+            Padding(
+              padding: padding ?? EdgeInsets.all(20.w),
+              child: child,
             ),
           ],
         ),
