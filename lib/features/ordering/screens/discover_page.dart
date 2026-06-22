@@ -75,12 +75,12 @@ class DiscoverPage extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 16.h,
         crossAxisSpacing: 16.w,
-        childAspectRatio: 1.4,
+        childAspectRatio: 1.4.w,
       ),
       itemCount: methods.length,
       itemBuilder: (context, index) {
         return AppGlassContainer(
-          padding: EdgeInsets.all(20.w),
+          padding: EdgeInsets.all(16.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

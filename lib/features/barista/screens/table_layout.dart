@@ -26,7 +26,7 @@ class TableLayoutPage extends StatelessWidget {
           crossAxisCount: 3,
           mainAxisSpacing: 24.h,
           crossAxisSpacing: 24.w,
-          childAspectRatio: 0.9,
+          childAspectRatio: 0.86.w,
         ),
         itemCount: 12,
         itemBuilder: (context, index) {

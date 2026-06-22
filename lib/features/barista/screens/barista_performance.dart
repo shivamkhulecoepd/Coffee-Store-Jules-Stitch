@@ -79,7 +79,7 @@ class BaristaPerformancePage extends StatelessWidget {
       crossAxisCount: 2,
       mainAxisSpacing: 16.w,
       crossAxisSpacing: 16.w,
-      childAspectRatio: 1.2,
+      childAspectRatio: 1.2.w,
       children: const [
         KPICard(label: 'Avg Brew Time', value: '2:14m', chartData: [5, 4, 3, 4, 3], chartColor: AppColors.primary),
         KPICard(label: 'Order Accuracy', value: '100%', chartData: [10, 10, 10, 10, 10], chartColor: AppColors.success),

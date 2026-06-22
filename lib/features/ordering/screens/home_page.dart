@@ -134,8 +134,10 @@ class HomePage extends StatelessWidget {
       crossAxisCount: 2,
       mainAxisSpacing: 24.h,
       crossAxisSpacing: 24.w,
-      childAspectRatio: 0.7,
+      childAspectRatio: 0.7.w,
       children: [
+        _buildProductCard(context, 'Vanilla Latte', '4.8', '5.50'),
+        _buildProductCard(context, 'Macchiato', '4.9', '6.00'),
         _buildProductCard(context, 'Vanilla Latte', '4.8', '5.50'),
         _buildProductCard(context, 'Macchiato', '4.9', '6.00'),
       ],

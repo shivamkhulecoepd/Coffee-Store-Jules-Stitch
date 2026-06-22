@@ -26,7 +26,9 @@ class ProfilePage extends StatelessWidget {
             AppGlassContainer(
               padding: EdgeInsets.all(24.w),
               boxShadow: AppTheme.premiumShadow,
+              width: double.infinity,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircleAvatar(
                     radius: 54.r,
