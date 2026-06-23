@@ -13,6 +13,7 @@ class OrderingBloc extends Bloc<OrderingEvent, OrderingState> {
     on<UpdateQuantityEvent>(_onUpdateQuantity);
     on<RemoveFromCartEvent>(_onRemoveFromCart);
     on<PlaceOrderEvent>(_onPlaceOrder);
+    on<ToggleFavoriteEvent>(_onToggleFavorite);
   }
 
   void _onLoadProducts(LoadProductsEvent event, Emitter<OrderingState> emit) {
@@ -76,5 +77,15 @@ class OrderingBloc extends Bloc<OrderingEvent, OrderingState> {
       cart: [],
       orderHistory: _repository.orders,
     ));
+  }
+
+  void _onToggleFavorite(ToggleFavoriteEvent event, Emitter<OrderingState> emit) {
+    final updatedProducts = state.products.map((p) {
+      if (p.id == event.productId) {
+        return p.copyWith(isFavorite: !p.isFavorite);
+      }
+      return p;
+    }).toList();
+    emit(state.copyWith(products: updatedProducts));
   }
 }

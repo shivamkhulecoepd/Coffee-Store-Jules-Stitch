@@ -14,12 +14,16 @@ import '../features/ordering/screens/checkout_page.dart';
 import '../features/ordering/screens/order_transmitted_page.dart';
 import '../features/ordering/screens/order_confirmed_page.dart';
 import '../features/ordering/screens/customize_brew_page.dart';
+import '../features/ordering/screens/order_tracking_page.dart';
 import '../features/account/screens/order_history_page.dart';
 import '../features/account/screens/payment_methods_page.dart';
 import '../features/account/screens/wishlist_page.dart';
 import '../features/account/screens/rewards_page.dart';
 import '../features/account/screens/subscription_page.dart';
 import '../features/account/screens/notifications_page.dart';
+import '../features/account/screens/address_management_page.dart';
+import '../features/account/screens/settings_page.dart';
+import '../features/account/screens/points_history_page.dart';
 import '../features/barista/screens/barista_navigation_page.dart';
 import '../features/barista/screens/brewing_workflow.dart';
 import '../features/barista/screens/table_ordering.dart';
@@ -63,6 +67,10 @@ class AppRouter {
       GoRoute(path: '/checkout', name: 'checkout', builder: (context, state) => const CheckoutPage()),
       GoRoute(path: '/transmitted', name: 'transmitted', builder: (context, state) => const OrderTransmittedPage()),
       GoRoute(path: '/confirmed', name: 'confirmed', builder: (context, state) => const OrderConfirmedPage()),
+      GoRoute(path: '/tracking', name: 'tracking', builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        return OrderTrackingPage(orderData: extra);
+      }),
 
       GoRoute(path: '/history', name: 'history', builder: (context, state) => const OrderHistoryPage()),
       GoRoute(path: '/payment', name: 'payment', builder: (context, state) => const PaymentMethodsPage()),
@@ -70,6 +78,9 @@ class AppRouter {
       GoRoute(path: '/rewards', name: 'rewards', builder: (context, state) => const RewardsPage()),
       GoRoute(path: '/subscription', name: 'subscription', builder: (context, state) => const SubscriptionPage()),
       GoRoute(path: '/notifications', name: 'notifications', builder: (context, state) => const NotificationsPage()),
+      GoRoute(path: '/address', name: 'address', builder: (context, state) => const AddressManagementPage()),
+      GoRoute(path: '/settings', name: 'settings', builder: (context, state) => const SettingsPage()),
+      GoRoute(path: '/points-history', name: 'points-history', builder: (context, state) => const PointsHistoryPage()),
 
       GoRoute(path: '/barista', name: 'barista', builder: (context, state) => const BaristaNavigationPage()),
       GoRoute(path: '/brewing', name: 'brewing', builder: (context, state) => const BrewingWorkflow()),
@@ -93,7 +104,7 @@ class AppRouter {
       GoRoute(path: '/requests', name: 'requests', builder: (context, state) => const CustomerRequestsPage()),
       GoRoute(path: '/product-mgmt', name: 'product-mgmt', builder: (context, state) => const ProductManagementPage()),
       GoRoute(path: '/employee-mgmt', name: 'employee-mgmt', builder: (context, state) => const EmployeeManagementPage()),
-      GoRoute(path: '/settings', name: 'settings', builder: (context, state) => const SystemSettingsPage()),
+      GoRoute(path: '/admin-settings', name: 'admin-settings', builder: (context, state) => const SystemSettingsPage()),
     ],
   );
 }

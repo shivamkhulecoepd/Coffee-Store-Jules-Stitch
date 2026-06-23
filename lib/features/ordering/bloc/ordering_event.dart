@@ -34,3 +34,10 @@ class UpdateQuantityEvent extends OrderingEvent {
 }
 
 class PlaceOrderEvent extends OrderingEvent {}
+
+class ToggleFavoriteEvent extends OrderingEvent {
+  final String productId;
+  const ToggleFavoriteEvent(this.productId);
+  @override
+  List<Object?> get props => [productId];
+}

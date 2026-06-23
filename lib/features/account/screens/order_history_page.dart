@@ -30,7 +30,7 @@ class OrderHistoryPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.history, size: 80.sp, color: AppColors.outline.withOpacity(0.3)),
+                  Icon(Icons.history, size: 80.sp, color: AppColors.outline.withValues(alpha: 0.3)),
                   SizedBox(height: 24.h),
                   Text('No orders found.', style: AppTypography.bodyLarge(context).copyWith(color: AppColors.outline)),
                 ],
@@ -44,23 +44,36 @@ class OrderHistoryPage extends StatelessWidget {
             separatorBuilder: (context, index) => SizedBox(height: 16.h),
             itemBuilder: (context, index) {
               final order = state.orderHistory[index];
-              return AppGlassContainer(
-                padding: EdgeInsets.all(20.w),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(order['id'], style: AppTypography.dataMono(context).copyWith(color: AppColors.primary, fontSize: 10.sp)),
-                          Text(order['items'], style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700), maxLines: 1, overflow: TextOverflow.ellipsis),
-                          Text('${order['date']} • ${order['status']}', style: AppTypography.bodySmall(context)),
-                        ],
+              return GestureDetector(
+                onTap: () => context.pushNamed('tracking', extra: order),
+                child: AppGlassContainer(
+                  padding: EdgeInsets.all(20.w),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 50.w,
+                        height: 50.w,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(Icons.receipt_long_outlined, color: AppColors.primary, size: 24.sp),
                       ),
-                    ),
-                    SizedBox(width: 16.w),
-                    Text(r'$' + order['total'].toStringAsFixed(2), style: AppTypography.dataMono(context).copyWith(fontWeight: FontWeight.w800)),
-                  ],
+                      SizedBox(width: 16.w),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(order['id'], style: AppTypography.dataMono(context).copyWith(color: AppColors.primary, fontSize: 10.sp)),
+                            Text(order['items'], style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700), maxLines: 1, overflow: TextOverflow.ellipsis),
+                            Text('${order['date']} • ${order['status']}', style: AppTypography.bodySmall(context)),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 16.w),
+                      Text('\$${order['total'].toStringAsFixed(2)}', style: AppTypography.dataMono(context).copyWith(fontWeight: FontWeight.w800)),
+                    ],
+                  ),
                 ),
               );
             },

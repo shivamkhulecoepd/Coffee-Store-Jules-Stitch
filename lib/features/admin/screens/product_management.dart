@@ -39,8 +39,13 @@ class ProductManagementPage extends StatelessWidget {
                     Container(
                       width: 50.w,
                       height: 50.w,
-                      decoration: BoxDecoration(color: AppColors.surfaceLight, borderRadius: BorderRadius.circular(12.r)),
-                      child: const Icon(Icons.coffee, color: AppColors.primary),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12.r),
+                        image: DecorationImage(
+                          image: NetworkImage(product.imageUrl),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                     SizedBox(width: 16.w),
                     Expanded(
@@ -52,7 +57,7 @@ class ProductManagementPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Text(r'$' + product.price.toStringAsFixed(2), style: AppTypography.dataMono(context)),
+                    Text('\$${product.price.toStringAsFixed(2)}', style: AppTypography.dataMono(context)),
                     SizedBox(width: 16.w),
                     const Icon(Icons.edit_note, color: AppColors.primary),
                   ],

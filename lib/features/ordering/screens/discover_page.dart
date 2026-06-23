@@ -6,6 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/glass_container.dart';
 import '../bloc/ordering_bloc.dart';
+import '../bloc/ordering_event.dart';
 import '../bloc/ordering_state.dart';
 import '../models/product_model.dart';
 
@@ -36,7 +37,7 @@ class DiscoverPage extends StatelessWidget {
                 children: [
                   Icon(Icons.search, color: AppColors.primary, size: 24.sp),
                   SizedBox(width: 16.w),
-                  Text('Search collections...', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline.withOpacity(0.5))),
+                  Text('Search collections...', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline.withValues(alpha: 0.5))),
                 ],
               ),
             ),
@@ -61,7 +62,7 @@ class DiscoverPage extends StatelessWidget {
                 );
               },
             ),
-            SizedBox(height: 120.h),
+            SliverToBoxAdapter(child: SizedBox(height: 120.h)),
           ],
         ),
       ),
@@ -124,10 +125,12 @@ class DiscoverPage extends StatelessWidget {
               width: 70.w,
               height: 70.w,
               decoration: BoxDecoration(
-                color: const Color(0xFF0A0A0A),
                 borderRadius: BorderRadius.circular(16.r),
+                image: DecorationImage(
+                  image: NetworkImage(product.imageUrl),
+                  fit: BoxFit.cover,
+                ),
               ),
-              child: const Icon(Icons.coffee, color: AppColors.primary),
             ),
             SizedBox(width: 20.w),
             Expanded(
@@ -140,7 +143,7 @@ class DiscoverPage extends StatelessWidget {
                 ],
               ),
             ),
-            Text(r'$' + product.price.toStringAsFixed(2), style: AppTypography.dataMono(context).copyWith(color: AppColors.primary, fontWeight: FontWeight.w700)),
+            Text('\$${product.price.toStringAsFixed(2)}', style: AppTypography.dataMono(context).copyWith(color: AppColors.primary, fontWeight: FontWeight.w700)),
           ],
         ),
       ),

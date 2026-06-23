@@ -34,7 +34,7 @@ class ProfilePage extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 54.r,
-                        backgroundColor: AppColors.primary.withOpacity(0.1),
+                        backgroundColor: AppColors.primary.withValues(alpha: 0.1),
                         child: Icon(Icons.person, size: 54.sp, color: AppColors.primary),
                       ),
                       SizedBox(height: 20.h),
@@ -43,7 +43,7 @@ class ProfilePage extends StatelessWidget {
                       SizedBox(height: 12.h),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
-                        decoration: BoxDecoration(color: AppColors.primaryGold.withOpacity(0.1), borderRadius: BorderRadius.circular(20.r)),
+                        decoration: BoxDecoration(color: AppColors.primaryGold.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(20.r)),
                         child: Text('${state.points} PTS • ${state.tier} Tier', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primaryGold, fontWeight: FontWeight.w700)),
                       ),
                     ],
@@ -52,8 +52,10 @@ class ProfilePage extends StatelessWidget {
                 SizedBox(height: 32.h),
                 _buildProfileOption(context, Icons.history, 'Order History', 'history'),
                 _buildProfileOption(context, Icons.favorite_border, 'Wishlist', 'wishlist'),
+                _buildProfileOption(context, Icons.location_on_outlined, 'Destinations', 'address'),
                 _buildProfileOption(context, Icons.credit_card, 'Payment Methods', 'payment'),
                 _buildProfileOption(context, Icons.card_membership, 'Subscription', 'subscription'),
+                _buildProfileOption(context, Icons.settings_outlined, 'Preferences', 'settings'),
                 const Divider(color: Colors.white10, height: 48),
                 _buildProfileOption(context, Icons.logout, 'Logout Session', 'welcome', isDestructive: true),
                 SizedBox(height: 120.h),
