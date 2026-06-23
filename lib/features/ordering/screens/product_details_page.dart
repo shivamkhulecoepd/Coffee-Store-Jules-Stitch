@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
-import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/glass_container.dart';
 import '../../../shared/widgets/custom_button.dart';
 import '../bloc/ordering_bloc.dart';
@@ -35,7 +34,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
     return BlocBuilder<OrderingBloc, OrderingState>(
       builder: (context, state) {
-        // Find the product in the current state to reflect the updated favorite status
         final product = state.products.firstWhere(
           (p) => p.id == initialProduct.id,
           orElse: () => initialProduct,
@@ -44,7 +42,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         return Scaffold(
           body: Stack(
             children: [
-              // Background Image
               Positioned(
                 top: 0,
                 left: 0,
@@ -65,7 +62,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            Colors.black.withOpacity(0.4),
+                            Colors.black.withValues(alpha: 0.4),
                             AppColors.background,
                           ],
                         ),
@@ -77,93 +74,92 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
               SafeArea(
                 child: CustomScrollView(
+                  physics: const BouncingScrollPhysics(),
                   slivers: [
                     SliverToBoxAdapter(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _buildCircleIcon(context, Icons.arrow_back_ios_new, onTap: () => context.pop()),
-                                _buildCircleIcon(
-                                  context,
-                                  product.isFavorite ? Icons.favorite : Icons.favorite_border,
-                                  iconColor: product.isFavorite ? Colors.red : Colors.white,
-                                  onTap: () => context.read<OrderingBloc>().add(ToggleFavoriteEvent(product.id)),
-                                ),
-                              ],
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _buildCircleIcon(context, Icons.arrow_back_ios_new, onTap: () => context.pop()),
+                            _buildCircleIcon(
+                              context,
+                              product.isFavorite ? Icons.favorite : Icons.favorite_border,
+                              iconColor: product.isFavorite ? Colors.red : Colors.white,
+                              onTap: () => context.read<OrderingBloc>().add(ToggleFavoriteEvent(product.id)),
                             ),
-                          ),
-                          SizedBox(height: 250.h),
-                          AppGlassContainer(
-                            borderRadius: 40.r,
-                            padding: EdgeInsets.all(32.w),
-                            child: Column(
+                          ],
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(child: SizedBox(height: 250.h)),
+                    SliverToBoxAdapter(
+                      child: AppGlassContainer(
+                        borderRadius: 40.r,
+                        padding: EdgeInsets.all(32.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('SIGNATURE SERIES', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2.5)),
+                                      SizedBox(height: 4.h),
+                                      Text(product.name, style: AppTypography.displayLargeMobile(context).copyWith(fontSize: 32.sp, fontWeight: FontWeight.w700)),
+                                    ],
+                                  ),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text('SIGNATURE SERIES', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2.5)),
-                                          SizedBox(height: 4.h),
-                                          Text(product.name, style: AppTypography.displayLargeMobile(context).copyWith(fontSize: 32.sp, fontWeight: FontWeight.w700)),
-                                        ],
-                                      ),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                    Text('\$${product.price.toStringAsFixed(2)}', style: AppTypography.headlineLarge(context).copyWith(color: AppColors.primary, fontSize: 28.sp)),
+                                    Row(
                                       children: [
-                                        Text('\$${product.price.toStringAsFixed(2)}', style: AppTypography.headlineLarge(context).copyWith(color: AppColors.primary, fontSize: 28.sp)),
-                                        Row(
-                                          children: [
-                                            Icon(Icons.star, color: Colors.amber, size: 16.sp),
-                                            SizedBox(width: 4.w),
-                                            Text(product.rating.toString(), style: AppTypography.dataMono(context).copyWith(fontSize: 12.sp)),
-                                          ],
-                                        ),
+                                        Icon(Icons.star, color: Colors.amber, size: 16.sp),
+                                        SizedBox(width: 4.w),
+                                        Text(product.rating.toString(), style: AppTypography.dataMono(context).copyWith(fontSize: 12.sp)),
                                       ],
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 32.h),
-                                Text('THE BREW STORY', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 1.5)),
-                                SizedBox(height: 12.h),
-                                Text(
-                                  product.description,
-                                  style: AppTypography.bodyMedium(context).copyWith(color: AppColors.boneWhite.withOpacity(0.7), height: 1.7),
-                                ),
-                                SizedBox(height: 32.h),
-                                _buildInfoGrid(context),
-                                SizedBox(height: 40.h),
-                                Text('CALIBRATE SIZE', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 1.5)),
-                                SizedBox(height: 16.h),
-                                Row(
-                                  children: [
-                                    _buildSizeOption(context, 'S'),
-                                    _buildSizeOption(context, 'M'),
-                                    _buildSizeOption(context, 'L'),
-                                  ],
-                                ),
-                                SizedBox(height: 40.h),
-                                AppButton(
-                                  text: 'ADD TO SELECTION',
-                                  onPressed: () {
-                                    context.read<OrderingBloc>().add(AddToCartEvent(product, customization: 'Size: $selectedSize'));
-                                    context.pushNamed('cart');
-                                  },
-                                ),
-                                SizedBox(height: 120.h),
                               ],
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 32.h),
+                            Text('THE BREW STORY', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 1.5)),
+                            SizedBox(height: 12.h),
+                            Text(
+                              product.description,
+                              style: AppTypography.bodyMedium(context).copyWith(color: AppColors.boneWhite.withValues(alpha: 0.7), height: 1.7),
+                            ),
+                            SizedBox(height: 32.h),
+                            _buildInfoGrid(context),
+                            SizedBox(height: 40.h),
+                            Text('CALIBRATE SIZE', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 1.5)),
+                            SizedBox(height: 16.h),
+                            Row(
+                              children: [
+                                _buildSizeOption(context, 'S'),
+                                _buildSizeOption(context, 'M'),
+                                _buildSizeOption(context, 'L'),
+                              ],
+                            ),
+                            SizedBox(height: 40.h),
+                            AppButton(
+                              text: 'ADD TO SELECTION',
+                              onPressed: () {
+                                context.read<OrderingBloc>().add(AddToCartEvent(product, customization: 'Size: $selectedSize'));
+                                context.pushNamed('cart');
+                              },
+                            ),
+                            SizedBox(height: 120.h),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -224,7 +220,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(18.r),
-          border: isSelected ? null : Border.all(color: Colors.white.withOpacity(0.1)),
+          border: isSelected ? null : Border.all(color: Colors.white.withValues(alpha: 0.1)),
         ),
         child: Center(
           child: Text(

@@ -24,46 +24,72 @@ class DiscoverPage extends StatelessWidget {
         centerTitle: false,
         automaticallyImplyLeading: false,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppGlassContainer(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              height: 64.h,
-              borderRadius: 16.r,
-              child: Row(
-                children: [
-                  Icon(Icons.search, color: AppColors.primary, size: 24.sp),
-                  SizedBox(width: 16.w),
-                  Text('Search collections...', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline.withValues(alpha: 0.5))),
-                ],
-              ),
-            ),
-            SizedBox(height: 40.h),
-            _buildSectionHeader(context, 'Brewing Methods'),
-            SizedBox(height: 24.h),
-            _buildBrewingMethodGrid(context),
-            SizedBox(height: 40.h),
-            _buildSectionHeader(context, 'Monthly Roasts'),
-            SizedBox(height: 24.h),
-            BlocBuilder<OrderingBloc, OrderingState>(
-              builder: (context, state) {
-                final roasts = state.products.where((p) => p.category == 'BEANS').toList();
-                return ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: roasts.length,
-                  separatorBuilder: (context, index) => SizedBox(height: 16.h),
-                  itemBuilder: (context, index) {
-                    return _buildArrivalItem(context, roasts[index]);
-                  },
-                );
-              },
-            ),
-            SliverToBoxAdapter(child: SizedBox(height: 120.h)),
-          ],
+      body: SafeArea(
+        child: BlocBuilder<OrderingBloc, OrderingState>(
+          builder: (context, state) {
+            final roasts = state.products.where((p) => p.category == 'BEANS').toList();
+
+            return CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.all(24.w),
+                  sliver: SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppGlassContainer(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          height: 64.h,
+                          borderRadius: 16.r,
+                          child: Row(
+                            children: [
+                              Icon(Icons.search, color: AppColors.primary, size: 24.sp),
+                              SizedBox(width: 16.w),
+                              Text('Search collections...',
+                                style: AppTypography.bodyMedium(context).copyWith(
+                                  color: AppColors.outline.withValues(alpha: 0.5)
+                                )
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 40.h),
+                        _buildSectionHeader(context, 'Brewing Methods'),
+                        SizedBox(height: 24.h),
+                      ],
+                    ),
+                  ),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  sliver: _buildBrewingMethodSliverGrid(context),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(24.w, 40.h, 24.w, 24.w),
+                  sliver: SliverToBoxAdapter(
+                    child: _buildSectionHeader(context, 'Monthly Roasts'),
+                  ),
+                ),
+                if (state.status == OrderingStatus.loading)
+                  const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator(color: AppColors.primary)))
+                else
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) => Padding(
+                          padding: EdgeInsets.only(bottom: 16.h),
+                          child: _buildArrivalItem(context, roasts[index]),
+                        ),
+                        childCount: roasts.length,
+                      ),
+                    ),
+                  ),
+                const SliverToBoxAdapter(child: SizedBox(height: 120)),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -79,7 +105,7 @@ class DiscoverPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBrewingMethodGrid(BuildContext context) {
+  Widget _buildBrewingMethodSliverGrid(BuildContext context) {
     final methods = [
       {'name': 'Pour Over', 'icon': Icons.water_drop_outlined},
       {'name': 'French Press', 'icon': Icons.coffee_maker_outlined},
@@ -87,29 +113,29 @@ class DiscoverPage extends StatelessWidget {
       {'name': 'AeroPress', 'icon': Icons.compress_outlined},
     ];
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+    return SliverGrid(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         mainAxisSpacing: 16.h,
         crossAxisSpacing: 16.w,
         childAspectRatio: 1.4,
       ),
-      itemCount: methods.length,
-      itemBuilder: (context, index) {
-        return AppGlassContainer(
-          padding: EdgeInsets.all(20.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(methods[index]['icon'] as IconData, color: AppColors.primary, size: 28.sp),
-              SizedBox(height: 12.h),
-              Text(methods[index]['name'] as String, style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700)),
-            ],
-          ),
-        );
-      },
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return AppGlassContainer(
+            padding: EdgeInsets.all(20.w),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(methods[index]['icon'] as IconData, color: AppColors.primary, size: 28.sp),
+                SizedBox(height: 12.h),
+                Text(methods[index]['name'] as String, style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700)),
+              ],
+            ),
+          );
+        },
+        childCount: methods.length,
+      ),
     );
   }
 
@@ -143,7 +169,20 @@ class DiscoverPage extends StatelessWidget {
                 ],
               ),
             ),
-            Text('\$${product.price.toStringAsFixed(2)}', style: AppTypography.dataMono(context).copyWith(color: AppColors.primary, fontWeight: FontWeight.w700)),
+            Row(
+              children: [
+                Text('\$${product.price.toStringAsFixed(2)}', style: AppTypography.dataMono(context).copyWith(color: AppColors.primary, fontWeight: FontWeight.w700)),
+                SizedBox(width: 8.w),
+                GestureDetector(
+                  onTap: () => context.read<OrderingBloc>().add(ToggleFavoriteEvent(product.id)),
+                  child: Icon(
+                    product.isFavorite ? Icons.favorite : Icons.favorite_border,
+                    size: 20.sp,
+                    color: product.isFavorite ? Colors.red : AppColors.outline,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
