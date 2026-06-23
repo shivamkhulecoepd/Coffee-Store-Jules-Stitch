@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../features/auth/presentation/pages/welcome_page.dart';
-import '../../features/auth/presentation/pages/login_page.dart';
-import '../../features/customer/presentation/pages/home_page.dart';
-import '../../features/customer/presentation/pages/discover_page.dart';
-import '../../features/customer/presentation/pages/cart_page.dart';
-import '../../features/customer/presentation/pages/product_details_page.dart';
-import '../../features/customer/presentation/pages/checkout_page.dart';
-import '../../features/customer/presentation/pages/order_confirmed_page.dart';
-import '../../features/management/presentation/pages/barista_dashboard.dart';
+import '../../features/auth/screens/welcome_page.dart';
+import '../../features/auth/screens/login_page.dart';
+import '../../features/ordering/screens/home_page.dart';
+import '../../features/ordering/screens/discover_page.dart';
+import '../../features/ordering/screens/cart_page.dart';
+import '../../features/ordering/screens/product_details_page.dart';
+import '../../features/ordering/screens/checkout_page.dart';
+import '../../features/ordering/screens/order_confirmed_page.dart';
+import '../../features/barista/screens/barista_dashboard.dart';
 
 class AppRouter {
   static const String welcome = '/';
