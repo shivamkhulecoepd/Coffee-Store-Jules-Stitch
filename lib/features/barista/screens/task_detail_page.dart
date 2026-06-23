@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
@@ -6,12 +7,18 @@ import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/glass_container.dart';
 import '../../../shared/widgets/custom_button.dart';
+import '../bloc/barista_bloc.dart';
+import '../bloc/barista_event.dart';
 
 class TaskDetailPage extends StatelessWidget {
-  const TaskDetailPage({super.key});
+  final Map<String, dynamic>? data;
+
+  const TaskDetailPage({super.key, this.data});
 
   @override
   Widget build(BuildContext context) {
+    final String title = data?['title'] ?? 'Maintenance Protocol';
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -36,10 +43,10 @@ class TaskDetailPage extends StatelessWidget {
                 children: [
                   Text('MAINTENANCE PROTOCOL', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
                   SizedBox(height: 12.h),
-                  Text('Daily Espresso Machine Backflush', style: AppTypography.headlineMedium(context)),
+                  Text(title, style: AppTypography.headlineMedium(context)),
                   SizedBox(height: 20.h),
                   Text(
-                    'Ensure the group heads are cleaned with the specialized nylon brush and the blind filter is used with 3g of cleaning powder.',
+                    'Ensure the equipment and area are synchronized with the cloud session and all procedural steps are followed for quality assurance.',
                     style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline, height: 1.6),
                   ),
                 ],
@@ -48,12 +55,18 @@ class TaskDetailPage extends StatelessWidget {
             SizedBox(height: 40.h),
             Text('CHECKLIST', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 1.5)),
             SizedBox(height: 16.h),
-            _buildChecklist(context, 'Remove Portafilters & Baskets'),
-            _buildChecklist(context, 'Insert Blind Filter with Powder'),
-            _buildChecklist(context, 'Run Automatic Backflush Cycle (5 Cycles)'),
-            _buildChecklist(context, 'Scrub Group Gaskets'),
+            _buildChecklist(context, 'Initial Equipment Inspection'),
+            _buildChecklist(context, 'Execution of Protocol Phase A'),
+            _buildChecklist(context, 'Quality Control Verification'),
+            _buildChecklist(context, 'Digital Log Submission'),
             SizedBox(height: 40.h),
-            AppButton(text: 'COMPLETE PROTOCOL', onPressed: () => context.pop()),
+            AppButton(
+              text: 'COMPLETE PROTOCOL',
+              onPressed: () {
+                context.read<BaristaBloc>().add(CompleteTaskEvent(title));
+                context.pop();
+              },
+            ),
             SizedBox(height: 40.h),
           ],
         ),

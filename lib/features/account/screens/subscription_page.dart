@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/glass_container.dart';
 import '../../../shared/widgets/custom_button.dart';
+import '../bloc/user_bloc.dart';
+import '../bloc/user_event.dart';
+import '../bloc/user_state.dart';
 
 class SubscriptionPage extends StatelessWidget {
   const SubscriptionPage({super.key});
@@ -22,25 +26,29 @@ class SubscriptionPage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: ListView(
-        padding: EdgeInsets.all(24.w),
-        children: [
-          _buildPlanCard(context, 'CORE', r'9.99/mo', ['5 specialty cups', '10% off whole beans', 'Member rewards access']),
-          SizedBox(height: 24.h),
-          _buildPlanCard(context, 'PROFESSIONAL', r'9.99/mo', ['15 specialty cups', '20% off whole beans', 'Exclusive tasting events', 'Complimentary delivery'], isPopular: true),
-          SizedBox(height: 24.h),
-          _buildPlanCard(context, 'ELITE', r'9.99/mo', ['Unlimited selections', '30% off whole beans', 'VIP sequence priority', 'Dedicated concierge']),
-          SizedBox(height: 120.h),
-        ],
+      body: BlocBuilder<UserBloc, UserState>(
+        builder: (context, state) {
+          return ListView(
+            padding: EdgeInsets.all(24.w),
+            children: [
+              _buildPlanCard(context, 'CORE', r'.99/mo', ['5 specialty cups', '10% off whole beans', 'Member rewards access'], state.subscriptionPlan == 'CORE'),
+              SizedBox(height: 24.h),
+              _buildPlanCard(context, 'PROFESSIONAL', r'9.99/mo', ['15 specialty cups', '20% off whole beans', 'Exclusive tasting events'], state.subscriptionPlan == 'PROFESSIONAL', isPopular: true),
+              SizedBox(height: 24.h),
+              _buildPlanCard(context, 'ELITE', r'4.99/mo', ['Unlimited selections', '30% off whole beans', 'VIP sequence priority'], state.subscriptionPlan == 'ELITE'),
+              SizedBox(height: 120.h),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildPlanCard(BuildContext context, String name, String price, List<String> features, {bool isPopular = false}) {
+  Widget _buildPlanCard(BuildContext context, String name, String price, List<String> features, bool isCurrent, {bool isPopular = false}) {
     return AppGlassContainer(
       padding: EdgeInsets.all(32.w),
-      boxShadow: isPopular ? AppTheme.premiumShadow : null,
-      opacity: isPopular ? 0.9 : 0.7,
+      boxShadow: (isPopular || isCurrent) ? AppTheme.premiumShadow : null,
+      opacity: isCurrent ? 1.0 : (isPopular ? 0.9 : 0.7),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -48,7 +56,13 @@ class SubscriptionPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(name, style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
-              if (isPopular)
+              if (isCurrent)
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                  decoration: BoxDecoration(color: AppColors.success, borderRadius: BorderRadius.circular(12.r)),
+                  child: Text('ACTIVE', style: AppTypography.labelSmall(context).copyWith(color: AppColors.background, fontSize: 10.sp, fontWeight: FontWeight.w800)),
+                )
+              else if (isPopular)
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                   decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(12.r)),
@@ -70,7 +84,10 @@ class SubscriptionPage extends StatelessWidget {
             ),
           )),
           SizedBox(height: 32.h),
-          AppButton(text: 'SELECT PLAN', onPressed: () {}),
+          AppButton(
+            text: isCurrent ? 'MANAGE PLAN' : 'SELECT PLAN',
+            onPressed: isCurrent ? () {} : () => context.read<UserBloc>().add(UpdateSubscriptionEvent(name)),
+          ),
         ],
       ),
     );

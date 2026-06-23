@@ -25,7 +25,17 @@ class OrderTransmittedPage extends StatelessWidget {
                 borderRadius: 70.r,
                 shape: BoxShape.circle,
                 boxShadow: AppTheme.premiumShadow,
-                child: Center(child: Icon(Icons.send_rounded, size: 56.sp, color: AppColors.primary)),
+                child: Center(
+                  child: Container(
+                    width: 90.w,
+                    height: 90.w,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(Icons.send_rounded, size: 48.sp, color: AppColors.primary),
+                  ),
+                ),
               ),
               SizedBox(height: 48.h),
               Text('REQUEST SENT', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 3)),
@@ -37,6 +47,8 @@ class OrderTransmittedPage extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline, height: 1.5),
               ),
+              SizedBox(height: 32.h),
+              const CircularProgressIndicator(color: AppColors.primary),
               SizedBox(height: 80.h),
               AppButton(
                 text: 'Track Progress',

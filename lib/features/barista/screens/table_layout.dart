@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
-import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/glass_container.dart';
+import '../bloc/barista_bloc.dart';
+import '../bloc/barista_event.dart';
+import '../bloc/barista_state.dart';
 
-class TableLayoutPage extends StatelessWidget {
+class TableLayoutPage extends StatefulWidget {
   const TableLayoutPage({super.key});
+
+  @override
+  State<TableLayoutPage> createState() => _TableLayoutPageState();
+}
+
+class _TableLayoutPageState extends State<TableLayoutPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<BaristaBloc>().add(LoadBaristaDataEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,58 +30,61 @@ class TableLayoutPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('Floor Layout', style: AppTypography.headlineMedium(context)),
+        title: Text('Table Logic', style: AppTypography.headlineMedium(context)),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      body: GridView.builder(
-        padding: EdgeInsets.all(24.w),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          mainAxisSpacing: 24.h,
-          crossAxisSpacing: 24.w,
-          childAspectRatio: 0.86.w,
-        ),
-        itemCount: 12,
-        itemBuilder: (context, index) {
-          bool isOccupied = index % 4 == 0;
-          return _buildTableItem(context, index + 1, isOccupied);
-        },
-      ),
-    );
-  }
+      body: BlocBuilder<BaristaBloc, BaristaState>(
+        builder: (context, state) {
+          if (state.status == BaristaStatus.loading) {
+            return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+          }
 
-  Widget _buildTableItem(BuildContext context, int number, bool isOccupied) {
-    return GestureDetector(
-      onTap: () => context.pushNamed('ordering'),
-      behavior: HitTestBehavior.opaque,
-      child: AppGlassContainer(
-        borderRadius: 20.r,
-        boxShadow: isOccupied ? null : AppTheme.premiumShadow,
-        opacity: isOccupied ? 0.3 : 0.8,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('T$number', style: AppTypography.headlineMedium(context).copyWith(color: isOccupied ? AppColors.outline : Colors.white)),
-            SizedBox(height: 8.h),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-              decoration: BoxDecoration(
-                color: isOccupied ? AppColors.primary.withOpacity(0.1) : AppColors.success.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              child: Text(
-                isOccupied ? 'BUSY' : 'OPEN',
-                style: AppTypography.labelSmall(context).copyWith(
-                  color: isOccupied ? AppColors.primary : AppColors.success,
-                  fontSize: 10.sp,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0,
-                ),
-              ),
+          return GridView.builder(
+            padding: EdgeInsets.all(24.w),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 20.h,
+              crossAxisSpacing: 20.w,
+              childAspectRatio: 1.1,
             ),
-          ],
-        ),
+            itemCount: state.tables.length,
+            itemBuilder: (context, index) {
+              final table = state.tables[index];
+              final bool isOccupied = table['status'] == 'Occupied';
+
+              return GestureDetector(
+                onTap: () => context.pushNamed('ordering', extra: {'table': table['id']}),
+                child: AppGlassContainer(
+                  padding: EdgeInsets.all(16.w),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('TABLE', style: AppTypography.labelSmall(context).copyWith(color: AppColors.outline, fontSize: 10.sp)),
+                      Text('${table['id']}', style: AppTypography.displayLargeMobile(context).copyWith(fontWeight: FontWeight.w800)),
+                      SizedBox(height: 8.h),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                        decoration: BoxDecoration(
+                          color: (isOccupied ? AppColors.error : AppColors.success).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                        child: Text(
+                          table['status'].toString().toUpperCase(),
+                          style: AppTypography.labelSmall(context).copyWith(
+                            color: isOccupied ? AppColors.error : AppColors.success,
+                            fontSize: 9.sp,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }

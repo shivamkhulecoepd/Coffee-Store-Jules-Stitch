@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
@@ -6,6 +7,10 @@ import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/glass_container.dart';
 import '../../../shared/widgets/kpi_card.dart';
+import '../../../data/repositories/store_repository.dart';
+import '../../../core/utils/service_locator.dart';
+import '../../ordering/bloc/ordering_bloc.dart';
+import '../../ordering/bloc/ordering_state.dart';
 
 class BaristaDashboard extends StatelessWidget {
   const BaristaDashboard({super.key});
@@ -58,7 +63,27 @@ class BaristaDashboard extends StatelessWidget {
               SizedBox(height: 40.h),
               Text('ACTIVE EXTRACTIONS', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
               SizedBox(height: 16.h),
-              _buildActiveOrdersList(context),
+              BlocBuilder<OrderingBloc, OrderingState>(
+                builder: (context, state) {
+                  // Only show orders that were recently placed in this mock
+                  if (state.orderHistory.isEmpty) {
+                    return AppGlassContainer(
+                      padding: EdgeInsets.all(20.w),
+                      child: Center(child: Text('No active brewing sessions.', style: AppTypography.bodySmall(context))),
+                    );
+                  }
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: state.orderHistory.length,
+                    separatorBuilder: (context, index) => SizedBox(height: 16.h),
+                    itemBuilder: (context, index) {
+                      final order = state.orderHistory[index];
+                      return _buildOrderCard(context, order);
+                    },
+                  );
+                },
+              ),
               SizedBox(height: 120.h),
             ],
           ),
@@ -141,40 +166,32 @@ class BaristaDashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildActiveOrdersList(BuildContext context) {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 3,
-      separatorBuilder: (context, index) => SizedBox(height: 16.h),
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () => context.pushNamed('brewing'),
-          behavior: HitTestBehavior.opaque,
-          child: AppGlassContainer(
-            padding: EdgeInsets.all(20.w),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('SESSION #421', style: AppTypography.dataMono(context).copyWith(color: AppColors.primary, fontSize: 10.sp)),
-                      Text('2x Vanilla Latte', style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700)),
-                      Text('Table 4 • Synchronizing', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline, fontSize: 11.sp)),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                  decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(6.r)),
-                  child: Text('BREWING', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, fontSize: 9.sp, fontWeight: FontWeight.w900, letterSpacing: 1)),
-                ),
-              ],
+  Widget _buildOrderCard(BuildContext context, Map<String, dynamic> order) {
+    return GestureDetector(
+      onTap: () => context.pushNamed('brewing'),
+      behavior: HitTestBehavior.opaque,
+      child: AppGlassContainer(
+        padding: EdgeInsets.all(20.w),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(order['id'], style: AppTypography.dataMono(context).copyWith(color: AppColors.primary, fontSize: 10.sp)),
+                  Text(order['items'], style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700), maxLines: 1, overflow: TextOverflow.ellipsis),
+                  Text('Active • Synchronizing', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline, fontSize: 11.sp)),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+              decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(6.r)),
+              child: Text('BREWING', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, fontSize: 9.sp, fontWeight: FontWeight.w900, letterSpacing: 1)),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
