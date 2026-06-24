@@ -66,7 +66,7 @@ class _TableLayoutPageState extends State<TableLayoutPage> {
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                         decoration: BoxDecoration(
-                          color: (isOccupied ? AppColors.error : AppColors.success).withOpacity(0.1),
+                          color: (isOccupied ? AppColors.error : AppColors.success).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(4.r),
                         ),
                         child: Text(

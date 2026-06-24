@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
-import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/glass_container.dart';
 import '../bloc/barista_bloc.dart';
 import '../bloc/barista_event.dart';
@@ -63,7 +62,7 @@ class _OperationalTasksPageState extends State<OperationalTasksPage> {
         leading: Container(
           padding: EdgeInsets.all(12.w),
           decoration: BoxDecoration(
-            color: statusColor.withOpacity(0.1),
+            color: statusColor.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(Icons.assignment_outlined, color: statusColor, size: 24.sp),

@@ -65,7 +65,7 @@ class BaristaPerformancePage extends StatelessWidget {
             height: 80.w,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: AppColors.success.withOpacity(0.3), width: 8.w),
+              border: Border.all(color: AppColors.success.withValues(alpha: 0.3), width: 8.w),
             ),
             child: Center(
               child: Text('A+', style: AppTypography.headlineLarge(context).copyWith(color: AppColors.success)),
@@ -105,7 +105,7 @@ class BaristaPerformancePage extends StatelessWidget {
           child: Row(
             children: [
               CircleAvatar(
-                backgroundColor: AppColors.primary.withOpacity(0.1),
+                backgroundColor: AppColors.primary.withValues(alpha: 0.1),
                 child: Icon(Icons.timer_outlined, color: AppColors.primary, size: 18.sp),
               ),
               SizedBox(width: 16.w),

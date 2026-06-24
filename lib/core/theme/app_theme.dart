@@ -5,12 +5,12 @@ import 'app_colors.dart';
 class AppTheme {
   static final List<BoxShadow> premiumShadow = [
     BoxShadow(
-      color: Colors.black.withOpacity(0.3),
+      color: Colors.black.withValues(alpha: 0.3),
       blurRadius: 40.r,
       offset: Offset(0, 20.h),
     ),
     BoxShadow(
-      color: Colors.white.withOpacity(0.05),
+      color: Colors.white.withValues(alpha: 0.05),
       blurRadius: 1,
       offset: const Offset(0, -1),
     ),

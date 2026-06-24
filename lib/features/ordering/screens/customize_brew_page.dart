@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../shared/widgets/glass_container.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/custom_button.dart';
 
 class CustomizeBrewPage extends StatefulWidget {
@@ -30,7 +31,7 @@ class _CustomizeBrewPageState extends State<CustomizeBrewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF131313),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -80,7 +81,7 @@ class _CustomizeBrewPageState extends State<CustomizeBrewPage> {
             _buildSectionTitle('Sweetness Level'),
             Slider(
               value: sweetness,
-              activeColor: const Color(0xFFE2C4A9),
+              activeColor: AppColors.primary,
               inactiveColor: Colors.white10,
               onChanged: (val) => setState(() => sweetness = val),
             ),
@@ -120,7 +121,7 @@ class _CustomizeBrewPageState extends State<CustomizeBrewPage> {
     return Text(
       title,
       style: TextStyle(
-        color: const Color(0xFFE2C4A9),
+        color: AppColors.primary,
         fontSize: 16.sp,
         fontWeight: FontWeight.w600,
         fontFamily: 'Manrope',
@@ -134,14 +135,14 @@ class _CustomizeBrewPageState extends State<CustomizeBrewPage> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFE2C4A9) : Colors.white10,
+          color: isSelected ? AppColors.primary : Colors.white10,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(color: isSelected ? Colors.transparent : Colors.white24),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? const Color(0xFF3F2D1A) : Colors.white,
+            color: isSelected ? AppColors.onPrimary : Colors.white,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),
@@ -160,7 +161,7 @@ class _CustomizeBrewPageState extends State<CustomizeBrewPage> {
             Text(label, style: const TextStyle(color: Colors.white)),
             Icon(
               isChecked ? Icons.check_box : Icons.check_box_outline_blank,
-              color: isChecked ? const Color(0xFFE2C4A9) : Colors.white38,
+              color: isChecked ? AppColors.primary : Colors.white38,
             ),
           ],
         ),

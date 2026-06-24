@@ -32,7 +32,7 @@ class NotificationsPage extends StatelessWidget {
               children: [
                 Container(
                   padding: EdgeInsets.all(10.w),
-                  decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.1), shape: BoxShape.circle),
+                  decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.1), shape: BoxShape.circle),
                   child: Icon(
                     index == 0 ? Icons.local_fire_department : Icons.notifications_outlined,
                     color: AppColors.primary,

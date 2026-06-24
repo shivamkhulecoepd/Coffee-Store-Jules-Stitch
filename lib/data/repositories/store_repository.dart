@@ -2,22 +2,24 @@ import 'dart:async';
 import '../../features/ordering/models/product_model.dart';
 
 class StoreRepository {
-  // Enhanced Mock Data with real-world coffee images and detailed descriptions
+  // Extensive catalog of products for Bean & Brew OS
   final List<Product> _products = [
+    // ESPRESSO
     const Product(
       id: '1',
       name: 'Signature Vanilla Latte',
-      description: 'Our house specialty. A velvety smooth double-shot of our premium espresso balanced with perfectly steamed organic whole milk and infused with Madagascar bourbon vanilla bean syrup. Finished with a delicate micro-foam heart.',
+      description: 'Our crown jewel. A velvety double-shot of our house-blend espresso, harmonized with organic whole milk and infused with hand-scraped Madagascar vanilla beans. A masterpiece of balance and aroma.',
       price: 5.50,
       rating: 4.8,
       category: 'ESPRESSO',
       heroTag: 'v_latte',
       imageUrl: 'https://images.unsplash.com/photo-1541167760496-162955ed8a9f?q=80&w=1000&auto=format&fit=crop',
+      brewSpecs: {'Body': 'Full', 'Temp': '92°C', 'Extraction': '28s'},
     ),
     const Product(
       id: '2',
       name: 'Caramel Macchiato',
-      description: 'Freshly steamed milk with vanilla-flavored syrup marked with espresso and topped with a decadent caramel drizzle. A layered masterpiece of sweetness and caffeine.',
+      description: 'Layers of rich espresso and freshly steamed milk meet a decadent caramel drizzle. It starts with sweetness and ends with the bold kick of our dark roast.',
       price: 6.00,
       rating: 4.9,
       category: 'ESPRESSO',
@@ -25,29 +27,9 @@ class StoreRepository {
       imageUrl: 'https://images.unsplash.com/photo-1485808191679-5f86510681a2?q=80&w=1000&auto=format&fit=crop',
     ),
     const Product(
-      id: '3',
-      name: 'Ethiopian Yirgacheffe',
-      description: 'Single-origin heirloom beans from the Yirgacheffe region. These beans are medium-light roasted to preserve their characteristic bright acidity, floral jasmine aroma, and complex citrus notes.',
-      price: 18.00,
-      rating: 4.7,
-      category: 'BEANS',
-      heroTag: 'ethiopian',
-      imageUrl: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=1000&auto=format&fit=crop',
-    ),
-    const Product(
-      id: '4',
-      name: 'Artisan Cold Brew',
-      description: 'Steeped for 24 hours in small batches to extract the smoothest, least acidic coffee experience. Served over ice with a hint of dark chocolate notes.',
-      price: 4.50,
-      rating: 4.6,
-      category: 'COLD',
-      heroTag: 'cold_brew',
-      imageUrl: 'https://images.unsplash.com/photo-1517701550927-30cf4bb1db41?q=80&w=1000&auto=format&fit=crop',
-    ),
-    const Product(
       id: '5',
-      name: 'Cortado',
-      description: 'The purist\'s choice. Equal parts espresso and warm silky milk to reduce the acidity. A perfect balance of strength and texture.',
+      name: 'Cortado Premium',
+      description: 'Spanish-inspired precision. Equal parts intense espresso and warm silky milk, crafted to reduce acidity while maintaining the coffee\'s powerful profile.',
       price: 4.25,
       rating: 4.8,
       category: 'ESPRESSO',
@@ -55,9 +37,31 @@ class StoreRepository {
       imageUrl: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?q=80&w=1000&auto=format&fit=crop',
     ),
     const Product(
+      id: '9',
+      name: 'Flat White',
+      description: 'The Australian classic. A thin layer of micro-foam atop a double ristretto shot, offering a higher coffee-to-milk ratio for those who appreciate the nuances of the roast.',
+      price: 4.75,
+      rating: 4.8,
+      category: 'ESPRESSO',
+      heroTag: 'flat_white',
+      imageUrl: 'https://images.unsplash.com/photo-1570968015848-fd2809228995?q=80&w=1000&auto=format&fit=crop',
+    ),
+
+    // COLD
+    const Product(
+      id: '4',
+      name: 'Artisan Cold Brew',
+      description: 'Time is the key ingredient. Steeped for 24 hours at precise temperatures to extract deep chocolate and nutty notes without the bitterness. Served over crystal-clear ice.',
+      price: 4.50,
+      rating: 4.6,
+      category: 'COLD',
+      heroTag: 'cold_brew',
+      imageUrl: 'https://images.unsplash.com/photo-1517701550927-30cf4bb1db41?q=80&w=1000&auto=format&fit=crop',
+    ),
+    const Product(
       id: '6',
-      name: 'Nitro Nitro Cold Brew',
-      description: 'Infused with nitrogen as it pours from the tap, our Cold Brew is transformed into a rich, creamy beverage with a cascading crema and a naturally sweet finish.',
+      name: 'Nitro Velvet Brew',
+      description: 'Experience the cascade. Infused with nitrogen from the tap, this cold brew takes on a Guinness-like texture with a rich, creamy head and a naturally sweet finish.',
       price: 5.75,
       rating: 4.9,
       category: 'COLD',
@@ -65,9 +69,31 @@ class StoreRepository {
       imageUrl: 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?q=80&w=1000&auto=format&fit=crop',
     ),
     const Product(
+      id: '11',
+      name: 'Iced Spanish Latte',
+      description: 'A summer favorite. Our Signature espresso combined with sweetened condensed milk and topped with fresh cold milk and ice. The perfect refreshing indulgence.',
+      price: 6.25,
+      rating: 4.9,
+      category: 'COLD',
+      heroTag: 'spanish_latte',
+      imageUrl: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=1000&auto=format&fit=crop',
+    ),
+
+    // BEANS (WHOLE BEAN)
+    const Product(
+      id: '3',
+      name: 'Ethiopian Yirgacheffe',
+      description: 'Single-origin heirloom beans. Medium-light roast with bright acidity, floral jasmine aroma, and complex citrus notes. Ideal for pour-over brewing.',
+      price: 18.00,
+      rating: 4.7,
+      category: 'BEANS',
+      heroTag: 'ethiopian',
+      imageUrl: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=1000&auto=format&fit=crop',
+    ),
+    const Product(
       id: '7',
       name: 'Sumatra Dark Roast',
-      description: 'Heavy-bodied and earthy with low acidity. These beans are dark roasted to bring out deep herbal and spicy notes with a long-lasting smoky finish.',
+      description: 'Deep, earthy, and bold. These beans are dark roasted to bring out heavy herbal and spicy notes with a long-lasting smoky finish. Low acidity, full body.',
       price: 16.50,
       rating: 4.5,
       category: 'BEANS',
@@ -75,9 +101,21 @@ class StoreRepository {
       imageUrl: 'https://images.unsplash.com/photo-1580915411954-282cb1b0d780?q=80&w=1000&auto=format&fit=crop',
     ),
     const Product(
+      id: '12',
+      name: 'Colombian Supremo',
+      description: 'The quintessential coffee profile. Balanced body, clean taste, and distinct nutty undertones. A versatile bean that excels in any preparation method.',
+      price: 15.00,
+      rating: 4.6,
+      category: 'BEANS',
+      heroTag: 'colombian',
+      imageUrl: 'https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?q=80&w=1000&auto=format&fit=crop',
+    ),
+
+    // TEA
+    const Product(
       id: '8',
-      name: 'Matcha Green Tea Latte',
-      description: 'Premium ceremonial grade Japanese matcha whisked with velvety steamed milk. A vibrant, antioxidant-rich alternative to coffee.',
+      name: 'Ceremonial Matcha Latte',
+      description: 'Grade A Japanese matcha whisked with velvety steamed milk. A vibrant, antioxidant-rich alternative for the health-conscious connoisseur.',
       price: 5.25,
       rating: 4.7,
       category: 'TEA',
@@ -85,49 +123,21 @@ class StoreRepository {
       imageUrl: 'https://images.unsplash.com/photo-1515823064-d6e0c04616a7?q=80&w=1000&auto=format&fit=crop',
     ),
     const Product(
-      id: '9',
-      name: 'Flat White',
-      description: 'A double shot of espresso topped with a thin layer of micro-foam, providing a higher coffee-to-milk ratio for a stronger flavor.',
-      price: 4.75,
-      rating: 4.8,
-      category: 'ESPRESSO',
-      heroTag: 'flat_white',
-      imageUrl: 'https://images.unsplash.com/photo-1570968015848-fd2809228995?q=80&w=1000&auto=format&fit=crop',
-    ),
-    const Product(
       id: '10',
-      name: 'Cascara Tea',
-      description: 'Brewed from the dried skins of coffee cherries, this tea has a unique flavor profile with notes of rosehip, hibiscus, and red currant.',
+      name: 'Rose Cascara Tea',
+      description: 'Brewed from the dried skins of organic coffee cherries. This "coffee-tea" hybrid features unique notes of rosehip, hibiscus, and red currant.',
       price: 4.00,
       rating: 4.4,
       category: 'TEA',
       heroTag: 'cascara',
       imageUrl: 'https://images.unsplash.com/photo-1594631252845-29fc45865157?q=80&w=1000&auto=format&fit=crop',
     ),
-    const Product(
-      id: '11',
-      name: 'Iced Spanish Latte',
-      description: 'Our Signature espresso combined with sweetened condensed milk and topped with fresh cold milk and ice. Perfectly sweet and refreshing.',
-      price: 6.25,
-      rating: 4.9,
-      category: 'COLD',
-      heroTag: 'spanish_latte',
-      imageUrl: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=1000&auto=format&fit=crop',
-    ),
-    const Product(
-      id: '12',
-      name: 'Colombian Supremo',
-      description: 'Classic Colombian beans known for their balanced body, clean taste, and nutty undertones. A versatile bean for any brewing method.',
-      price: 15.00,
-      rating: 4.6,
-      category: 'BEANS',
-      heroTag: 'colombian',
-      imageUrl: 'https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?q=80&w=1000&auto=format&fit=crop',
-    ),
+
+    // PASTRY
     const Product(
       id: '13',
       name: 'Almond Croissant',
-      description: 'Butter croissant filled with sweet almond cream and topped with sliced almonds. Twice-baked for maximum crunch.',
+      description: 'Pure French butter croissant filled with sweet almond frangipane cream and topped with toasted sliced almonds. Twice-baked for perfection.',
       price: 4.50,
       rating: 4.9,
       category: 'PASTRY',
@@ -136,13 +146,45 @@ class StoreRepository {
     ),
     const Product(
       id: '14',
-      name: 'Blueberry Muffin',
-      description: 'Bursting with fresh blueberries and topped with a crunchy streusel crumble. Moist and flavorful.',
+      name: 'Blueberry Streusel Muffin',
+      description: 'Bursting with fresh local blueberries and finished with a crunchy cinnamon streusel crumble. Moist, flavorful, and baked fresh daily.',
       price: 3.75,
       rating: 4.7,
       category: 'PASTRY',
       heroTag: 'muffin',
       imageUrl: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=1000&auto=format&fit=crop',
+    ),
+    const Product(
+      id: '15',
+      name: 'Double Chocolate Cookie',
+      description: 'A decadent treat made with 70% dark Belgian chocolate chunks and a hint of sea salt. Crisp edges with a gooey, molten center.',
+      price: 3.25,
+      rating: 4.8,
+      category: 'PASTRY',
+      heroTag: 'cookie',
+      imageUrl: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=1000&auto=format&fit=crop',
+    ),
+
+    // SPECIALTY
+    const Product(
+      id: '16',
+      name: 'Gold Leaf Affogato',
+      description: 'Our luxury special. A double-shot of espresso poured over artisanal vanilla bean gelato, topped with edible 24k gold leaf and crushed hazelnuts.',
+      price: 12.00,
+      rating: 5.0,
+      category: 'SPECIALTY',
+      heroTag: 'affogato',
+      imageUrl: 'https://images.unsplash.com/photo-1594631252845-29fc45865157?q=80&w=1000&auto=format&fit=crop',
+    ),
+    const Product(
+      id: '17',
+      name: 'Smoked Oak Espresso',
+      description: 'A sensory experience. Espresso shot pulled through oak-smoked filters, giving the brew a deep, woody aroma and a smooth, savory finish.',
+      price: 7.50,
+      rating: 4.8,
+      category: 'SPECIALTY',
+      heroTag: 'smoked_oak',
+      imageUrl: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?q=80&w=1000&auto=format&fit=crop',
     ),
   ];
 
@@ -198,6 +240,13 @@ class StoreRepository {
   List<Map<String, dynamic>> get employees => _employees;
   Map<String, dynamic> get performance => _performance;
   Stream<List<Map<String, dynamic>>> get ordersStream => _ordersController.stream;
+
+  void toggleFavorite(String productId) {
+    final index = _products.indexWhere((p) => p.id == productId);
+    if (index != -1) {
+      _products[index] = _products[index].copyWith(isFavorite: !_products[index].isFavorite);
+    }
+  }
 
   void addOrder(Map<String, dynamic> order) {
     _orders.insert(0, order);

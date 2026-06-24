@@ -64,7 +64,7 @@ class BrewingWorkflow extends StatelessWidget {
         children: [
           Icon(
             isDone ? Icons.check_circle : Icons.radio_button_off,
-            color: isDone ? AppColors.primary : AppColors.outline.withOpacity(0.3),
+            color: isDone ? AppColors.primary : AppColors.outline.withValues(alpha: 0.3),
             size: 24.sp,
           ),
           SizedBox(width: 20.w),
