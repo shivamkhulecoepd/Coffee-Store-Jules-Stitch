@@ -73,7 +73,7 @@ class ChooseRolePage extends StatelessWidget {
               width: 56.w,
               height: 56.w,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, color: AppColors.primary, size: 28.sp),

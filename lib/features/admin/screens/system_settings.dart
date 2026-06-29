@@ -47,7 +47,7 @@ class SystemSettingsPage extends StatelessWidget {
             Switch(
               value: enabled,
               onChanged: (val) {},
-              activeColor: AppColors.primary,
+              activeThumbColor: AppColors.primary,
             ),
           ],
         ),

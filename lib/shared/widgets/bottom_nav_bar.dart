@@ -21,7 +21,7 @@ class AppBottomNavBar extends StatelessWidget {
       height: 90.h,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.surfaceLight.withOpacity(0.8),
+        color: AppColors.surfaceLight.withValues(alpha: 0.8),
         border: const Border(top: BorderSide(color: Colors.white10, width: 0.5)),
       ),
       child: ClipRect(

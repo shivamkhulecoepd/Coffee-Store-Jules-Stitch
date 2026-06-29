@@ -34,7 +34,7 @@ class EmployeeManagementPage extends StatelessWidget {
             child: Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: AppColors.primary.withOpacity(0.1),
+                  backgroundColor: AppColors.primary.withValues(alpha: 0.1),
                   child: Text(emp['name']![0], style: const TextStyle(color: AppColors.primary)),
                 ),
                 SizedBox(width: 16.w),
@@ -50,7 +50,7 @@ class EmployeeManagementPage extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                   decoration: BoxDecoration(
-                    color: (isOn ? AppColors.success : AppColors.outline).withOpacity(0.1),
+                    color: (isOn ? AppColors.success : AppColors.outline).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4.r),
                   ),
                   child: Text(

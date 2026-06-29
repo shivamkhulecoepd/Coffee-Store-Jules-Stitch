@@ -51,7 +51,7 @@ class CustomerRequestsPage extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                             decoration: BoxDecoration(
-                              color: (isResolved ? AppColors.success : AppColors.warning).withOpacity(0.1),
+                              color: (isResolved ? AppColors.success : AppColors.warning).withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(4.r)
                             ),
                             child: Text(

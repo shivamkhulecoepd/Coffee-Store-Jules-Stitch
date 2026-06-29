@@ -34,7 +34,7 @@ class WishlistPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.favorite_border, size: 64.sp, color: AppColors.outline.withOpacity(0.3)),
+                  Icon(Icons.favorite_border, size: 64.sp, color: AppColors.outline.withValues(alpha: 0.3)),
                   SizedBox(height: 24.h),
                   Text('Your curated list is empty.', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline)),
                 ],

@@ -10,6 +10,7 @@ class Product extends Equatable {
   final String heroTag;
   final String imageUrl;
   final bool isFavorite;
+  final Map<String, String> brewSpecs;
 
   const Product({
     required this.id,
@@ -21,6 +22,11 @@ class Product extends Equatable {
     required this.heroTag,
     required this.imageUrl,
     this.isFavorite = false,
+    this.brewSpecs = const {
+      'Body': 'Medium',
+      'Temp': '92°C',
+      'Extraction': '4 min',
+    },
   });
 
   Product copyWith({
@@ -33,6 +39,7 @@ class Product extends Equatable {
     String? heroTag,
     String? imageUrl,
     bool? isFavorite,
+    Map<String, String>? brewSpecs,
   }) {
     return Product(
       id: id ?? this.id,
@@ -44,11 +51,12 @@ class Product extends Equatable {
       heroTag: heroTag ?? this.heroTag,
       imageUrl: imageUrl ?? this.imageUrl,
       isFavorite: isFavorite ?? this.isFavorite,
+      brewSpecs: brewSpecs ?? this.brewSpecs,
     );
   }
 
   @override
-  List<Object> get props => [id, name, description, price, rating, category, heroTag, imageUrl, isFavorite];
+  List<Object> get props => [id, name, description, price, rating, category, heroTag, imageUrl, isFavorite, brewSpecs];
 }
 
 class CartItem extends Equatable {

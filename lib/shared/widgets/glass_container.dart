@@ -53,7 +53,7 @@ class AppGlassContainer extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: shape,
                     borderRadius: shape == BoxShape.circle ? null : BorderRadius.circular(effectiveRadius),
-                    color: AppColors.surfaceLight.withOpacity(opacity),
+                    color: AppColors.surfaceLight.withValues(alpha: opacity),
                   ),
                 ),
               ),

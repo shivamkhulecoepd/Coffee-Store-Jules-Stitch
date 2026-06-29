@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                       crossAxisCount: 2,
                       mainAxisSpacing: 20.h,
                       crossAxisSpacing: 20.w,
-                      childAspectRatio: 0.7,
+                      childAspectRatio: 0.68,
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => _buildProductCard(context, products[index]),
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
-            SliverToBoxAdapter(child: SizedBox(height: 120.h)),
+            const SliverToBoxAdapter(child: SizedBox(height: 120)),
           ],
         ),
       ),

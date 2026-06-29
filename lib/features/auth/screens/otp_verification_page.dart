@@ -58,7 +58,7 @@ class OTPVerificationPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF0A0A0A),
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.outline.withOpacity(0.2)),
+        border: Border.all(color: AppColors.outline.withValues(alpha: 0.2)),
       ),
       child: Center(
         child: TextField(
