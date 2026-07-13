@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../models/table_session_model.dart';
 
 abstract class BaristaEvent extends Equatable {
   const BaristaEvent();
@@ -10,10 +11,17 @@ class LoadBaristaDataEvent extends BaristaEvent {}
 
 class UpdateTableStatusEvent extends BaristaEvent {
   final int tableId;
-  final String status;
+  final TableStatus status;
   const UpdateTableStatusEvent(this.tableId, this.status);
   @override
   List<Object?> get props => [tableId, status];
+}
+
+class CloseTableSessionEvent extends BaristaEvent {
+  final int tableId;
+  const CloseTableSessionEvent(this.tableId);
+  @override
+  List<Object?> get props => [tableId];
 }
 
 class CompleteTaskEvent extends BaristaEvent {

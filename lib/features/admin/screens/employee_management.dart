@@ -4,6 +4,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/glass_container.dart';
 import '../../../data/repositories/store_repository.dart';
+import '../models/employee_model.dart';
 import '../../../core/utils/service_locator.dart';
 
 class EmployeeManagementPage extends StatelessWidget {
@@ -28,22 +29,23 @@ class EmployeeManagementPage extends StatelessWidget {
         separatorBuilder: (context, index) => SizedBox(height: 16.h),
         itemBuilder: (context, index) {
           final emp = employees[index];
-          final bool isOn = emp['status'] == 'ON-SHIFT';
+          final bool isOn = emp.status == EmployeeStatus.onShift;
+          final statusText = emp.status == EmployeeStatus.onShift ? 'ON-SHIFT' : 'OFF-SHIFT';
           return AppGlassContainer(
             padding: EdgeInsets.all(20.w),
             child: Row(
               children: [
                 CircleAvatar(
                   backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-                  child: Text(emp['name']![0], style: const TextStyle(color: AppColors.primary)),
+                  child: Text(emp.name[0], style: const TextStyle(color: AppColors.primary)),
                 ),
                 SizedBox(width: 16.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(emp['name']!, style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700)),
-                      Text(emp['role']!, style: AppTypography.bodySmall(context)),
+                      Text(emp.name, style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700)),
+                      Text(emp.role, style: AppTypography.bodySmall(context)),
                     ],
                   ),
                 ),
@@ -54,7 +56,7 @@ class EmployeeManagementPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4.r),
                   ),
                   child: Text(
-                    emp['status']!,
+                    statusText,
                     style: AppTypography.labelSmall(context).copyWith(
                       color: isOn ? AppColors.success : AppColors.outline,
                       fontSize: 8.sp,

@@ -8,6 +8,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/glass_container.dart';
 import '../bloc/barista_bloc.dart';
 import '../bloc/barista_event.dart';
+import '../models/table_session_model.dart';
 
 class ScanTableQRPage extends StatelessWidget {
   const ScanTableQRPage({super.key});
@@ -37,7 +38,7 @@ class ScanTableQRPage extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   // Mock scan success for Table 4
-                  context.read<BaristaBloc>().add(const UpdateTableStatusEvent(4, 'Occupied'));
+                  context.read<BaristaBloc>().add(const UpdateTableStatusEvent(4, TableStatus.occupied));
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Table #4 Session Synchronized')),
                   );

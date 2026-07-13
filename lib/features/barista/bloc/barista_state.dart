@@ -1,10 +1,11 @@
 import 'package:equatable/equatable.dart';
+import '../models/table_session_model.dart';
 
 enum BaristaStatus { initial, loading, loaded, error }
 
 class BaristaState extends Equatable {
   final BaristaStatus status;
-  final List<Map<String, dynamic>> tables;
+  final List<TableSession> tables;
   final List<Map<String, dynamic>> tasks;
 
   const BaristaState({
@@ -15,7 +16,7 @@ class BaristaState extends Equatable {
 
   BaristaState copyWith({
     BaristaStatus? status,
-    List<Map<String, dynamic>>? tables,
+    List<TableSession>? tables,
     List<Map<String, dynamic>>? tasks,
   }) {
     return BaristaState(
