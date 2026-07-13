@@ -4,6 +4,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/glass_container.dart';
 import '../../../data/repositories/store_repository.dart';
+import '../models/table_session_model.dart';
 import '../../../core/utils/service_locator.dart';
 
 class ActiveTablesBillingPage extends StatelessWidget {
@@ -12,7 +13,7 @@ class ActiveTablesBillingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final repository = sl<StoreRepository>();
-    final activeTables = repository.tables.where((t) => t['status'] == 'Occupied').toList();
+    final activeTables = repository.tables.where((t) => t.status == TableStatus.occupied).toList();
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -41,12 +42,12 @@ class ActiveTablesBillingPage extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('TABLE #${table['id']}', style: AppTypography.labelSmall(context)),
+                          Text('TABLE #${table.tableId}', style: AppTypography.labelSmall(context)),
                           Text('Active Session', style: AppTypography.bodySmall(context)),
                         ],
                       ),
                       const Spacer(),
-                      Text(r'$' + table['total'].toStringAsFixed(2), style: AppTypography.dataMono(context).copyWith(color: AppColors.primary)),
+                      Text(r'$' + table.total.toStringAsFixed(2), style: AppTypography.dataMono(context).copyWith(color: AppColors.primary)),
                     ],
                   ),
                 );

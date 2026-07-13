@@ -45,10 +45,10 @@ class InventoryStatusPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('ITEM #${item['id']}', style: AppTypography.dataMono(context).copyWith(color: AppColors.outline, fontSize: 10.sp)),
-                      Text(item['name'], style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700)),
+                      Text('ITEM #${item.id}', style: AppTypography.dataMono(context).copyWith(color: AppColors.outline, fontSize: 10.sp)),
+                      Text(item.name, style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700)),
                       SizedBox(height: 12.h),
-                      _buildStockBar(item['progress']),
+                      _buildStockBar(item.progress),
                     ],
                   ),
                 ),
@@ -56,10 +56,10 @@ class InventoryStatusPage extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(item['qty'], style: AppTypography.headlineMedium(context)),
-                    Text(item['progress'] < 0.3 ? 'LOW STOCK' : 'HEALTHY',
+                    Text(item.quantity, style: AppTypography.headlineMedium(context)),
+                    Text(item.progress < 0.3 ? 'LOW STOCK' : 'HEALTHY',
                       style: AppTypography.labelSmall(context).copyWith(
-                        color: item['progress'] < 0.3 ? Colors.orange : AppColors.success,
+                        color: item.progress < 0.3 ? Colors.orange : AppColors.success,
                         fontSize: 9.sp,
                       ),
                     ),

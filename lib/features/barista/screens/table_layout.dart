@@ -8,6 +8,7 @@ import '../../../shared/widgets/glass_container.dart';
 import '../bloc/barista_bloc.dart';
 import '../bloc/barista_event.dart';
 import '../bloc/barista_state.dart';
+import '../models/table_session_model.dart';
 
 class TableLayoutPage extends StatefulWidget {
   const TableLayoutPage({super.key});
@@ -51,17 +52,17 @@ class _TableLayoutPageState extends State<TableLayoutPage> {
             itemCount: state.tables.length,
             itemBuilder: (context, index) {
               final table = state.tables[index];
-              final bool isOccupied = table['status'] == 'Occupied';
+              final bool isOccupied = table.status == TableStatus.occupied;
 
               return GestureDetector(
-                onTap: () => context.pushNamed('ordering', extra: {'table': table['id']}),
+                onTap: () => context.pushNamed('ordering', extra: {'table': table.tableId}),
                 child: AppGlassContainer(
                   padding: EdgeInsets.all(16.w),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('TABLE', style: AppTypography.labelSmall(context).copyWith(color: AppColors.outline, fontSize: 10.sp)),
-                      Text('${table['id']}', style: AppTypography.displayLargeMobile(context).copyWith(fontWeight: FontWeight.w800)),
+                      Text('${table.tableId}', style: AppTypography.displayLargeMobile(context).copyWith(fontWeight: FontWeight.w800)),
                       SizedBox(height: 8.h),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
@@ -70,7 +71,7 @@ class _TableLayoutPageState extends State<TableLayoutPage> {
                           borderRadius: BorderRadius.circular(4.r),
                         ),
                         child: Text(
-                          table['status'].toString().toUpperCase(),
+                          table.status.name.toUpperCase(),
                           style: AppTypography.labelSmall(context).copyWith(
                             color: isOccupied ? AppColors.error : AppColors.success,
                             fontSize: 9.sp,

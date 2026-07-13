@@ -109,6 +109,24 @@ class StoreRepository {
     const Employee(name: 'Elena Rodriguez', role: 'Store Manager', status: EmployeeStatus.onShift),
   ];
 
+  final List<Map<String, dynamic>> _suppliers = [
+    {'name': 'Global Bean Co.', 'contact': 'supply@globalbean.com', 'category': 'BEANS'},
+    {'name': 'Dairy Gold', 'contact': 'orders@dairygold.com', 'category': 'DAIRY'},
+  ];
+
+  final List<Map<String, dynamic>> _tasks = [
+    {'title': 'Machine Calibration', 'status': 'PENDING', 'color': 'warning'},
+    {'title': 'Inventory Check', 'status': 'COMPLETED', 'color': 'success'},
+  ];
+
+  final Map<String, dynamic> _performance = {
+    'ordersCompleted': 124,
+    'avgTime': '4.2m',
+    'rating': 4.9,
+    'avgBrewTime': '28s',
+    'score': 98.2,
+  };
+
   final List<Map<String, dynamic>> _orders = [];
   final StreamController<List<TableSession>> _tableController = StreamController.broadcast();
   final StreamController<List<Map<String, dynamic>>> _ordersController = StreamController.broadcast();
@@ -120,10 +138,14 @@ class StoreRepository {
 
   List<Product> get products => _products;
   List<TableSession> get tableSessions => _tableSessions;
+  List<TableSession> get tables => _tableSessions; // Alias for BaristaBloc
   Stream<List<TableSession>> get tableStream => _tableController.stream;
   List<InventoryItem> get inventory => _inventory;
   List<CustomerRequest> get requests => _requests;
   List<Employee> get employees => _employees;
+  List<Map<String, dynamic>> get suppliers => _suppliers;
+  List<Map<String, dynamic>> get tasks => _tasks;
+  Map<String, dynamic> get performance => _performance;
   List<Map<String, dynamic>> get orders => _orders;
   Stream<List<Map<String, dynamic>>> get ordersStream => _ordersController.stream;
 
