@@ -31,7 +31,7 @@ class TableOrderingPage extends StatelessWidget {
         children: [
           Expanded(
             child: ListView(
-              padding: EdgeInsets.all(24.w),
+              padding: EdgeInsets.all(20.w),
               children: [
                 Text('TRANSACTION ITEMS', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
                 SizedBox(height: 20.h),

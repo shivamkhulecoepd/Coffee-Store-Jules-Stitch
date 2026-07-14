@@ -30,7 +30,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       body: ListView(
-        padding: EdgeInsets.all(24.w),
+        padding: EdgeInsets.all(20.w),
         children: [
           _buildSectionHeader('Notifications'),
           _buildToggleItem('Push Notifications', 'Real-time order updates', pushEnabled, (val) => setState(() => pushEnabled = val)),

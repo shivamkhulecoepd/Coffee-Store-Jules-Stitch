@@ -29,7 +29,7 @@ class CustomerRequestsPage extends StatelessWidget {
           }
 
           return ListView.separated(
-            padding: EdgeInsets.all(24.w),
+            padding: EdgeInsets.all(20.w),
             itemCount: state.requests.length,
             separatorBuilder: (context, index) => SizedBox(height: 16.h),
             itemBuilder: (context, index) {

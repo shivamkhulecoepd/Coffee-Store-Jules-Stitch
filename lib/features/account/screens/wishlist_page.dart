@@ -43,7 +43,7 @@ class WishlistPage extends StatelessWidget {
           }
 
           return ListView.separated(
-            padding: EdgeInsets.all(24.w),
+            padding: EdgeInsets.all(20.w),
             itemCount: favorites.length,
             separatorBuilder: (context, index) => SizedBox(height: 20.h),
             itemBuilder: (context, index) {

@@ -34,7 +34,7 @@ class RewardsPage extends StatelessWidget {
       body: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
           return SingleChildScrollView(
-            padding: EdgeInsets.all(24.w),
+            padding: EdgeInsets.all(20.w),
             child: Column(
               children: [
                 AppGlassContainer(

@@ -18,7 +18,7 @@ class SystemSettingsPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: ListView(
-        padding: EdgeInsets.all(24.w),
+        padding: EdgeInsets.all(20.w),
         children: [
           _buildSettingItem(context, 'Station Synchronization', 'Automatic (30s intervals)', true),
           _buildSettingItem(context, 'Cloud Ledger Logging', 'Active', true),

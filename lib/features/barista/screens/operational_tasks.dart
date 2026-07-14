@@ -37,7 +37,7 @@ class _OperationalTasksPageState extends State<OperationalTasksPage> {
       body: BlocBuilder<BaristaBloc, BaristaState>(
         builder: (context, state) {
           return ListView.separated(
-            padding: EdgeInsets.all(24.w),
+            padding: EdgeInsets.all(20.w),
             itemCount: state.tasks.length,
             separatorBuilder: (context, index) => SizedBox(height: 16.h),
             itemBuilder: (context, index) {

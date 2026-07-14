@@ -8,6 +8,7 @@ import 'features/auth/bloc/auth_bloc.dart';
 import 'features/ordering/bloc/ordering_bloc.dart';
 import 'features/barista/bloc/barista_bloc.dart';
 import 'features/admin/bloc/admin_bloc.dart';
+import 'features/admin/bloc/inventory_bloc.dart';
 import 'features/account/bloc/user_bloc.dart';
 
 void main() async {
@@ -27,6 +28,7 @@ class BeanAndBrewOS extends StatelessWidget {
         BlocProvider(create: (_) => di.sl<OrderingBloc>()),
         BlocProvider(create: (_) => di.sl<BaristaBloc>()),
         BlocProvider(create: (_) => di.sl<AdminBloc>()),
+        BlocProvider(create: (_) => di.sl<InventoryBloc>()),
         BlocProvider(create: (_) => di.sl<UserBloc>()),
       ],
       child: ScreenUtilInit(

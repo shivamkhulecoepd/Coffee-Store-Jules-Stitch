@@ -49,7 +49,7 @@ class CartPage extends StatelessWidget {
             children: [
               Expanded(
                 child: ListView.separated(
-                  padding: EdgeInsets.all(24.w),
+                  padding: EdgeInsets.all(20.w),
                   itemCount: state.cart.length,
                   separatorBuilder: (context, index) => SizedBox(height: 16.h),
                   itemBuilder: (context, index) {
@@ -124,23 +124,24 @@ class CartPage extends StatelessWidget {
   }
 
   Widget _buildSummary(BuildContext context, OrderingState state) {
-    return AppGlassContainer(
-      borderRadius: 0,
-      padding: EdgeInsets.all(32.w),
-      child: Column(
-        children: [
-          _buildSummaryRow(context, 'Subtotal', '\$${state.subtotal.toStringAsFixed(2)}'),
-          SizedBox(height: 12.h),
-          _buildSummaryRow(context, 'Service Fee', '\$${state.serviceFee.toStringAsFixed(2)}'),
-          const Divider(height: 32, color: Colors.white10),
-          _buildSummaryRow(context, 'Total', '\$${state.total.toStringAsFixed(2)}', isTotal: true),
-          SizedBox(height: 32.h),
-          AppButton(
-            text: 'PROCEED TO CHECKOUT',
-            onPressed: () => context.pushNamed('checkout'),
-          ),
-          SizedBox(height: 20.h),
-        ],
+    return SafeArea(
+      child: AppGlassContainer(
+        borderRadius: 0,
+        padding: EdgeInsets.all(20.w),
+        child: Column(
+          children: [
+            _buildSummaryRow(context, 'Subtotal', '\$${state.subtotal.toStringAsFixed(2)}'),
+            SizedBox(height: 12.h),
+            _buildSummaryRow(context, 'Service Fee', '\$${state.serviceFee.toStringAsFixed(2)}'),
+            const Divider(height: 32, color: Colors.white10),
+            _buildSummaryRow(context, 'Total', '\$${state.total.toStringAsFixed(2)}', isTotal: true),
+            SizedBox(height: 20.h),
+            AppButton(
+              text: 'PROCEED TO CHECKOUT',
+              onPressed: () => context.pushNamed('checkout'),
+            ),
+          ],
+        ),
       ),
     );
   }

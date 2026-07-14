@@ -27,7 +27,7 @@ class ProductManagementPage extends StatelessWidget {
       body: BlocBuilder<OrderingBloc, OrderingState>(
         builder: (context, state) {
           return ListView.separated(
-            padding: EdgeInsets.all(24.w),
+            padding: EdgeInsets.all(20.w),
             itemCount: state.products.length,
             separatorBuilder: (context, index) => SizedBox(height: 16.h),
             itemBuilder: (context, index) {

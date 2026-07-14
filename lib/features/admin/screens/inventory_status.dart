@@ -32,7 +32,7 @@ class InventoryStatusPage extends StatelessWidget {
         ],
       ),
       body: ListView.separated(
-        padding: EdgeInsets.all(24.w),
+        padding: EdgeInsets.all(20.w),
         itemCount: inventory.length,
         separatorBuilder: (context, index) => SizedBox(height: 16.h),
         itemBuilder: (context, index) {

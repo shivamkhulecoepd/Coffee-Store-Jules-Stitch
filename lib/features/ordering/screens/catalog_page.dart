@@ -17,14 +17,18 @@ class CatalogPage extends StatefulWidget {
 }
 
 class _CatalogPageState extends State<CatalogPage> {
-  String searchQuery = '';
-  String selectedCategory = 'ALL';
-  String sortBy = 'Name';
+  final _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     context.read<OrderingBloc>().add(LoadProductsEvent());
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -43,44 +47,27 @@ class _CatalogPageState extends State<CatalogPage> {
             return const Center(child: CircularProgressIndicator(color: AppColors.primary));
           }
 
-          final categories = ['ALL', ...state.products.map((p) => p.category).toSet()];
-
-          var filteredProducts = state.products.where((p) {
-            final matchesQuery = p.name.toLowerCase().contains(searchQuery.toLowerCase()) ||
-                                 p.description.toLowerCase().contains(searchQuery.toLowerCase());
-            final matchesCategory = selectedCategory == 'ALL' || p.category == selectedCategory;
-            return matchesQuery && matchesCategory;
-          }).toList();
-
-          if (sortBy == 'Price: Low to High') {
-            filteredProducts.sort((a, b) => a.price.compareTo(b.price));
-          } else if (sortBy == 'Price: High to Low') {
-            filteredProducts.sort((a, b) => b.price.compareTo(a.price));
-          } else if (sortBy == 'Rating') {
-            filteredProducts.sort((a, b) => b.rating.compareTo(a.rating));
-          } else {
-            filteredProducts.sort((a, b) => a.name.compareTo(b.name));
-          }
+          final categories = ['ALL', ...state.availableCategories];
 
           return Column(
             children: [
-              _buildHeader(categories),
+              _buildHeader(context, state, categories),
               Expanded(
-                child: filteredProducts.isEmpty
-                  ? _buildEmptyState()
-                  : GridView.builder(
-                      padding: EdgeInsets.all(24.w),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.75,
-                        mainAxisSpacing: 20.w,
-                        crossAxisSpacing: 20.w,
+                child: state.filteredProducts.isEmpty
+                    ? _buildEmptyState()
+                    : GridView.builder(
+                        padding: EdgeInsets.all(20.w),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.75,
+                          mainAxisSpacing: 20.w,
+                          crossAxisSpacing: 20.w,
+                        ),
+                        itemCount: state.filteredProducts.length,
+                        itemBuilder: (context, index) {
+                          return _buildProductCard(state.filteredProducts[index]);
+                        },
                       ),
-                      itemCount: filteredProducts.length,
-                      itemBuilder: (context, index) {
-                        return _buildProductCard(filteredProducts[index]);
-                      },
-                    ),
               ),
             ],
           );
@@ -89,18 +76,28 @@ class _CatalogPageState extends State<CatalogPage> {
     );
   }
 
-  Widget _buildHeader(List<String> categories) {
+  Widget _buildHeader(BuildContext context, OrderingState state, List<String> categories) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Column(
         children: [
           TextField(
-            onChanged: (val) => setState(() => searchQuery = val),
+            controller: _searchController,
+            onChanged: (val) => context.read<OrderingBloc>().add(SearchProductsEvent(val)),
             style: AppTypography.bodyMedium(context),
             decoration: InputDecoration(
               hintText: 'Search artisanal brews...',
               hintStyle: TextStyle(color: AppColors.outline.withValues(alpha: 0.5)),
               prefixIcon: Icon(Icons.search, color: AppColors.primary, size: 20.sp),
+              suffixIcon: _searchController.text.isNotEmpty
+                  ? IconButton(
+                      icon: Icon(Icons.clear, color: AppColors.outline, size: 18.sp),
+                      onPressed: () {
+                        _searchController.clear();
+                        context.read<OrderingBloc>().add(const SearchProductsEvent(''));
+                      },
+                    )
+                  : null,
               filled: true,
               fillColor: Colors.black.withValues(alpha: 0.3),
               border: OutlineInputBorder(
@@ -118,13 +115,18 @@ class _CatalogPageState extends State<CatalogPage> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: categories.map((cat) {
-                final isSelected = selectedCategory == cat;
+                final isSelected = (state.selectedCategory ?? 'ALL') == cat ||
+                    (state.selectedCategory == null && cat == 'ALL');
                 return Padding(
                   padding: EdgeInsets.only(right: 8.w),
                   child: ChoiceChip(
                     label: Text(cat),
                     selected: isSelected,
-                    onSelected: (val) => setState(() => selectedCategory = cat),
+                    onSelected: (_) {
+                      context.read<OrderingBloc>().add(
+                        FilterByCategoryEvent(cat == 'ALL' ? null : cat),
+                      );
+                    },
                     selectedColor: AppColors.primary,
                     labelStyle: TextStyle(
                       color: isSelected ? AppColors.onPrimary : Colors.white,
@@ -144,13 +146,18 @@ class _CatalogPageState extends State<CatalogPage> {
             children: [
               Text('Sort by: ', style: AppTypography.bodySmall(context)),
               DropdownButton<String>(
-                value: sortBy,
+                value: state.sortOption,
                 dropdownColor: AppColors.surfaceDark,
                 underline: const SizedBox(),
                 items: ['Name', 'Price: Low to High', 'Price: High to Low', 'Rating']
-                    .map((s) => DropdownMenuItem(value: s, child: Text(s, style: TextStyle(fontSize: 12.sp))))
+                    .map((s) => DropdownMenuItem(
+                          value: s,
+                          child: Text(s, style: TextStyle(fontSize: 12.sp)),
+                        ))
                     .toList(),
-                onChanged: (val) => setState(() => sortBy = val!),
+                onChanged: (val) {
+                  if (val != null) context.read<OrderingBloc>().add(SortProductsEvent(val));
+                },
               ),
             ],
           ),
@@ -197,21 +204,37 @@ class _CatalogPageState extends State<CatalogPage> {
             ),
           ),
           SizedBox(height: 12.h),
-          Text(product.name, style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700), maxLines: 1, overflow: TextOverflow.ellipsis),
-          Text(product.category, style: AppTypography.bodySmall(context).copyWith(color: AppColors.outline, fontSize: 10.sp)),
+          Text(
+            product.name,
+            style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(
+            product.category,
+            style: AppTypography.bodySmall(context).copyWith(color: AppColors.outline, fontSize: 10.sp),
+          ),
           SizedBox(height: 8.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('\$${product.price.toStringAsFixed(2)}', style: AppTypography.dataMono(context).copyWith(color: AppColors.primary)),
+              Text(
+                '\$${product.price.toStringAsFixed(2)}',
+                style: AppTypography.dataMono(context).copyWith(color: AppColors.primary),
+              ),
               GestureDetector(
                 onTap: () {
                   context.read<OrderingBloc>().add(AddToCartEvent(product));
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Added ${product.name} to tray')));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Added ${product.name} to tray')),
+                  );
                 },
                 child: Container(
                   padding: EdgeInsets.all(4.w),
-                  decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(8.r)),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
                   child: Icon(Icons.add, color: AppColors.onPrimary, size: 16.sp),
                 ),
               ),
@@ -229,7 +252,10 @@ class _CatalogPageState extends State<CatalogPage> {
         children: [
           Icon(Icons.search_off, size: 64.sp, color: AppColors.outline.withValues(alpha: 0.3)),
           SizedBox(height: 16.h),
-          Text('No products found matches your selection.', style: AppTypography.bodyMedium(context)),
+          Text(
+            'No products found matching your selection.',
+            style: AppTypography.bodyMedium(context),
+          ),
         ],
       ),
     );

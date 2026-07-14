@@ -33,7 +33,7 @@ class TableDetailPage extends StatelessWidget {
           final session = state.tables.firstWhere((s) => s.tableId == tableId);
 
           return Padding(
-            padding: EdgeInsets.all(24.w),
+            padding: EdgeInsets.all(20.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

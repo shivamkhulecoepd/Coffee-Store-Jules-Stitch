@@ -30,10 +30,9 @@ class DiscoverPage extends StatelessWidget {
             final roasts = state.products.where((p) => p.category == 'BEANS').toList();
 
             return CustomScrollView(
-              physics: const BouncingScrollPhysics(),
               slivers: [
                 SliverPadding(
-                  padding: EdgeInsets.all(24.w),
+                  padding: EdgeInsets.all(20.w),
                   sliver: SliverToBoxAdapter(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,6 +42,7 @@ class DiscoverPage extends StatelessWidget {
                           height: 64.h,
                           borderRadius: 16.r,
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Icon(Icons.search, color: AppColors.primary, size: 24.sp),
                               SizedBox(width: 16.w),
@@ -54,9 +54,8 @@ class DiscoverPage extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(height: 40.h),
+                        SizedBox(height: 20.h),
                         _buildSectionHeader(context, 'Brewing Methods'),
-                        SizedBox(height: 24.h),
                       ],
                     ),
                   ),

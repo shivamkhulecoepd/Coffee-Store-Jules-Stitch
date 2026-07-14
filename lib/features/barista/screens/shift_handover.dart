@@ -22,7 +22,7 @@ class ShiftHandoverPage extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(24.w),
+        padding: EdgeInsets.all(20.w),
         child: Column(
           children: [
             const AppTextField(

@@ -24,7 +24,7 @@ class EmployeeManagementPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: ListView.separated(
-        padding: EdgeInsets.all(24.w),
+        padding: EdgeInsets.all(20.w),
         itemCount: employees.length,
         separatorBuilder: (context, index) => SizedBox(height: 16.h),
         itemBuilder: (context, index) {

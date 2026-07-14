@@ -22,7 +22,7 @@ class AddressManagementPage extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(24.w),
+        padding: EdgeInsets.all(20.w),
         child: Column(
           children: [
             _buildAddressItem(context, 'Home Office', '421 Espresso Lane, Tech District', true),

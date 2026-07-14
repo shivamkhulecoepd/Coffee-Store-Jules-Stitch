@@ -46,7 +46,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 top: 0,
                 left: 0,
                 right: 0,
-                height: 500.h,
+                height: 350.h,
                 child: Hero(
                   tag: heroTag,
                   child: Container(
@@ -74,91 +74,164 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
               SafeArea(
                 child: CustomScrollView(
-                  physics: const BouncingScrollPhysics(),
                   slivers: [
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20.w,
+                          vertical: 6.h,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            _buildCircleIcon(context, Icons.arrow_back_ios_new, onTap: () => context.pop()),
                             _buildCircleIcon(
                               context,
-                              product.isFavorite ? Icons.favorite : Icons.favorite_border,
-                              iconColor: product.isFavorite ? Colors.red : Colors.white,
-                              onTap: () => context.read<OrderingBloc>().add(ToggleFavoriteEvent(product.id)),
+                              Icons.arrow_back_ios_new,
+                              onTap: () => context.pop(),
+                            ),
+                            _buildCircleIcon(
+                              context,
+                              product.isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              iconColor: product.isFavorite
+                                  ? Colors.red
+                                  : Colors.white,
+                              onTap: () => context.read<OrderingBloc>().add(
+                                ToggleFavoriteEvent(product.id),
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    SliverToBoxAdapter(child: SizedBox(height: 250.h)),
+                    SliverToBoxAdapter(child: SizedBox(height: 260.h)),
                     SliverToBoxAdapter(
-                      child: AppGlassContainer(
-                        borderRadius: 40.r,
-                        padding: EdgeInsets.all(32.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text('SIGNATURE SERIES', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2.5)),
-                                      SizedBox(height: 4.h),
-                                      Text(product.name, style: AppTypography.displayLargeMobile(context).copyWith(fontSize: 32.sp, fontWeight: FontWeight.w700)),
-                                    ],
-                                  ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text('\$${product.price.toStringAsFixed(2)}', style: AppTypography.headlineLarge(context).copyWith(color: AppColors.primary, fontSize: 28.sp)),
-                                    Row(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(32.r),
+                        ),
+                        child: AppGlassContainer(
+                          borderRadius: 0,
+                          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 32.h),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Icon(Icons.star, color: Colors.amber, size: 16.sp),
-                                        SizedBox(width: 4.w),
-                                        Text(product.rating.toString(), style: AppTypography.dataMono(context).copyWith(fontSize: 12.sp)),
+                                        Text(
+                                          'SIGNATURE SERIES',
+                                          style: AppTypography.labelSmall(context)
+                                              .copyWith(
+                                                color: AppColors.primary,
+                                                letterSpacing: 2.5,
+                                              ),
+                                        ),
+                                        SizedBox(height: 4.h),
+                                        Text(
+                                          product.name,
+                                          style:
+                                              AppTypography.displayLargeMobile(
+                                                context,
+                                              ).copyWith(
+                                                fontSize: 32.sp,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                        ),
                                       ],
                                     ),
-                                  ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        '\$${product.price.toStringAsFixed(2)}',
+                                        style:
+                                            AppTypography.headlineLarge(
+                                              context,
+                                            ).copyWith(
+                                              color: AppColors.primary,
+                                              fontSize: 28.sp,
+                                            ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                            size: 16.sp,
+                                          ),
+                                          SizedBox(width: 4.w),
+                                          Text(
+                                            product.rating.toString(),
+                                            style: AppTypography.dataMono(
+                                              context,
+                                            ).copyWith(fontSize: 12.sp),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 32.h),
+                              Text(
+                                'THE BREW STORY',
+                                style: AppTypography.labelSmall(context).copyWith(
+                                  color: AppColors.primary,
+                                  letterSpacing: 1.5,
                                 ),
-                              ],
-                            ),
-                            SizedBox(height: 32.h),
-                            Text('THE BREW STORY', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 1.5)),
-                            SizedBox(height: 12.h),
-                            Text(
-                              product.description,
-                              style: AppTypography.bodyMedium(context).copyWith(color: AppColors.boneWhite.withValues(alpha: 0.7), height: 1.7),
-                            ),
-                            SizedBox(height: 32.h),
-                            _buildInfoGrid(context),
-                            SizedBox(height: 40.h),
-                            Text('CALIBRATE SIZE', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 1.5)),
-                            SizedBox(height: 16.h),
-                            Row(
-                              children: [
-                                _buildSizeOption(context, 'S'),
-                                _buildSizeOption(context, 'M'),
-                                _buildSizeOption(context, 'L'),
-                              ],
-                            ),
-                            SizedBox(height: 40.h),
-                            AppButton(
-                              text: 'ADD TO SELECTION',
-                              onPressed: () {
-                                context.read<OrderingBloc>().add(AddToCartEvent(product, customization: 'Size: $selectedSize'));
-                                context.pushNamed('cart');
-                              },
-                            ),
-                            SizedBox(height: 120.h),
-                          ],
+                              ),
+                              SizedBox(height: 12.h),
+                              Text(
+                                product.description,
+                                style: AppTypography.bodyMedium(context).copyWith(
+                                  color: AppColors.boneWhite.withValues(
+                                    alpha: 0.7,
+                                  ),
+                                  height: 1.7,
+                                ),
+                              ),
+                              SizedBox(height: 32.h),
+                              _buildInfoGrid(context),
+                              SizedBox(height: 40.h),
+                              Text(
+                                'CALIBRATE SIZE',
+                                style: AppTypography.labelSmall(context).copyWith(
+                                  color: AppColors.primary,
+                                  letterSpacing: 1.5,
+                                ),
+                              ),
+                              SizedBox(height: 16.h),
+                              Row(
+                                children: [
+                                  _buildSizeOption(context, 'S'),
+                                  _buildSizeOption(context, 'M'),
+                                  _buildSizeOption(context, 'L'),
+                                ],
+                              ),
+                              SizedBox(height: 40.h),
+                              AppButton(
+                                text: 'ADD TO SELECTION',
+                                onPressed: () {
+                                  context.read<OrderingBloc>().add(
+                                    AddToCartEvent(
+                                      product,
+                                      customization: 'Size: $selectedSize',
+                                    ),
+                                  );
+                                  context.pushNamed('cart');
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -183,18 +256,36 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
-  Widget _buildInfoItem(BuildContext context, IconData icon, String value, String label) {
+  Widget _buildInfoItem(
+    BuildContext context,
+    IconData icon,
+    String value,
+    String label,
+  ) {
     return Column(
       children: [
         Icon(icon, color: AppColors.primary, size: 24.sp),
         SizedBox(height: 8.h),
-        Text(value, style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700)),
-        Text(label, style: AppTypography.bodySmall(context).copyWith(fontSize: 10.sp)),
+        Text(
+          value,
+          style: AppTypography.labelMedium(
+            context,
+          ).copyWith(fontWeight: FontWeight.w700),
+        ),
+        Text(
+          label,
+          style: AppTypography.bodySmall(context).copyWith(fontSize: 10.sp),
+        ),
       ],
     );
   }
 
-  Widget _buildCircleIcon(BuildContext context, IconData icon, {VoidCallback? onTap, Color? iconColor}) {
+  Widget _buildCircleIcon(
+    BuildContext context,
+    IconData icon, {
+    VoidCallback? onTap,
+    Color? iconColor,
+  }) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -204,7 +295,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         borderRadius: 24.r,
         shape: BoxShape.circle,
         padding: EdgeInsets.zero,
-        child: Center(child: Icon(icon, color: iconColor ?? Colors.white, size: 20.sp)),
+        child: Center(
+          child: Icon(icon, color: iconColor ?? Colors.white, size: 20.sp),
+        ),
       ),
     );
   }
@@ -220,7 +313,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(18.r),
-          border: isSelected ? null : Border.all(color: Colors.white.withValues(alpha: 0.1)),
+          border: isSelected
+              ? null
+              : Border.all(color: Colors.white.withValues(alpha: 0.1)),
         ),
         child: Center(
           child: Text(

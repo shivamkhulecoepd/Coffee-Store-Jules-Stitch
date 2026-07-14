@@ -7,6 +7,7 @@ import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/glass_container.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
+import '../models/user_model.dart';
 
 class ChooseRolePage extends StatelessWidget {
   const ChooseRolePage({super.key});
@@ -32,6 +33,7 @@ class ChooseRolePage extends StatelessWidget {
             SizedBox(height: 48.h),
             _buildRoleCard(
               context,
+              UserRole.customer,
               'Customer',
               'Order, track, and earn rewards seamlessly.',
               Icons.person_outline,
@@ -40,6 +42,7 @@ class ChooseRolePage extends StatelessWidget {
             SizedBox(height: 20.h),
             _buildRoleCard(
               context,
+              UserRole.barista,
               'Barista',
               'Manage brews, tables, and station tasks.',
               Icons.coffee_maker_outlined,
@@ -48,6 +51,7 @@ class ChooseRolePage extends StatelessWidget {
             SizedBox(height: 20.h),
             _buildRoleCard(
               context,
+              UserRole.administrator,
               'Administrator',
               'Full stack inventory and store analytics.',
               Icons.admin_panel_settings_outlined,
@@ -59,10 +63,17 @@ class ChooseRolePage extends StatelessWidget {
     );
   }
 
-  Widget _buildRoleCard(BuildContext context, String title, String subtitle, IconData icon, String route) {
+  Widget _buildRoleCard(
+    BuildContext context,
+    UserRole role,
+    String title,
+    String subtitle,
+    IconData icon,
+    String route,
+  ) {
     return GestureDetector(
       onTap: () {
-        context.read<AuthBloc>().add(SelectRoleEvent(title));
+        context.read<AuthBloc>().add(SelectRoleEvent(role));
         context.pushNamed('login', extra: {'role': title, 'route': route});
       },
       child: AppGlassContainer(

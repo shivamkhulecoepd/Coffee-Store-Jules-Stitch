@@ -30,7 +30,7 @@ class ActiveTablesBillingPage extends StatelessWidget {
       body: activeTables.isEmpty
           ? Center(child: Text('No active tables.', style: AppTypography.bodySmall(context)))
           : ListView.separated(
-              padding: EdgeInsets.all(24.w),
+              padding: EdgeInsets.all(20.w),
               itemCount: activeTables.length,
               separatorBuilder: (context, index) => SizedBox(height: 16.h),
               itemBuilder: (context, index) {

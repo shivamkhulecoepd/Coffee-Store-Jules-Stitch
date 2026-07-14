@@ -21,7 +21,7 @@ class NotificationsPage extends StatelessWidget {
         ),
       ),
       body: ListView.separated(
-        padding: EdgeInsets.all(24.w),
+        padding: EdgeInsets.all(20.w),
         itemCount: 3,
         separatorBuilder: (context, index) => SizedBox(height: 16.h),
         itemBuilder: (context, index) {

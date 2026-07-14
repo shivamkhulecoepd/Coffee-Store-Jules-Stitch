@@ -4,21 +4,29 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:coffee_store_jules_stitch/features/auth/bloc/auth_bloc.dart';
+import 'package:coffee_store_jules_stitch/features/auth/repositories/auth_repository.dart';
 import 'package:coffee_store_jules_stitch/features/admin/bloc/admin_bloc.dart';
 import 'package:coffee_store_jules_stitch/features/ordering/bloc/ordering_bloc.dart';
+import 'package:coffee_store_jules_stitch/features/barista/bloc/barista_bloc.dart';
 import 'package:coffee_store_jules_stitch/features/account/bloc/user_bloc.dart';
 import 'package:coffee_store_jules_stitch/data/repositories/store_repository.dart';
 
-Widget wrapWithMaterial(Widget child) {
+/// Wraps a widget with Material, ScreenUtil, and all BLoC providers.
+/// Use this in widget tests instead of raw `wrapWithMaterial`.
+Widget wrapWithMaterialAndProviders(Widget child) {
   HttpOverrides.global = _MockHttpOverrides();
-  final repository = StoreRepository();
+  final storeRepository = StoreRepository();
+  final authRepository = AuthRepository();
 
   return ScreenUtilInit(
     designSize: const Size(390, 844),
     builder: (context, _) => MultiBlocProvider(
       providers: [
-        BlocProvider<AdminBloc>(create: (_) => AdminBloc(repository)),
-        BlocProvider<OrderingBloc>(create: (_) => OrderingBloc(repository)),
+        BlocProvider<AuthBloc>(create: (_) => AuthBloc(authRepository)),
+        BlocProvider<OrderingBloc>(create: (_) => OrderingBloc(storeRepository)),
+        BlocProvider<BaristaBloc>(create: (_) => BaristaBloc(storeRepository)),
+        BlocProvider<AdminBloc>(create: (_) => AdminBloc(storeRepository)),
         BlocProvider<UserBloc>(create: (_) => UserBloc()),
       ],
       child: MaterialApp(
@@ -27,6 +35,17 @@ Widget wrapWithMaterial(Widget child) {
     ),
   );
 }
+
+/// Legacy alias for backward compatibility.
+Widget wrapWithMaterial(Widget child) => wrapWithMaterialAndProviders(child);
+
+/// Returns a mock [StoreRepository] pre-seeded with test data.
+StoreRepository makeTestStoreRepository() => StoreRepository();
+
+/// Returns a mock [AuthRepository] for auth testing.
+AuthRepository makeTestAuthRepository() => AuthRepository();
+
+// ─── Mock HTTP overrides ────────────────────────────────────────────────────
 
 class _MockHttpOverrides extends HttpOverrides {
   @override
@@ -71,8 +90,18 @@ class _MockHttpClientResponse implements HttpClientResponse {
   HttpClientResponseCompressionState get compressionState => HttpClientResponseCompressionState.notCompressed;
 
   @override
-  StreamSubscription<List<int>> listen(void Function(List<int>)? onData, {Function? onError, void Function()? onDone, bool? cancelOnError}) {
-    return Stream<List<int>>.fromIterable([_transparentImage]).listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
+  StreamSubscription<List<int>> listen(
+    void Function(List<int>)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
+    return Stream<List<int>>.fromIterable([_transparentImage]).listen(
+      onData,
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
   }
 
   @override

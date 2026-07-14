@@ -42,7 +42,7 @@ class _TableLayoutPageState extends State<TableLayoutPage> {
           }
 
           return GridView.builder(
-            padding: EdgeInsets.all(24.w),
+            padding: EdgeInsets.all(20.w),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               mainAxisSpacing: 20.h,

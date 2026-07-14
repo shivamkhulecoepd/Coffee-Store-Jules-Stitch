@@ -29,7 +29,7 @@ class SubscriptionPage extends StatelessWidget {
       body: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
           return ListView(
-            padding: EdgeInsets.all(24.w),
+            padding: EdgeInsets.all(20.w),
             children: [
               _buildPlanCard(context, 'CORE', r'.99/mo', ['5 specialty cups', '10% off whole beans', 'Member rewards access'], state.subscriptionPlan == 'CORE'),
               SizedBox(height: 24.h),
