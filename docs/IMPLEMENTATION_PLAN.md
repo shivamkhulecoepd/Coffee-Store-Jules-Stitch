@@ -1,58 +1,35 @@
-# Implementation Plan — Bean & Brew OS
+# Enterprise Implementation Plan — Bean & Brew OS
 
-## 1. Technical Stack
-- **Framework:** Flutter (Stable channel).
-- **Architecture:** Clean Architecture with Feature-based modularization.
-- **State Management:** BLoC (flutter_bloc) for business logic and state transitions.
-- **Dependency Injection:** GetIt (sl) for service discovery and repository singletons.
-- **Navigation:** GoRouter for declarative, type-safe routing.
-- **UI Responsiveness:** flutter_screenutil.
+## 1. Phase 1: Foundation & Shared Infrastructure
+- **Infrastructure as Code (IaC):** Definition of AWS VPC, RDS (PostgreSQL), and Elasticache (Redis) using Terraform.
+- **Backend Core:** Express.js + TypeScript setup with Zod for environment and request validation.
+- **Database Layer:** Prisma schema design for Users, Products, Orders, and Inventory.
+- **Flutter Setup:** Service Locator (GetIt) and base Repository pattern integration.
 
-## 2. Directory Structure
-```text
-lib/
-├── core/               # App-wide themes, constants, and utilities
-├── data/               # Centralized repositories and data sources
-├── features/           # Feature modules (Auth, Ordering, Barista, Admin, etc.)
-│   ├── [feature]/
-│   │   ├── bloc/       # State management logic
-│   │   ├── models/     # Data entities
-│   │   ├── screens/    # UI Pages
-│   │   └── widgets/    # Feature-specific reusable components
-└── shared/             # Global reusable widgets (GlassContainer, Buttons, etc.)
-```
+## 2. Phase 2: Identity & Access Management
+- **Auth Implementation:** JWT issuing service with RSA-256 signing and Refresh Token rotation.
+- **Role Orchestration:** Middleware implementation for RBAC across all API and Socket routes.
+- **Secure Recovery:** Integration with Twilio/SendGrid for multi-channel OTP delivery.
 
-## 3. Data Strategy
-- **Repository Pattern:** A centralized `StoreRepository` acts as the single source of truth for the application's runtime state.
-- **Synchronization:**
-  - Singleton repository pattern ensures all modules access the same underlying data sets (Inventory, Orders, Sessions).
-  - Stream-based updates in the repository allow BLoCs to react to changes made in other parts of the app (e.g., Barista status change reflecting in Customer tracking).
-- **Model Integrity:** Models use Equatable for efficient rebuilds and value-based comparisons in BLoC states.
+## 3. Phase 3: Artisanal Menu & Customer Experience
+- **Catalog Engine:** Development of the hierarchical menu API with Redis caching for rapid discovery.
+- **Customization Logic:** Server-side price calculation engine to prevent client-side manipulation.
+- **Ordering Transaction:** Atomic orders API with "Check-then-Decrement" inventory logic.
 
-## 4. Implementation Phases
+## 4. Phase 4: Real-time Operational Mesh
+- **Socket.IO Hub:** Implementation of the Redis-backed event mesh for horizontal scaling.
+- **Barista Workflow:** Table session state machine and preparation queue logic.
+- **Live Sync:** Wiring order status transitions to broadcast to the customer and branch-ops rooms.
 
-### Phase 1: Core & Foundation
-- Setup `ScreenUtil` and base `AppTheme`.
-- Implement `sl` (Service Locator) and basic `StoreRepository`.
-- Create shared UI library (Glass containers, artisanal typography).
+## 5. Phase 5: Administrative Suite & Analytics
+- **Analytics Service:** Materialized view generation for financial KPIs (Revenue, Efficiency).
+- **Supply Chain:** Automated low-stock alert workers using BullMQ.
+- **Shift Management:** Real-time roster tracking and performance logging.
 
-### Phase 2: Feature Development (Modular)
-- **Authentication:** Role-based logic and onboarding screens.
-- **Customer Experience:** Catalog implementation, product customization, and checkout flow.
-- **Barista Operations:** Table session management and extraction task workflows.
-- **Admin Management:** KPI dashboards, inventory status, and roster management.
+## 6. Phase 6: Quality Assurance & Production Readiness
+- **Testing:** 90%+ coverage target using Jest and Supertest.
+- **Observability:** Prometheus/Grafana dashboard setup for socket health and API latency.
+- **Security Audit:** Pentesting API endpoints and hardening S3 bucket policies.
+- **Documentation:** Finalization of API specs and deployment runbooks.
 
-### Phase 3: Integration & Sync
-- Wiring real-time interactions (Ordering -> Barista updates).
-- Implementing global search and artisanal filtering logic.
-- Finalizing navigation transitions and hero animations.
-
-### Phase 4: Audit & QA
-- Comprehensive visual audit against Stitch designs.
-- Responsiveness testing across multiple device breakpoints.
-- Unit and widget testing for core business flows using `test_helpers.dart`.
-
-## 5. Testing Approach
-- **Widget Testing:** Verify UI component rendering and interaction logic.
-- **Integration Testing:** Ensure repository-to-bloc-to-ui data flow is consistent.
-- **Mocking Strategy:** Use custom HTTP overrides and bloc providers in tests to simulate network assets and repository states.
+---
