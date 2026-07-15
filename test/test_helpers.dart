@@ -4,6 +4,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
+import 'package:coffee_store_jules_stitch/core/utils/service_locator.dart' as di;
 import 'package:coffee_store_jules_stitch/features/auth/bloc/auth_bloc.dart';
 import 'package:coffee_store_jules_stitch/features/auth/repositories/auth_repository.dart';
 import 'package:coffee_store_jules_stitch/features/admin/bloc/admin_bloc.dart';
@@ -12,8 +14,28 @@ import 'package:coffee_store_jules_stitch/features/barista/bloc/barista_bloc.dar
 import 'package:coffee_store_jules_stitch/features/account/bloc/user_bloc.dart';
 import 'package:coffee_store_jules_stitch/data/repositories/store_repository.dart';
 
+final getIt = GetIt.instance;
+
+/// Initialize GetIt with mock-friendly singletons for testing.
+/// Call this in setUp or setUpAll of widget tests that need GetIt.
+/// Uses the provided storeRepository if given, otherwise creates a new one.
+void setupGetItForTesting({StoreRepository? storeRepository, AuthRepository? authRepository}) {
+  // Reset any existing registrations
+  if (getIt.isRegistered<StoreRepository>()) {
+    getIt.unregister<StoreRepository>();
+  }
+  if (getIt.isRegistered<AuthRepository>()) {
+    getIt.unregister<AuthRepository>();
+  }
+
+  // Register mock-friendly instances
+  getIt.registerSingleton<StoreRepository>(storeRepository ?? StoreRepository());
+  getIt.registerSingleton<AuthRepository>(authRepository ?? AuthRepository());
+}
+
 /// Wraps a widget with Material, ScreenUtil, and all BLoC providers.
 /// Use this in widget tests instead of raw `wrapWithMaterial`.
+/// This version does NOT use GetIt - use wrapWithMaterialAndProvidersWithGetIt for widgets that need sl<>
 Widget wrapWithMaterialAndProviders(Widget child) {
   HttpOverrides.global = _MockHttpOverrides();
   final storeRepository = StoreRepository();
@@ -27,6 +49,28 @@ Widget wrapWithMaterialAndProviders(Widget child) {
         BlocProvider<OrderingBloc>(create: (_) => OrderingBloc(storeRepository)),
         BlocProvider<BaristaBloc>(create: (_) => BaristaBloc(storeRepository)),
         BlocProvider<AdminBloc>(create: (_) => AdminBloc(storeRepository)),
+        BlocProvider<UserBloc>(create: (_) => UserBloc()),
+      ],
+      child: MaterialApp(
+        home: Scaffold(body: child),
+      ),
+    ),
+  );
+}
+
+/// Same as wrapWithMaterialAndProviders but uses GetIt registrations.
+/// Use this for widgets that call sl<T>() directly (like BaristaDashboard).
+Widget wrapWithMaterialAndProvidersWithGetIt(Widget child) {
+  HttpOverrides.global = _MockHttpOverrides();
+
+  return ScreenUtilInit(
+    designSize: const Size(390, 844),
+    builder: (context, _) => MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>(create: (_) => AuthBloc(getIt<AuthRepository>())),
+        BlocProvider<OrderingBloc>(create: (_) => OrderingBloc(getIt<StoreRepository>())),
+        BlocProvider<BaristaBloc>(create: (_) => BaristaBloc(getIt<StoreRepository>())),
+        BlocProvider<AdminBloc>(create: (_) => AdminBloc(getIt<StoreRepository>())),
         BlocProvider<UserBloc>(create: (_) => UserBloc()),
       ],
       child: MaterialApp(

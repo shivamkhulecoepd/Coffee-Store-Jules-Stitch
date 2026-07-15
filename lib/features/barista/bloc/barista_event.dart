@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import '../models/table_session_model.dart';
+import '../../ordering/models/product_model.dart';
 
 abstract class BaristaEvent extends Equatable {
   const BaristaEvent();
@@ -43,6 +44,31 @@ class StartBrewingEvent extends BaristaEvent {
   const StartBrewingEvent(this.orderId);
   @override
   List<Object?> get props => [orderId];
+}
+
+/// Mark a brew as Ready — updates order status in repository and increments performance.
+class MarkBrewReadyEvent extends BaristaEvent {
+  final String orderId;
+  const MarkBrewReadyEvent(this.orderId);
+  @override
+  List<Object?> get props => [orderId];
+}
+
+/// Simulates a QR scan — resolves tableId and stores result in state.
+class SyncQRCodeEvent extends BaristaEvent {
+  final int tableId;
+  const SyncQRCodeEvent(this.tableId);
+  @override
+  List<Object?> get props => [tableId];
+}
+
+/// Adds a cart item to an existing table session.
+class AddItemToTableSessionEvent extends BaristaEvent {
+  final int tableId;
+  final CartItem item;
+  const AddItemToTableSessionEvent(this.tableId, this.item);
+  @override
+  List<Object?> get props => [tableId, item];
 }
 
 /// Internal event — emitted when orders stream updates.

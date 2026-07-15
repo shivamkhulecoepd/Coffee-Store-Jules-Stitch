@@ -33,6 +33,7 @@ import '../features/barista/screens/shift_overview.dart';
 import '../features/barista/screens/shift_handover.dart';
 import '../features/barista/screens/active_tables_billing.dart';
 import '../features/barista/screens/scan_table_qr.dart';
+import '../features/barista/screens/table_detail_page.dart';
 import '../features/admin/screens/admin_navigation_page.dart';
 import '../features/admin/screens/inventory_status.dart';
 import '../features/admin/screens/purchase_order.dart';
@@ -73,6 +74,7 @@ enum AppRoute {
   brewing,
   ordering,
   taskDetail,
+  tableDetail,
   overview,
   handover,
   billing,
@@ -120,6 +122,7 @@ extension AppRouteX on AppRoute {
       case AppRoute.brewing: return 'brewing';
       case AppRoute.ordering: return 'ordering';
       case AppRoute.taskDetail: return 'task-detail';
+      case AppRoute.tableDetail: return 'table-detail';
       case AppRoute.overview: return 'overview';
       case AppRoute.handover: return 'handover';
       case AppRoute.billing: return 'billing';
@@ -162,6 +165,7 @@ const _protectedBaristaRoutes = [
   AppRoute.brewing,
   AppRoute.ordering,
   AppRoute.taskDetail,
+  AppRoute.tableDetail,
   AppRoute.overview,
   AppRoute.handover,
   AppRoute.billing,
@@ -289,6 +293,15 @@ class AppRouter {
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
           return TaskDetailPage(data: extra);
+        },
+      ),
+      GoRoute(
+        path: '/table-detail',
+        name: AppRoute.tableDetail.name,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final tableId = extra?['tableId'] as int? ?? 1;
+          return TableDetailPage(tableId: tableId);
         },
       ),
       GoRoute(path: '/overview', name: AppRoute.overview.name, builder: (context, state) => const ShiftOverviewPage()),

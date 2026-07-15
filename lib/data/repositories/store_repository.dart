@@ -140,6 +140,9 @@ class StoreRepository {
     'rating': 4.9,
     'avgBrewTime': '28s',
     'score': 98.2,
+    'trend': '+2.1%',
+    'accuracy': '99%',
+    'upsell': '12%',
   };
 
   final List<Map<String, dynamic>> _orders = [];
@@ -150,6 +153,7 @@ class StoreRepository {
   final StreamController<List<InventoryItem>> _inventoryController = StreamController.broadcast();
   final StreamController<List<Employee>> _employeeController = StreamController.broadcast();
   final StreamController<List<CustomerRequest>> _requestsController = StreamController.broadcast();
+  final StreamController<Map<String, dynamic>> _performanceController = StreamController.broadcast();
 
   StoreRepository() {
     // Push initial state
@@ -157,6 +161,7 @@ class StoreRepository {
     _inventoryController.add(List.unmodifiable(_inventory));
     _employeeController.add(List.unmodifiable(_employees));
     _requestsController.add(List.unmodifiable(_requests));
+    _performanceController.add(Map.unmodifiable(_performance));
   }
 
   // ─── Public Getters ──────────────────────────────────────────────────────
@@ -186,10 +191,28 @@ class StoreRepository {
   List<Map<String, dynamic>> get suppliers => _suppliers;
   List<Map<String, dynamic>> get tasks => _tasks;
   Map<String, dynamic> get performance => _performance;
+  /// Reactive performance stream — emits whenever a metric is updated.
+  Stream<Map<String, dynamic>> get performanceStream => _performanceController.stream;
 
   List<Map<String, dynamic>> get orders => _orders;
   /// Stream of active orders — used by BaristaBloc to show the order queue.
   Stream<List<Map<String, dynamic>>> get ordersStream => _ordersController.stream;
+  /// Returns the order with the given id, or null if not found.
+  Map<String, dynamic>? getOrderById(String orderId) {
+    try {
+      return _orders.firstWhere((o) => o['id'] == orderId);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Returns active orders (Preparing / Ready) for the barista queue.
+  List<Map<String, dynamic>> get activeOrders =>
+      _orders.where((o) => o['status'] == 'Preparing' || o['status'] == 'Ready').toList();
+
+  /// Returns orders in 'Preparing' state only.
+  List<Map<String, dynamic>> get ordersInQueue =>
+      _orders.where((o) => o['status'] == 'Preparing').toList();
 
   // ─── Product Actions ─────────────────────────────────────────────────────
 
@@ -270,6 +293,50 @@ class StoreRepository {
     }
   }
 
+  /// Adds an item to an existing table session and broadcasts the update.
+  void addItemToTableSession(int tableId, CartItem item) {
+    final index = _tableSessions.indexWhere((s) => s.tableId == tableId);
+    if (index == -1) return;
+
+    final current = _tableSessions[index];
+    _tableSessions[index] = current.copyWith(
+      items: [...current.items, item],
+      status: current.status == TableStatus.vacant ? TableStatus.occupied : current.status,
+    );
+    _tableController.add(List.unmodifiable(_tableSessions));
+  }
+
+  /// Increments ordersCompleted and updates the performance stream.
+  void incrementOrdersCompleted() {
+    _performance['ordersCompleted'] = (_performance['ordersCompleted'] as int) + 1;
+    _performanceController.add(Map.unmodifiable(_performance));
+  }
+
+  /// Sets the status of a table session by ID and broadcasts.
+  void setTableStatus(int tableId, TableStatus status) {
+    final index = _tableSessions.indexWhere((s) => s.tableId == tableId);
+    if (index == -1) return;
+    _tableSessions[index] = _tableSessions[index].copyWith(status: status);
+    _tableController.add(List.unmodifiable(_tableSessions));
+  }
+
+  /// Simulates a QR scan — returns the table session if one exists for the given ID.
+  TableSession? findTableById(int tableId) {
+    try {
+      return _tableSessions.firstWhere((s) => s.tableId == tableId);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Updates a task by title and returns the updated list.
+  void updateTask(String title, String newStatus, String newColor) {
+    final index = _tasks.indexWhere((t) => t['title'] == title);
+    if (index != -1) {
+      _tasks[index] = {..._tasks[index], 'status': newStatus, 'color': newColor};
+    }
+  }
+
   // ─── Employee Actions ────────────────────────────────────────────────────
 
   void updateEmployeeStatus(String name, EmployeeStatus status) {
@@ -298,5 +365,6 @@ class StoreRepository {
     _inventoryController.close();
     _employeeController.close();
     _requestsController.close();
+    _performanceController.close();
   }
 }

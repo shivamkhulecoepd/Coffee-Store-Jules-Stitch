@@ -55,7 +55,7 @@ class _TableLayoutPageState extends State<TableLayoutPage> {
               final bool isOccupied = table.status == TableStatus.occupied;
 
               return GestureDetector(
-                onTap: () => context.pushNamed('ordering', extra: {'table': table.tableId}),
+                onTap: () => context.pushNamed('table-detail', extra: {'tableId': table.tableId}),
                 child: AppGlassContainer(
                   padding: EdgeInsets.all(16.w),
                   child: Column(

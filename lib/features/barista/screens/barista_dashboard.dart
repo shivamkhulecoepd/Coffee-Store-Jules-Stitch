@@ -6,11 +6,25 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/glass_container.dart';
 import '../../../shared/widgets/kpi_card.dart';
-import '../../ordering/bloc/ordering_bloc.dart';
-import '../../ordering/bloc/ordering_state.dart';
+import '../../../data/repositories/store_repository.dart';
+import '../bloc/barista_bloc.dart';
+import '../bloc/barista_event.dart';
+import '../bloc/barista_state.dart';
+import '../../../core/utils/service_locator.dart';
 
-class BaristaDashboard extends StatelessWidget {
+class BaristaDashboard extends StatefulWidget {
   const BaristaDashboard({super.key});
+
+  @override
+  State<BaristaDashboard> createState() => _BaristaDashboardState();
+}
+
+class _BaristaDashboardState extends State<BaristaDashboard> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<BaristaBloc>().add(LoadBaristaDataEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +57,12 @@ class BaristaDashboard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('SYSTEM STATUS: ONLINE', style: AppTypography.labelSmall(context).copyWith(color: AppColors.success, letterSpacing: 2)),
-                        Text('Sarah Miller', style: AppTypography.displayLargeMobile(context).copyWith(fontWeight: FontWeight.w700)),
+                        Text('SYSTEM STATUS: ONLINE',
+                            style: AppTypography.labelSmall(context)
+                                .copyWith(color: AppColors.success, letterSpacing: 2)),
+                        Text('Sarah Miller',
+                            style: AppTypography.displayLargeMobile(context)
+                                .copyWith(fontWeight: FontWeight.w700)),
                       ],
                     ),
                   ),
@@ -54,33 +72,17 @@ class BaristaDashboard extends StatelessWidget {
               SizedBox(height: 32.h),
               _buildKPISection(context),
               SizedBox(height: 40.h),
-              Text('OPERATIONS', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
+              Text('OPERATIONS',
+                  style: AppTypography.labelSmall(context)
+                      .copyWith(color: AppColors.primary, letterSpacing: 2)),
               SizedBox(height: 16.h),
               _buildQuickActions(context),
               SizedBox(height: 40.h),
-              Text('ACTIVE EXTRACTIONS', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, letterSpacing: 2)),
+              Text('ACTIVE EXTRACTIONS',
+                  style: AppTypography.labelSmall(context)
+                      .copyWith(color: AppColors.primary, letterSpacing: 2)),
               SizedBox(height: 16.h),
-              BlocBuilder<OrderingBloc, OrderingState>(
-                builder: (context, state) {
-                  // Only show orders that were recently placed in this mock
-                  if (state.orderHistory.isEmpty) {
-                    return AppGlassContainer(
-                      padding: EdgeInsets.all(20.w),
-                      child: Center(child: Text('No active brewing sessions.', style: AppTypography.bodySmall(context))),
-                    );
-                  }
-                  return ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: state.orderHistory.length,
-                    separatorBuilder: (context, index) => SizedBox(height: 16.h),
-                    itemBuilder: (context, index) {
-                      final order = state.orderHistory[index];
-                      return _buildOrderCard(context, order);
-                    },
-                  );
-                },
-              ),
+              _buildActiveOrdersList(context),
               SizedBox(height: 120.h),
             ],
           ),
@@ -109,25 +111,57 @@ class BaristaDashboard extends StatelessWidget {
   }
 
   Widget _buildKPISection(BuildContext context) {
+    // Listen to the repository performance stream for live updates
+    final perf = sl<StoreRepository>().performance;
     return Row(
       children: [
-        const Expanded(
+        Expanded(
           child: KPICard(
             label: 'Total Orders',
-            value: '24',
-            chartData: [10, 15, 12, 18, 20, 24],
+            value: '${perf['ordersCompleted']}',
+            chartData: const [10, 15, 12, 18, 20, 24],
           ),
         ),
         SizedBox(width: 16.w),
-        const Expanded(
+        Expanded(
           child: KPICard(
             label: 'Avg. Latency',
-            value: '4m',
-            chartData: [5, 4.5, 4.2, 4.8, 4.1, 4.0],
+            value: perf['avgTime'],
+            chartData: const [5, 4.5, 4.2, 4.8, 4.1, 4.0],
             chartColor: AppColors.success,
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildActiveOrdersList(BuildContext context) {
+    return BlocBuilder<BaristaBloc, BaristaState>(
+      builder: (context, state) {
+        // Use activeOrders from BaristaBloc — updated via repository stream
+        final orders = state.activeOrders;
+
+        if (orders.isEmpty) {
+          return AppGlassContainer(
+            padding: EdgeInsets.all(20.w),
+            child: Center(
+              child: Text('No active brewing sessions.',
+                  style: AppTypography.bodySmall(context)),
+            ),
+          );
+        }
+
+        return ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: orders.length,
+          separatorBuilder: (context, index) => SizedBox(height: 16.h),
+          itemBuilder: (context, index) {
+            final order = orders[index];
+            return _buildOrderCard(context, order);
+          },
+        );
+      },
     );
   }
 
@@ -143,7 +177,8 @@ class BaristaDashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildActionItem(BuildContext context, IconData icon, String label, String routeName) {
+  Widget _buildActionItem(
+      BuildContext context, IconData icon, String label, String routeName) {
     return GestureDetector(
       onTap: () => context.pushNamed(routeName),
       behavior: HitTestBehavior.opaque,
@@ -157,15 +192,26 @@ class BaristaDashboard extends StatelessWidget {
             child: Center(child: Icon(icon, color: AppColors.primary, size: 24.sp)),
           ),
           SizedBox(height: 12.h),
-          Text(label, style: AppTypography.labelSmall(context).copyWith(fontSize: 10.sp, fontWeight: FontWeight.w600, letterSpacing: 0)),
+          Text(label,
+              style: AppTypography.labelSmall(context)
+                  .copyWith(fontSize: 10.sp, fontWeight: FontWeight.w600, letterSpacing: 0)),
         ],
       ),
     );
   }
 
   Widget _buildOrderCard(BuildContext context, Map<String, dynamic> order) {
+    final orderId = order['id'] ?? '';
+    // Build a short summary of items in this order
+    final items = order['items'];
+    String itemsSummary = '';
+    if (items is List && items.isNotEmpty) {
+      itemsSummary = items.take(2).map((i) => i['product']?['name'] ?? i['name'] ?? 'Item').join(', ');
+      if (items.length > 2) itemsSummary += ' +${items.length - 2} more';
+    }
+
     return GestureDetector(
-      onTap: () => context.pushNamed('brewing'),
+      onTap: () => context.pushNamed('brewing', extra: {'orderId': orderId}),
       behavior: HitTestBehavior.opaque,
       child: AppGlassContainer(
         padding: EdgeInsets.all(20.w),
@@ -175,16 +221,36 @@ class BaristaDashboard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(order['id'], style: AppTypography.dataMono(context).copyWith(color: AppColors.primary, fontSize: 10.sp)),
-                  Text(order['items'], style: AppTypography.labelMedium(context).copyWith(fontWeight: FontWeight.w700), maxLines: 1, overflow: TextOverflow.ellipsis),
-                  Text('Active • Synchronizing', style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline, fontSize: 11.sp)),
+                  Text(orderId,
+                      style: AppTypography.dataMono(context)
+                          .copyWith(color: AppColors.primary, fontSize: 10.sp)),
+                  if (itemsSummary.isNotEmpty)
+                    Text(itemsSummary,
+                        style: AppTypography.labelMedium(context)
+                            .copyWith(fontWeight: FontWeight.w700),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis),
+                  Text('Active \u2022 Synchronizing',
+                      style: AppTypography.bodyMedium(context)
+                          .copyWith(color: AppColors.outline, fontSize: 11.sp)),
                 ],
               ),
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-              decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(6.r)),
-              child: Text('BREWING', style: AppTypography.labelSmall(context).copyWith(color: AppColors.primary, fontSize: 9.sp, fontWeight: FontWeight.w900, letterSpacing: 1)),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(6.r),
+              ),
+              child: Text(
+                (order['status'] ?? 'BREWING').toString().toUpperCase(),
+                style: AppTypography.labelSmall(context).copyWith(
+                  color: AppColors.primary,
+                  fontSize: 9.sp,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1,
+                ),
+              ),
             ),
           ],
         ),

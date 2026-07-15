@@ -11,8 +11,6 @@ class ShiftOverviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final performance = sl<StoreRepository>().performance;
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -25,24 +23,36 @@ class ShiftOverviewPage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppGlassContainer(
-              padding: EdgeInsets.all(24.w),
-              child: Column(
-                children: [
-                  _buildStatRow(context, 'Total Shots Pulled', '142'),
-                  _buildStatRow(context, 'Average extraction', performance['avgBrewTime']),
-                  _buildStatRow(context, 'Waste %', '2.1%'),
-                  _buildStatRow(context, 'Efficiency Score', '${performance['score']}%'),
-                ],
-              ),
+      body: StreamBuilder<Map<String, dynamic>>(
+        stream: sl<StoreRepository>().performanceStream,
+        initialData: sl<StoreRepository>().performance,
+        builder: (context, snapshot) {
+          final perf = snapshot.data ?? sl<StoreRepository>().performance;
+          return SingleChildScrollView(
+            padding: EdgeInsets.all(20.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppGlassContainer(
+                  padding: EdgeInsets.all(24.w),
+                  child: Column(
+                    children: [
+                      _buildStatRow(context, 'Total Shots Pulled',
+                          '${perf['ordersCompleted']}'),
+                      _buildStatRow(context, 'Average extraction',
+                          perf['avgBrewTime'] ?? 'N/A'),
+                      _buildStatRow(context, 'Waste %', '2.1%'),
+                      _buildStatRow(context, 'Efficiency Score',
+                          '${perf['score']}%'),
+                      _buildStatRow(context, 'Order Accuracy',
+                          perf['accuracy'] ?? 'N/A'),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -53,8 +63,12 @@ class ShiftOverviewPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: AppTypography.bodyMedium(context).copyWith(color: AppColors.outline)),
-          Text(value, style: AppTypography.dataMono(context).copyWith(fontWeight: FontWeight.w700)),
+          Text(label,
+              style: AppTypography.bodyMedium(context)
+                  .copyWith(color: AppColors.outline)),
+          Text(value,
+              style: AppTypography.dataMono(context)
+                  .copyWith(fontWeight: FontWeight.w700)),
         ],
       ),
     );
